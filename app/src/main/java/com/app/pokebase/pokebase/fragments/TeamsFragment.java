@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,7 @@ import com.app.pokebase.pokebase.activities.TeamViewActivity;
 import com.app.pokebase.pokebase.adapters.TeamAdapter;
 import com.app.pokebase.pokebase.components.Team;
 import com.app.pokebase.pokebase.database.DatabaseOpenHelper;
+import com.app.pokebase.pokebase.utilities.AnimatedRecyclerView;
 import com.github.fabtransitionactivity.SheetLayout;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
 
    private SheetLayout mSheetLayout;
    private FloatingActionButton mFab;
-   private RecyclerView mTeamList;
+   private AnimatedRecyclerView mTeamList;
    private LinearLayout mEmptyView;
 
    private TeamAdapter mTeamAdapter;
@@ -45,7 +45,7 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
       View v = inflater.inflate(R.layout.teams_fragment, container, false);
 
       mSheetLayout = (SheetLayout) v.findViewById(R.id.bottom_sheet);
-      mTeamList = (RecyclerView) v.findViewById(R.id.team_list);
+      mTeamList = (AnimatedRecyclerView) v.findViewById(R.id.team_list);
       mFab = (FloatingActionButton) v.findViewById(R.id.fab);
       mEmptyView = (LinearLayout) v.findViewById(R.id.empty_layout);
 

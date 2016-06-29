@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,7 @@ import com.app.pokebase.pokebase.adapters.PokemonRecyclerViewAdapter;
 import com.app.pokebase.pokebase.adapters.TextViewSpinnerAdapter;
 import com.app.pokebase.pokebase.components.PokemonListItem;
 import com.app.pokebase.pokebase.database.DatabaseOpenHelper;
+import com.app.pokebase.pokebase.utilities.AnimatedRecyclerView;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ import java.util.List;
 public class PokebaseFragment extends Fragment implements AdapterView.OnItemSelectedListener {
    private Spinner mTypeSpinner;
    private Spinner mRegionSpinner;
-   private RecyclerView mPokemonList;
+   private AnimatedRecyclerView mPokemonList;
    private DatabaseOpenHelper mDatabaseHelper;
    private List<PokemonListItem> mPokemon;
 
@@ -65,7 +65,7 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
       mTypeSpinner.setOnItemSelectedListener(this);
       mRegionSpinner = (Spinner) view.findViewById(R.id.region_spinner);
       mRegionSpinner.setOnItemSelectedListener(this);
-      mPokemonList = (RecyclerView) view.findViewById(R.id.pokemon_list);
+      mPokemonList = (AnimatedRecyclerView) view.findViewById(R.id.pokemon_list);
       mPokemonList.setLayoutManager(new LinearLayoutManager(getContext()));
 
       List<String> types = mDatabaseHelper.queryAllTypes();

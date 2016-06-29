@@ -8,9 +8,9 @@
         android:id="@+id/toolbar"
         layout="@layout/tool_bar"/>
 
-    <android.support.v7.widget.RecyclerView
+    <com.app.pokebase.pokebase.utilities.AnimatedRecyclerView
         android:id="@+id/evolutions_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </android.support.v7.widget.RecyclerView>
+    </com.app.pokebase.pokebase.utilities.AnimatedRecyclerView>
 </LinearLayout>

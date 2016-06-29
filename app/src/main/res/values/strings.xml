@@ -67,4 +67,5 @@
     <string name="logout">Logout</string>
     <string name="delete">Delete</string>
     <string name="no_teams">"No teams to add to.\nPlease add a team first."</string>
+    <string name="hashtag">#</string>
 </resources>

@@ -7,7 +7,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +19,7 @@ import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.adapters.PokemonTeamMemberAdapter;
 import com.app.pokebase.pokebase.components.PokemonTeamMember;
 import com.app.pokebase.pokebase.database.DatabaseOpenHelper;
+import com.app.pokebase.pokebase.utilities.AnimatedRecyclerView;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class TeamViewActivity extends AppCompatActivity {
    public static final String TEAM_ID_KEY = "team_id_key";
    public static final String UPDATE_KEY = "update_key";
    private Toolbar mToolbar;
-   private RecyclerView mPokemonList;
+   private AnimatedRecyclerView mPokemonList;
    private LinearLayout mEmptyView;
    private TextInputEditText mNameInput;
    private TextInputEditText mDescriptionInput;
@@ -49,7 +49,7 @@ public class TeamViewActivity extends AppCompatActivity {
       setContentView(R.layout.activity_team);
 
       mToolbar = (Toolbar) findViewById(R.id.toolbar);
-      mPokemonList = (RecyclerView) findViewById(R.id.team_list);
+      mPokemonList = (AnimatedRecyclerView) findViewById(R.id.team_list);
       mEmptyView = (LinearLayout) findViewById(R.id.empty_layout);
       mNameInput = (TextInputEditText) findViewById(R.id.name_input);
       mDescriptionInput = (TextInputEditText) findViewById(R.id.description_input);
