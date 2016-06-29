@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="170dp"
+            android:lines="2"
+            android:text="@string/gender_title"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorAccent"
+            android:textSize="40sp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/boy_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/button_pressed"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/boy"/>
+
+            <ImageButton
+                android:id="@+id/girl_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/button_pressed"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/girl"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/gender_select"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:background="?attr/selectableItemBackground"
+        android:text="@string/go"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"/>
+</RelativeLayout>

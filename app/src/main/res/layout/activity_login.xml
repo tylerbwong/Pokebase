@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="100dp"
+            android:lines="2"
+            android:text="@string/login_title"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorAccent"
+            android:textSize="40sp"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_layout"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="60dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/name_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_name"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLength="15"
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/name_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/count"
+                android:textAlignment="textEnd"
+                android:textColor="@color/colorAccent"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/exit_button"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="?attr/selectableItemBackground"
+        android:text="@string/exit"
+        android:textColor="@color/colorAccent"
+        android:textSize="17sp"/>
+
+    <Button
+        android:id="@+id/create_user"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="?attr/selectableItemBackground"
+        android:text="@string/create_user"
+        android:textColor="@color/colorAccent"
+        android:textSize="12sp"/>
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:background="?attr/selectableItemBackground"
+        android:text="@string/login"
+        android:textColor="@color/colorAccent"
+        android:textSize="17sp"/>
+</RelativeLayout>

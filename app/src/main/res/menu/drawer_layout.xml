@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/teams"
+            android:checked="false"
+            android:title="@string/teams"/>
+
+        <item
+            android:id="@+id/pokebase"
+            android:checked="false"
+            android:title="@string/pokebase"/>
+
+        <item
+            android:id="@+id/logout"
+            android:checked="false"
+            android:title="@string/logout"/>
+    </group>
+</menu>
