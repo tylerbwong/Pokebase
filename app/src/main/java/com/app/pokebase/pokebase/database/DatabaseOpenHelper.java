@@ -487,7 +487,7 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
       int moveTwoId = queryMoveIdByName(moveTwo);
       int moveThreeId = queryMoveIdByName(moveThree);
       int moveFourId = queryMoveIdByName(moveFour);
-      String idFilter = ROW_ID_COL + "=" + "'" + memberId + "'";
+      String idFilter = ROW_ID_COL + "=" + memberId;
       ContentValues contentValues = new ContentValues();
 
       contentValues.put(NICKNAME_COL, nickname);
@@ -501,13 +501,24 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
       return true;
    }
 
-   // TODO deleteTeam
    public boolean deleteTeam(int teamId) {
-      return false;
+      SQLiteDatabase database = getWritableDatabase();
+      String teamFilter = ROW_ID_COL + "=" + teamId;
+      database.delete(TEAMS_TABLE, teamFilter, null);
+      return true;
    }
 
-   // TODO deleteTeamPokemon
-   public boolean deleteTeamPokemon(int memberId) {
-      return false;
+   public boolean deleteTeamPokemonAll(int teamId) {
+      SQLiteDatabase database = getWritableDatabase();
+      String teamFilter = TEAM_ID_COL + "=" + teamId;
+      database.delete(TEAM_POKEMON_TABLE, teamFilter, null);
+      return true;
+   }
+
+   public boolean deleteTeamPokemonSingle(int memberId) {
+      SQLiteDatabase database = getWritableDatabase();
+      String memberFilter = ROW_ID_COL + "=" + memberId;
+      database.delete(TEAM_POKEMON_TABLE, memberFilter, null);
+      return true;
    }
 }
