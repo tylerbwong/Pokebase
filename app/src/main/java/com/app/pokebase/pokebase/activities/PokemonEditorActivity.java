@@ -116,6 +116,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
    @Override
    public boolean onCreateOptionsMenu(Menu menu) {
       MenuInflater inflater = getMenuInflater();
+      inflater.inflate(R.menu.menu_trash, menu);
       inflater.inflate(R.menu.menu_submit, menu);
       return true;
    }
@@ -126,16 +127,38 @@ public class PokemonEditorActivity extends AppCompatActivity {
          case android.R.id.home:
             onBackPressed();
             break;
+         case R.id.delete_action:
+            showDeleteDialog();
+            break;
          case R.id.submit_action:
             updatePokemon();
-            Toast.makeText(this, "Updated " + mNickNameView.getText().toString() + "!",
-                  Toast.LENGTH_LONG).show();
-            backToTeamView();
             break;
          default:
             break;
       }
       return true;
+   }
+
+   private void showDeleteDialog() {
+      new LovelyStandardDialog(this)
+            .setIcon(R.drawable.ic_info_white_48dp)
+            .setTitle(R.string.delete_pokemon)
+            .setMessage(R.string.delete_pokemon_prompt).setCancelable(true)
+            .setPositiveButton(R.string.yes, new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                  deletePokemon();
+               }
+            }).setNegativeButton(R.string.no, null).setTopColor(
+            ContextCompat.getColor(this, R.color.colorPrimary)).show();
+   }
+
+   private void deletePokemon() {
+      mDatabaseHelper.deleteTeamPokemonSingle(mMemberId);
+
+      Toast.makeText(this, "Deleted pokemon " + mNickNameView.getText().toString() + ".",
+            Toast.LENGTH_LONG).show();
+      backToTeamView();
    }
 
    private void updatePokemon() {
@@ -145,6 +168,10 @@ public class PokemonEditorActivity extends AppCompatActivity {
             String.valueOf(mMoveSpinners[1].getSelectedItem()),
             String.valueOf(mMoveSpinners[2].getSelectedItem()),
             String.valueOf(mMoveSpinners[3].getSelectedItem()));
+
+      Toast.makeText(this, "Updated " + mNickNameView.getText().toString() + "!",
+            Toast.LENGTH_LONG).show();
+      backToTeamView();
    }
 
    private void backToTeamView() {

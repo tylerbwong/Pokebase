@@ -17,6 +17,8 @@
     <string name="login_title">What was your\nname again?</string>
     <string name="add_team_title">Choose a team to add to!</string>
     <string name="logout_question">Are you sure you want to logout?</string>
+    <string name="delete_team">Delete Team</string>
+    <string name="delete_pokemon">Delete Pokémon</string>
 
     <!-- VALUES -->
     <string name="logo_transition">Logo transition</string>
@@ -68,4 +70,6 @@
     <string name="delete">Delete</string>
     <string name="no_teams">"No teams to add to.\nPlease add a team first."</string>
     <string name="hashtag">#</string>
+    <string name="delete_team_prompt">Are you sure you want to delete this team?</string>
+    <string name="delete_pokemon_prompt">Are you sure you want to delete this Pokémon?</string>
 </resources>

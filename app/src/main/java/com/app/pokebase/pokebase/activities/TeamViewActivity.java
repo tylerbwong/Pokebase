@@ -98,6 +98,7 @@ public class TeamViewActivity extends AppCompatActivity {
    @Override
    public boolean onCreateOptionsMenu(Menu menu) {
       MenuInflater inflater = getMenuInflater();
+      inflater.inflate(R.menu.menu_trash, menu);
       inflater.inflate(R.menu.menu_submit, menu);
       return true;
    }
@@ -107,6 +108,9 @@ public class TeamViewActivity extends AppCompatActivity {
       switch (item.getItemId()) {
          case android.R.id.home:
             onBackPressed();
+            break;
+         case R.id.delete_action:
+            showDeleteDialog();
             break;
          case R.id.submit_action:
             addTeam();
@@ -129,6 +133,29 @@ public class TeamViewActivity extends AppCompatActivity {
                mDescriptionInput.getText().toString());
          Toast.makeText(this, "Updated team!", Toast.LENGTH_LONG).show();
       }
+      backToMain();
+   }
+
+   private void showDeleteDialog() {
+      new LovelyStandardDialog(this)
+            .setIcon(R.drawable.ic_info_white_48dp)
+            .setTitle(R.string.delete_team)
+            .setMessage(R.string.delete_team_prompt).setCancelable(true)
+            .setPositiveButton(R.string.yes, new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                  deleteTeam();
+               }
+            }).setNegativeButton(R.string.no, null).setTopColor(
+            ContextCompat.getColor(this, R.color.colorPrimary)).show();
+   }
+
+   private void deleteTeam() {
+      mDatabaseHelper.deleteTeam(mTeamId);
+      mDatabaseHelper.deleteTeamPokemonAll(mTeamId);
+
+      Toast.makeText(this, "Deleted team " + mNameInput.getText().toString() + ".",
+            Toast.LENGTH_LONG).show();
       backToMain();
    }
 
