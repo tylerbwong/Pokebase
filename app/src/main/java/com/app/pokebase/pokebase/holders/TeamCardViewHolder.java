@@ -11,9 +11,6 @@ import android.widget.TextView;
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.activities.TeamViewActivity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Tyler Wong
  */
@@ -29,7 +26,9 @@ public class TeamCardViewHolder extends RecyclerView.ViewHolder {
    public ImageView mPokemonSix;
    public int mTeamId;
 
-   public List<ImageView> pokemonList;
+   public ImageView[] pokemonList;
+
+   private final static int NUM_POKEMON = 6;
 
    public TeamCardViewHolder(View itemView) {
       super(itemView);
@@ -38,8 +37,8 @@ public class TeamCardViewHolder extends RecyclerView.ViewHolder {
 
       this.view.setOnClickListener(new View.OnClickListener() {
          @Override
-         public void onClick(View v) {
-            Context cardContext = v.getContext();
+         public void onClick(View view) {
+            Context cardContext = view.getContext();
             Intent editorIntent = new Intent(cardContext, TeamViewActivity.class);
             Bundle extras = new Bundle();
             extras.putInt(TeamViewActivity.TEAM_ID_KEY, mTeamId);
@@ -47,7 +46,7 @@ public class TeamCardViewHolder extends RecyclerView.ViewHolder {
             extras.putString("teamName", mTitleLabel.getText().toString());
             extras.putString("description", mDescription.getText().toString());
             editorIntent.putExtras(extras);
-            v.getContext().startActivity(editorIntent);
+            view.getContext().startActivity(editorIntent);
          }
       });
 
@@ -60,14 +59,14 @@ public class TeamCardViewHolder extends RecyclerView.ViewHolder {
       mPokemonFive = (ImageView) itemView.findViewById(R.id.pokemon_5);
       mPokemonSix = (ImageView) itemView.findViewById(R.id.pokemon_6);
 
-      pokemonList = new ArrayList<>();
+      pokemonList = new ImageView[NUM_POKEMON];
 
-      pokemonList.add(mPokemonOne);
-      pokemonList.add(mPokemonTwo);
-      pokemonList.add(mPokemonThree);
-      pokemonList.add(mPokemonFour);
-      pokemonList.add(mPokemonFive);
-      pokemonList.add(mPokemonSix);
+      pokemonList[0] = mPokemonOne;
+      pokemonList[1] = mPokemonTwo;
+      pokemonList[2] = mPokemonThree;
+      pokemonList[3] = mPokemonFour;
+      pokemonList[4] = mPokemonFive;
+      pokemonList[5] = mPokemonSix;
    }
 
    public void setTeamId(int teamId) {

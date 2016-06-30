@@ -38,7 +38,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
       int teamSize = curTeam.mTeam.length;
 
       for (int index = 0; index < teamSize; index++) {
-         holder.pokemonList.get(index).setImageResource(mContext.getResources()
+         holder.pokemonList[index].setImageResource(mContext.getResources()
                .getIdentifier("icon_" + curTeam.mTeam[index].mPokemonId,
                      "drawable", mContext.getPackageName()));
       }
