@@ -67,12 +67,25 @@ public class MainActivity extends AppCompatActivity {
       mToolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(mToolbar);
 
-      mNavigationView.getMenu().getItem(0).setChecked(true);
-      TeamsFragment teamsFragment = new TeamsFragment();
-      mCurrentFragment = teamsFragment;
-      fragmentTransaction = getSupportFragmentManager().beginTransaction();
-      fragmentTransaction.replace(R.id.frame, teamsFragment);
-      fragmentTransaction.commit();
+      Intent intent = getIntent();
+      boolean pokemonAdd = intent.getBooleanExtra("pokemonAdd", false);
+
+      if (pokemonAdd) {
+         mNavigationView.getMenu().getItem(1).setChecked(true);
+         PokebaseFragment pokebaseFragment = new PokebaseFragment();
+         mCurrentFragment = pokebaseFragment;
+         fragmentTransaction = getSupportFragmentManager().beginTransaction();
+         fragmentTransaction.replace(R.id.frame, pokebaseFragment);
+         fragmentTransaction.commit();
+      }
+      else {
+         mNavigationView.getMenu().getItem(0).setChecked(true);
+         TeamsFragment teamsFragment = new TeamsFragment();
+         mCurrentFragment = teamsFragment;
+         fragmentTransaction = getSupportFragmentManager().beginTransaction();
+         fragmentTransaction.replace(R.id.frame, teamsFragment);
+         fragmentTransaction.commit();
+      }
 
       mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 

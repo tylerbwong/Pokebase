@@ -33,7 +33,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
    private static final int MAX_LEVEL = 100;
    private Toolbar mToolbar;
    private ImageView mProfileImg;
-   private TextInputEditText mNickNameView;
+   private TextInputEditText mNicknameInput;
    private Spinner mLevelSpinner;
    private Spinner[] mMoveSpinners;
    private int mTeamId;
@@ -85,10 +85,10 @@ public class PokemonEditorActivity extends AppCompatActivity {
 
       int imageResourceId = getResources().getIdentifier("sprites_" + mPokemonId, "drawable", getPackageName());
       mProfileImg.setImageResource(imageResourceId);
-      mNickNameView = (TextInputEditText) findViewById(R.id.nickname_input);
-      mNickNameView.setText(mNickname);
+      mNicknameInput = (TextInputEditText) findViewById(R.id.nickname_input);
+      mNicknameInput.setText(mNickname);
 
-      mNickNameView.addTextChangedListener(new TextWatcher() {
+      mNicknameInput.addTextChangedListener(new TextWatcher() {
 
          @Override
          public void onTextChanged(CharSequence sequence, int start, int before, int count) {
@@ -98,7 +98,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
          }
 
          @Override
-         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+         public void beforeTextChanged(CharSequence sequence, int start, int count, int after) {
 
          }
 
@@ -165,7 +165,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
             .setIcon(R.drawable.ic_info_white_24dp)
             .setTitle(R.string.delete_pokemon)
             .setMessage(getResources().getString(R.string.delete_pokemon_prompt) + " "
-                  + mNickNameView.getText().toString() + "?")
+                  + mNicknameInput.getText().toString() + "?")
             .setCancelable(true)
             .setPositiveButton(R.string.yes, new View.OnClickListener() {
                @Override
@@ -179,20 +179,20 @@ public class PokemonEditorActivity extends AppCompatActivity {
    private void deletePokemon() {
       mDatabaseHelper.deleteTeamPokemonSingle(mMemberId);
 
-      Toast.makeText(this, "Deleted " + mNickNameView.getText().toString(),
+      Toast.makeText(this, "Deleted " + mNicknameInput.getText().toString(),
             Toast.LENGTH_LONG).show();
       backToTeamView();
    }
 
    private void updatePokemon() {
-      mDatabaseHelper.updateTeamPokemon(mMemberId, mNickNameView.getText().toString(),
+      mDatabaseHelper.updateTeamPokemon(mMemberId, mNicknameInput.getText().toString(),
             Integer.parseInt(String.valueOf(mLevelSpinner.getSelectedItem())),
             String.valueOf(mMoveSpinners[0].getSelectedItem()),
             String.valueOf(mMoveSpinners[1].getSelectedItem()),
             String.valueOf(mMoveSpinners[2].getSelectedItem()),
             String.valueOf(mMoveSpinners[3].getSelectedItem()));
 
-      Toast.makeText(this, "Updated " + mNickNameView.getText().toString() + "!",
+      Toast.makeText(this, "Updated " + mNicknameInput.getText().toString() + "!",
             Toast.LENGTH_LONG).show();
       backToTeamView();
    }

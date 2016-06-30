@@ -2,12 +2,15 @@ package com.app.pokebase.pokebase.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,15 +23,18 @@ import com.app.pokebase.pokebase.adapters.PokemonTeamMemberAdapter;
 import com.app.pokebase.pokebase.components.PokemonTeamMember;
 import com.app.pokebase.pokebase.database.DatabaseOpenHelper;
 import com.app.pokebase.pokebase.utilities.AnimatedRecyclerView;
+import com.github.fabtransitionactivity.SheetLayout;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 /**
  * @author Tyler Wong
  */
-public class TeamViewActivity extends AppCompatActivity {
+public class TeamViewActivity extends AppCompatActivity implements SheetLayout.OnFabAnimationEndListener {
    public static final String TEAM_ID_KEY = "team_id_key";
    public static final String UPDATE_KEY = "update_key";
    private Toolbar mToolbar;
+   private FloatingActionButton mFab;
+   private SheetLayout mSheetLayout;
    private AnimatedRecyclerView mPokemonList;
    private LinearLayout mEmptyView;
    private TextInputEditText mNameInput;
@@ -43,6 +49,7 @@ public class TeamViewActivity extends AppCompatActivity {
 
    private final static String DEFAULT_NAME = "My Team";
    private final static String DEFAULT_DESCRIPTION = "None";
+   private final static int REQUEST_CODE = 1;
 
    @Override
    public void onCreate(Bundle savedInstanceState) {
@@ -50,21 +57,22 @@ public class TeamViewActivity extends AppCompatActivity {
       setContentView(R.layout.activity_team);
 
       mToolbar = (Toolbar) findViewById(R.id.toolbar);
+      mFab = (FloatingActionButton) findViewById(R.id.fab);
+      mSheetLayout = (SheetLayout) findViewById(R.id.bottom_sheet);
       mPokemonList = (AnimatedRecyclerView) findViewById(R.id.team_list);
       mEmptyView = (LinearLayout) findViewById(R.id.empty_layout);
       mNameInput = (TextInputEditText) findViewById(R.id.name_input);
       mDescriptionInput = (TextInputEditText) findViewById(R.id.description_input);
 
-      setSupportActionBar(mToolbar);
-      ActionBar actionBar = getSupportActionBar();
+      mFab.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+            onFabClick();
+         }
+      });
 
-      if (actionBar != null) {
-         actionBar.setDisplayHomeAsUpEnabled(true);
-      }
-
-      getSupportActionBar().setTitle(R.string.new_team);
-
-      mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
+      mSheetLayout.setFab(mFab);
+      mSheetLayout.setFabAnimationEndListener(this);
 
       Intent intent = getIntent();
       Bundle extras = intent.getExtras();
@@ -72,6 +80,39 @@ public class TeamViewActivity extends AppCompatActivity {
       mUpdateKey = extras.getBoolean(UPDATE_KEY, false);
       String teamTitle = extras.getString("teamName");
       String description = extras.getString("description");
+
+      setSupportActionBar(mToolbar);
+      final ActionBar actionBar = getSupportActionBar();
+
+      if (actionBar != null) {
+         actionBar.setDisplayHomeAsUpEnabled(true);
+         actionBar.setTitle(teamTitle);
+      }
+
+      mNameInput.addTextChangedListener(new TextWatcher() {
+
+         @Override
+         public void onTextChanged(CharSequence sequence, int start, int before, int count) {
+            if (actionBar != null) {
+               actionBar.setTitle(sequence.toString());
+
+               if (!mUpdateKey && sequence.toString().trim().length() == 0) {
+                  actionBar.setTitle(R.string.new_team);
+               }
+            }
+         }
+
+         @Override
+         public void beforeTextChanged(CharSequence sequence, int start, int count, int after) {
+
+         }
+
+         @Override
+         public void afterTextChanged(Editable editable) {
+         }
+      });
+
+      mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
 
       mNameInput.setText(teamTitle);
       mDescriptionInput.setText(description);
@@ -82,6 +123,18 @@ public class TeamViewActivity extends AppCompatActivity {
                mNameInput.getText().toString(),
                mDescriptionInput.getText().toString());
          mPokemonList.setAdapter(mPokemonAdapter);
+
+         if (mPokemon.length == 6) {
+            mFab.setVisibility(View.GONE);
+         }
+         else {
+            mFab.setVisibility(View.VISIBLE);
+         }
+      }
+      else {
+         if (actionBar != null) {
+            actionBar.setTitle(R.string.new_team);
+         }
       }
 
       LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -95,6 +148,30 @@ public class TeamViewActivity extends AppCompatActivity {
       else {
          mPokemonList.setVisibility(View.VISIBLE);
          mEmptyView.setVisibility(View.GONE);
+      }
+   }
+
+   public void onFabClick() {
+      mSheetLayout.expandFab();
+   }
+
+   @Override
+   public void onFabAnimationEnd() {
+      if (!mUpdateKey) {
+         addTeam();
+      }
+      Intent intent = new Intent(this, MainActivity.class);
+      Bundle extras = new Bundle();
+      extras.putBoolean("pokemonAdd", true);
+      intent.putExtras(extras);
+      startActivityForResult(intent, REQUEST_CODE);
+   }
+
+   @Override
+   public void onActivityResult(int requestCode, int resultCode, Intent data) {
+      super.onActivityResult(requestCode, resultCode, data);
+      if (requestCode == REQUEST_CODE) {
+         mSheetLayout.contractFab();
       }
    }
 
