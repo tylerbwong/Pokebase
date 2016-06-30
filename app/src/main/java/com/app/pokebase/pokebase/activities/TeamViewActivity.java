@@ -157,9 +157,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
 
    @Override
    public void onFabAnimationEnd() {
-      if (!mUpdateKey) {
-         addTeam();
-      }
+      addTeam();
       Intent intent = new Intent(this, MainActivity.class);
       Bundle extras = new Bundle();
       extras.putBoolean("pokemonAdd", true);
