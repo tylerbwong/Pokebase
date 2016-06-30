@@ -198,7 +198,7 @@ public class ProfileActivity extends AppCompatActivity {
          new LovelyChoiceDialog(this)
                .setTopColorRes(R.color.colorPrimary)
                .setTitle("Choose a team to add " + mPokemonName + " to!")
-               .setIcon(R.drawable.ic_add_circle_outline_white_36dp)
+               .setIcon(R.drawable.ic_add_circle_outline_white_24dp)
                .setItems(teamNames, new LovelyChoiceDialog.OnItemSelectedListener<String>() {
                   @Override
                   public void onItemSelected(int position, String item) {
@@ -216,7 +216,7 @@ public class ProfileActivity extends AppCompatActivity {
          new LovelyChoiceDialog(this)
                .setTopColorRes(R.color.colorPrimary)
                .setTitle(getResources().getString(R.string.no_teams))
-               .setIcon(R.drawable.ic_add_circle_outline_white_36dp)
+               .setIcon(R.drawable.ic_add_circle_outline_white_24dp)
                .show();
       }
    }

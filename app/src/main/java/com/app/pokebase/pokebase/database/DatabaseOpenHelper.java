@@ -491,4 +491,10 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       mDatabase.delete(TEAM_POKEMON_TABLE, memberFilter, null);
       return true;
    }
+
+   public boolean deleteAllTeams() {
+      mDatabase.delete(TEAM_POKEMON_TABLE, null, null);
+      mDatabase.delete(TEAMS_TABLE, null, null);
+      return true;
+   }
 }

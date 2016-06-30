@@ -141,7 +141,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
 
    private void showDeleteDialog() {
       new LovelyStandardDialog(this)
-            .setIcon(R.drawable.ic_info_white_48dp)
+            .setIcon(R.drawable.ic_info_white_24dp)
             .setTitle(R.string.delete_pokemon)
             .setMessage(R.string.delete_pokemon_prompt).setCancelable(true)
             .setPositiveButton(R.string.yes, new View.OnClickListener() {
@@ -156,7 +156,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
    private void deletePokemon() {
       mDatabaseHelper.deleteTeamPokemonSingle(mMemberId);
 
-      Toast.makeText(this, "Deleted pokemon " + mNickNameView.getText().toString() + ".",
+      Toast.makeText(this, "Deleted " + mNickNameView.getText().toString(),
             Toast.LENGTH_LONG).show();
       backToTeamView();
    }
@@ -187,7 +187,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
 
    private void showBackDialog() {
       new LovelyStandardDialog(this)
-            .setIcon(R.drawable.ic_info_white_48dp)
+            .setIcon(R.drawable.ic_info_white_24dp)
             .setTitle(R.string.go_back)
             .setMessage(R.string.back_prompt).setCancelable(true)
             .setPositiveButton(R.string.yes, new View.OnClickListener() {

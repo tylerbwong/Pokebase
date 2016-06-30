@@ -72,4 +72,7 @@
     <string name="hashtag">#</string>
     <string name="delete_team_prompt">Are you sure you want to delete this team?</string>
     <string name="delete_pokemon_prompt">Are you sure you want to delete this Pokémon?</string>
+    <string name="clear_all_teams">Clear All Teams</string>
+    <string name="clear_all_teams_prompt">Are you sure you want to clear all teams?</string>
+    <string name="cleared_teams">Cleared All Teams</string>
 </resources>

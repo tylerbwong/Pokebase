@@ -3,7 +3,7 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/submit_action"
-        android:icon="@drawable/ic_check_white_36dp"
+        android:icon="@drawable/ic_check_white_24dp"
         android:title="@string/submit"
         app:showAsAction="always"/>
 </menu>

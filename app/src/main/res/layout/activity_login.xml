@@ -64,17 +64,6 @@
         android:textSize="17sp"/>
 
     <Button
-        android:id="@+id/create_user"
-        android:layout_width="100dp"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="?attr/selectableItemBackground"
-        android:text="@string/create_user"
-        android:textColor="@color/colorAccent"
-        android:textSize="12sp"/>
-
-    <Button
         android:id="@+id/login_button"
         android:layout_width="150dp"
         android:layout_height="60dp"

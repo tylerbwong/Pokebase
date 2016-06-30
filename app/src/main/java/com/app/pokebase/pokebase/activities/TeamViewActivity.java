@@ -41,6 +41,9 @@ public class TeamViewActivity extends AppCompatActivity {
    private boolean mUpdateKey;
    private int mTeamId;
 
+   private final static String DEFAULT_NAME = "My Team";
+   private final static String DEFAULT_DESCRIPTION = "None";
+
    @Override
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -122,15 +125,22 @@ public class TeamViewActivity extends AppCompatActivity {
    }
 
    private void addTeam() {
+      String name = mNameInput.getText().toString();
+      String description = mDescriptionInput.getText().toString();
+
       if (!mUpdateKey) {
-         mDatabaseHelper.insertTeam(mNameInput.getText().toString(),
-               mDescriptionInput.getText().toString());
+         if (name.length() == 0) {
+            name = DEFAULT_NAME;
+         }
+         if (description.length() == 0) {
+            description = DEFAULT_DESCRIPTION;
+         }
+         mDatabaseHelper.insertTeam(name, description);
          Toast.makeText(this, "Added new team " + mNameInput.getText().toString() + "!",
                Toast.LENGTH_LONG).show();
       }
       else {
-         mDatabaseHelper.updateTeam(mTeamId, mNameInput.getText().toString(),
-               mDescriptionInput.getText().toString());
+         mDatabaseHelper.updateTeam(mTeamId, name, description);
          Toast.makeText(this, "Updated team!", Toast.LENGTH_LONG).show();
       }
       backToMain();
@@ -138,7 +148,7 @@ public class TeamViewActivity extends AppCompatActivity {
 
    private void showDeleteDialog() {
       new LovelyStandardDialog(this)
-            .setIcon(R.drawable.ic_info_white_48dp)
+            .setIcon(R.drawable.ic_info_white_24dp)
             .setTitle(R.string.delete_team)
             .setMessage(R.string.delete_team_prompt).setCancelable(true)
             .setPositiveButton(R.string.yes, new View.OnClickListener() {
@@ -151,17 +161,17 @@ public class TeamViewActivity extends AppCompatActivity {
    }
 
    private void deleteTeam() {
-      mDatabaseHelper.deleteTeam(mTeamId);
       mDatabaseHelper.deleteTeamPokemonAll(mTeamId);
+      mDatabaseHelper.deleteTeam(mTeamId);
 
-      Toast.makeText(this, "Deleted team " + mNameInput.getText().toString() + ".",
+      Toast.makeText(this, "Deleted " + mNameInput.getText().toString(),
             Toast.LENGTH_LONG).show();
       backToMain();
    }
 
    private void showBackDialog() {
       new LovelyStandardDialog(this)
-            .setIcon(R.drawable.ic_info_white_48dp)
+            .setIcon(R.drawable.ic_info_white_24dp)
             .setTitle(R.string.go_back)
             .setMessage(R.string.back_prompt).setCancelable(true)
             .setPositiveButton(R.string.yes, new View.OnClickListener() {

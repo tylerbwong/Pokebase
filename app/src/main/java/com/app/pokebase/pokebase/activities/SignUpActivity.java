@@ -24,7 +24,6 @@ public class SignUpActivity extends AppCompatActivity {
    private TextInputEditText mNameInput;
    private TextView mNameCount;
    private Button mExitButton;
-   private Button mLoginButton;
    private Button mCreateButton;
    private boolean mHasText = false;
 
@@ -43,7 +42,6 @@ public class SignUpActivity extends AppCompatActivity {
       mNameInput = (TextInputEditText) findViewById(R.id.name_input);
       mNameCount = (TextView) findViewById(R.id.name_count);
       mExitButton = (Button) findViewById(R.id.exit_button);
-      mLoginButton = (Button) findViewById(R.id.login_button);
       mCreateButton = (Button) findViewById(R.id.create_user);
 
       mCreateButton.setEnabled(false);
@@ -52,13 +50,6 @@ public class SignUpActivity extends AppCompatActivity {
          @Override
          public void onClick(View v) {
             close();
-         }
-      });
-
-      mLoginButton.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-            switchToLogin();
          }
       });
 
@@ -78,10 +69,10 @@ public class SignUpActivity extends AppCompatActivity {
       mNameInput.addTextChangedListener(new TextWatcher() {
 
          @Override
-         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            String charLeft = s.length() + MAX_LENGTH;
+         public void onTextChanged(CharSequence sequence, int start, int before, int count) {
+            String charLeft = sequence.length() + MAX_LENGTH;
 
-            if (s.toString().trim().length() == 0) {
+            if (sequence.toString().trim().length() == 0) {
                mHasText = false;
             }
             else {
@@ -114,10 +105,9 @@ public class SignUpActivity extends AppCompatActivity {
    private void createUser() {
       SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
       SharedPreferences.Editor ed = pref.edit();
-      ed.putBoolean("loggedIn", true);
+      ed.putString("username", mNameInput.getText().toString());
       ed.apply();
       Intent genderIntent = new Intent(this, GenderActivity.class);
-      genderIntent.putExtra("username", mNameInput.getText().toString());
       startActivity(genderIntent);
    }
 
@@ -127,11 +117,6 @@ public class SignUpActivity extends AppCompatActivity {
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       finish();
       startActivity(intent);
-   }
-
-   private void switchToLogin() {
-      Intent loginIntent = new Intent(this, LoginActivity.class);
-      startActivity(loginIntent);
    }
 
    @Override

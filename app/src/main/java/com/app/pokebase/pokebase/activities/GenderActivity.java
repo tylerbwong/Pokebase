@@ -42,9 +42,6 @@ public class GenderActivity extends AppCompatActivity {
       mGirlButton = (ImageButton) findViewById(R.id.girl_button);
       mGoButton = (Button) findViewById(R.id.gender_select);
 
-      Intent mainIntent = getIntent();
-      mUsername = mainIntent.getStringExtra("username");
-
       mGoButton.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
@@ -86,7 +83,6 @@ public class GenderActivity extends AppCompatActivity {
       SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
       SharedPreferences.Editor ed = pref.edit();
       ed.putBoolean("loggedIn", true);
-      ed.putString("username", mUsername);
       if (mIsBoy) {
          ed.putString("gender", "M");
       }
@@ -95,7 +91,6 @@ public class GenderActivity extends AppCompatActivity {
       }
       ed.apply();
       Intent mainIntent = new Intent(this, MainActivity.class);
-      mainIntent.putExtra("username", mUsername);
       startActivity(mainIntent);
    }
 }

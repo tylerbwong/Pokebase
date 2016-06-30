@@ -26,15 +26,12 @@ public class LoginActivity extends AppCompatActivity {
    private TextInputEditText mNameInput;
    private TextView mNameCount;
    private Button mExitButton;
-   private Button mCreateButton;
    private Button mLoginButton;
-   private String mUsername;
    private boolean mHasText = false;
 
    Typeface robotoLight;
 
    final static String ROBOTO_PATH = "fonts/roboto-light.ttf";
-   final static String DEFAULT_NAME = "Ash Ketchum";
    final static String MAX_LENGTH = "/15";
 
    @Override
@@ -48,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
       mNameInput = (TextInputEditText) findViewById(R.id.name_input);
       mNameCount = (TextView) findViewById(R.id.name_count);
       mExitButton = (Button) findViewById(R.id.exit_button);
-      mCreateButton = (Button) findViewById(R.id.create_user);
+//      mCreateButton = (Button) findViewById(R.id.create_user);
       mLoginButton = (Button) findViewById(R.id.login_button);
 
       mLoginButton.setEnabled(false);
@@ -57,13 +54,6 @@ public class LoginActivity extends AppCompatActivity {
          @Override
          public void onClick(View v) {
             close();
-         }
-      });
-
-      mCreateButton.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-            switchToCreate();
          }
       });
 
@@ -83,10 +73,10 @@ public class LoginActivity extends AppCompatActivity {
       mNameInput.addTextChangedListener(new TextWatcher() {
 
          @Override
-         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            String charLeft = s.length() + MAX_LENGTH;
+         public void onTextChanged(CharSequence sequence, int start, int before, int count) {
+            String charLeft = sequence.length() + MAX_LENGTH;
 
-            if (s.toString().trim().length() == 0) {
+            if (sequence.toString().trim().length() == 0) {
                mHasText = false;
             }
             else {
@@ -107,16 +97,6 @@ public class LoginActivity extends AppCompatActivity {
       });
    }
 
-   public String getUsername() {
-      if (mHasText) {
-         mUsername = mNameInput.getText().toString();
-      }
-      else {
-         mUsername = DEFAULT_NAME;
-      }
-      return mUsername;
-   }
-
    private void checkFields() {
       if (mHasText) {
          mLoginButton.setEnabled(true);
@@ -130,10 +110,9 @@ public class LoginActivity extends AppCompatActivity {
       SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
       SharedPreferences.Editor ed = pref.edit();
       if (mNameInput.getText().toString().equals(pref.getString("username", ""))) {
-         ed.putString("username", mNameInput.getText().toString());
+         ed.putBoolean("loggedIn", true);
          ed.apply();
          Intent mainIntent = new Intent(this, MainActivity.class);
-         mainIntent.putExtra("username", mNameInput.getText().toString());
          startActivity(mainIntent);
       }
       else {
@@ -143,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
 
    private void showIncorrectLoginDialog() {
       new LovelyStandardDialog(this)
-            .setIcon(R.drawable.ic_info_white_48dp)
+            .setIcon(R.drawable.ic_info_white_24dp)
             .setTitle(R.string.not_found)
             .setMessage(R.string.try_again).setCancelable(true)
             .setPositiveButton(R.string.ok, null).setTopColor(
@@ -156,11 +135,6 @@ public class LoginActivity extends AppCompatActivity {
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       finish();
       startActivity(intent);
-   }
-
-   private void switchToCreate() {
-      Intent createIntent = new Intent(this, SignUpActivity.class);
-      startActivity(createIntent);
    }
 
    @Override

@@ -72,6 +72,20 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
       mTeamAdapter = new TeamAdapter(getContext(), mTeams);
       mTeamList.setAdapter(mTeamAdapter);
 
+      checkEmpty();
+
+      return view;
+   }
+
+   public void refreshAdapter() {
+      mTeams = mDatabaseHelper.queryAllTeams();
+      mTeamAdapter = new TeamAdapter(getContext(), mTeams);
+      mTeamList.setAdapter(mTeamAdapter);
+
+      checkEmpty();
+   }
+
+   private void checkEmpty() {
       if (mTeams.length == 0) {
          mTeamList.setVisibility(View.GONE);
          mEmptyView.setVisibility(View.VISIBLE);
@@ -80,8 +94,6 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
          mTeamList.setVisibility(View.VISIBLE);
          mEmptyView.setVisibility(View.GONE);
       }
-
-      return view;
    }
 
    public void onFabClick() {
