@@ -7,6 +7,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -56,7 +58,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
 
       mToolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(mToolbar);
-      ActionBar actionBar = getSupportActionBar();
+      final ActionBar actionBar = getSupportActionBar();
       if (actionBar != null) {
          actionBar.setDisplayHomeAsUpEnabled(true);
       }
@@ -85,6 +87,25 @@ public class PokemonEditorActivity extends AppCompatActivity {
       mProfileImg.setImageResource(imageResourceId);
       mNickNameView = (TextInputEditText) findViewById(R.id.nickname_input);
       mNickNameView.setText(mNickname);
+
+      mNickNameView.addTextChangedListener(new TextWatcher() {
+
+         @Override
+         public void onTextChanged(CharSequence sequence, int start, int before, int count) {
+            if (actionBar != null) {
+               actionBar.setTitle(sequence.toString());
+            }
+         }
+
+         @Override
+         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+         }
+
+         @Override
+         public void afterTextChanged(Editable editable) {
+         }
+      });
 
       mLevelSpinner = (Spinner) findViewById(R.id.level_spinner);
       mMoveSpinners = new Spinner[NUM_SPINNERS];
@@ -143,7 +164,9 @@ public class PokemonEditorActivity extends AppCompatActivity {
       new LovelyStandardDialog(this)
             .setIcon(R.drawable.ic_info_white_24dp)
             .setTitle(R.string.delete_pokemon)
-            .setMessage(R.string.delete_pokemon_prompt).setCancelable(true)
+            .setMessage(getResources().getString(R.string.delete_pokemon_prompt) + " "
+                  + mNickNameView.getText().toString() + "?")
+            .setCancelable(true)
             .setPositiveButton(R.string.yes, new View.OnClickListener() {
                @Override
                public void onClick(View v) {

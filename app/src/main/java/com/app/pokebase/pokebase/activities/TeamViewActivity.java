@@ -136,12 +136,11 @@ public class TeamViewActivity extends AppCompatActivity {
             description = DEFAULT_DESCRIPTION;
          }
          mDatabaseHelper.insertTeam(name, description);
-         Toast.makeText(this, "Added new team " + mNameInput.getText().toString() + "!",
-               Toast.LENGTH_LONG).show();
+         Toast.makeText(this, "Added new team " + name + "!", Toast.LENGTH_LONG).show();
       }
       else {
          mDatabaseHelper.updateTeam(mTeamId, name, description);
-         Toast.makeText(this, "Updated team!", Toast.LENGTH_LONG).show();
+         Toast.makeText(this, "Updated " + name + "!", Toast.LENGTH_LONG).show();
       }
       backToMain();
    }
@@ -150,7 +149,8 @@ public class TeamViewActivity extends AppCompatActivity {
       new LovelyStandardDialog(this)
             .setIcon(R.drawable.ic_info_white_24dp)
             .setTitle(R.string.delete_team)
-            .setMessage(R.string.delete_team_prompt).setCancelable(true)
+            .setMessage(getResources().getString(R.string.delete_team_prompt)
+                  + " " + mNameInput.getText().toString() + "?").setCancelable(true)
             .setPositiveButton(R.string.yes, new View.OnClickListener() {
                @Override
                public void onClick(View v) {

@@ -110,8 +110,6 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
          "SELECT P._id, P.pokemonId, P.nickname, P.level, P.moveOne, P.moveTwo, P.moveThree, P.moveFour " +
                "FROM TeamPokemon AS P " +
                "WHERE P.teamId = ?";
-   private final static String UPDATE_TEAM =
-         "UPDATE Teams SET name = ?, description = ? WHERE _id = ?";
    private final static String TEAM_NAMES =
          "SELECT T._id, T.name FROM Teams AS T";
    private final static String TEAM_SIZE =
@@ -329,7 +327,11 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
    }
 
    public boolean updateTeam(int teamId, String name, String description) {
-      mDatabase.rawQuery(UPDATE_TEAM, new String[]{name, description, String.valueOf(teamId)});
+      ContentValues contentValues = new ContentValues();
+      String idFilter = ROW_ID_COL + "=" + teamId;
+      contentValues.put(NAME_COL, name);
+      contentValues.put(DESCRIPTION_COL, description);
+      mDatabase.update(TEAMS_TABLE, contentValues, idFilter, null);
       return true;
    }
 
