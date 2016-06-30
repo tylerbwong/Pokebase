@@ -24,9 +24,8 @@ public class GenderActivity extends AppCompatActivity {
    private ImageButton mGirlButton;
    private Button mGoButton;
    private boolean mIsBoy = true;
-   private String mUsername;
 
-   Typeface robotoLight;
+   private Typeface mRobotoLight;
 
    final static String ROBOTO_PATH = "fonts/roboto-light.ttf";
 
@@ -35,7 +34,7 @@ public class GenderActivity extends AppCompatActivity {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_gender);
 
-      robotoLight = Typefaces.get(this, ROBOTO_PATH);
+      mRobotoLight = Typefaces.get(this, ROBOTO_PATH);
 
       mTitleLabel = (TextView) findViewById(R.id.title_label);
       mBoyButton = (ImageButton) findViewById(R.id.boy_button);
@@ -69,8 +68,8 @@ public class GenderActivity extends AppCompatActivity {
          }
       });
 
-      if (robotoLight != null) {
-         mTitleLabel.setTypeface(robotoLight);
+      if (mRobotoLight != null) {
+         mTitleLabel.setTypeface(mRobotoLight);
       }
    }
 

@@ -17,8 +17,7 @@ import java.util.TimerTask;
  */
 public class LoadingActivity extends AppCompatActivity {
    private TextView mTitlelabel;
-
-   Typeface robotoLight;
+   private Typeface mRobotoLight;
 
    final static String ROBOTO_PATH = "fonts/roboto-light.ttf";
    final static int LOADING_TIME = 3000;
@@ -27,12 +26,12 @@ public class LoadingActivity extends AppCompatActivity {
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_loading);
-      robotoLight = Typefaces.get(this, ROBOTO_PATH);
+      mRobotoLight = Typefaces.get(this, ROBOTO_PATH);
 
       mTitlelabel = (TextView) findViewById(R.id.title_label);
 
-      if (robotoLight != null) {
-         mTitlelabel.setTypeface(robotoLight);
+      if (mRobotoLight != null) {
+         mTitlelabel.setTypeface(mRobotoLight);
       }
 
       TimerTask timerTask = new TimerTask() {

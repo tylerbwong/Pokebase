@@ -30,8 +30,8 @@ public class EvolutionsActivity extends AppCompatActivity {
 
       Intent intent = getIntent();
       Bundle extras = intent.getExtras();
-      int pokemonId = extras.getInt(ProfileActivity.POKEMON_ID_KEY);
-      String pokemonName = extras.getString(ProfileActivity.POKEMON_NAME_KEY);
+      int pokemonId = extras.getInt(PokemonProfileActivity.POKEMON_ID_KEY);
+      String pokemonName = extras.getString(PokemonProfileActivity.POKEMON_NAME_KEY);
 
       mToolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(mToolbar);

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.app.pokebase.pokebase.R;
-import com.app.pokebase.pokebase.activities.ProfileActivity;
+import com.app.pokebase.pokebase.activities.PokemonProfileActivity;
 import com.app.pokebase.pokebase.components.PokemonListItem;
 import com.app.pokebase.pokebase.holders.PokemonListItemHolder;
 
@@ -52,9 +52,9 @@ public class PokemonRecyclerViewAdapter extends RecyclerView.Adapter implements 
    @Override
    public void onClick(View v) {
       int pokemonId = Integer.valueOf((((TextView) v.findViewById(R.id.id)).getText()).toString());
-      Intent profileIntent = new Intent(mContext, ProfileActivity.class);
+      Intent profileIntent = new Intent(mContext, PokemonProfileActivity.class);
       Bundle extras = new Bundle();
-      extras.putInt(ProfileActivity.POKEMON_ID_KEY, pokemonId);
+      extras.putInt(PokemonProfileActivity.POKEMON_ID_KEY, pokemonId);
       profileIntent.putExtras(extras);
       mContext.startActivity(profileIntent);
    }

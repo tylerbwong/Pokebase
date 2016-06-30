@@ -17,8 +17,7 @@ import com.app.pokebase.pokebase.utilities.Typefaces;
  */
 public class IntroPokebaseFragment extends Fragment {
    private TextView mDescription;
-
-   Typeface robotoLight;
+   private Typeface mRobotoLight;
 
    final static String ROBOTO_PATH = "fonts/roboto-light.ttf";
 
@@ -26,12 +25,12 @@ public class IntroPokebaseFragment extends Fragment {
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       View view = inflater.inflate(R.layout.intro_pokebase_fragment, container, false);
-      robotoLight = Typefaces.get(getContext(), ROBOTO_PATH);
+      mRobotoLight = Typefaces.get(getContext(), ROBOTO_PATH);
 
       mDescription = (TextView) view.findViewById(R.id.description);
 
-      if (robotoLight != null) {
-         mDescription.setTypeface(robotoLight);
+      if (mRobotoLight != null) {
+         mDescription.setTypeface(mRobotoLight);
       }
       return view;
    }

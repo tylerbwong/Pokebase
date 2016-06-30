@@ -20,8 +20,7 @@ import com.app.pokebase.pokebase.utilities.Typefaces;
  */
 public class SplashActivity extends AppCompatActivity {
    private TextView mTitleLabel;
-
-   Typeface robotoLight;
+   private Typeface mRobotoLight;
 
    final static int SPLASH_DISPLAY_LENGTH = 1000;
    final static String ROBOTO_PATH = "fonts/roboto-light.ttf";
@@ -29,23 +28,25 @@ public class SplashActivity extends AppCompatActivity {
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      robotoLight = Typefaces.get(this, ROBOTO_PATH);
+      mRobotoLight = Typefaces.get(this, ROBOTO_PATH);
 
       setContentView(R.layout.activity_splash);
 
       mTitleLabel = (TextView) findViewById(R.id.title_label);
 
-      if (robotoLight != null) {
-         mTitleLabel.setTypeface(robotoLight);
+      if (mRobotoLight != null) {
+         mTitleLabel.setTypeface(mRobotoLight);
       }
 
       SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
-      if (pref.getBoolean("loggedIn", false)) {
+      boolean loggedIn = pref.getBoolean("loggedIn", false);
+      boolean appIntroFinished = pref.getBoolean("appIntroFinished", false);
+      if (loggedIn) {
          Intent mainIntent = new Intent(this, MainActivity.class);
          startActivity(mainIntent);
          finish();
       }
-      else if (pref.getBoolean("appIntroFinished", false) && !pref.getBoolean("loggedIn", false)) {
+      else if (appIntroFinished && !loggedIn) {
          Intent loginIntent = new Intent(this, LoginActivity.class);
          startActivity(loginIntent);
          finish();
@@ -64,12 +65,12 @@ public class SplashActivity extends AppCompatActivity {
       new Handler().postDelayed(new Runnable() {
          @Override
          public void run() {
-            Intent mainIntent = new Intent(SplashActivity.this, StartActivity.class);
-            mainIntent.putExtra("logo_transition", true);
+            Intent startIntent = new Intent(SplashActivity.this, StartActivity.class);
+            startIntent.putExtra("logo_transition", true);
             LinearLayout logo = (LinearLayout) findViewById(R.id.logo);
             ActivityOptionsCompat options = ActivityOptionsCompat.
                   makeSceneTransitionAnimation(SplashActivity.this, logo, getString(R.string.logo_transition));
-            SplashActivity.this.startActivity(mainIntent, options.toBundle());
+            SplashActivity.this.startActivity(startIntent, options.toBundle());
          }
       }, SPLASH_DISPLAY_LENGTH);
    }

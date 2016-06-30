@@ -26,8 +26,7 @@ public class SignUpActivity extends AppCompatActivity {
    private Button mExitButton;
    private Button mCreateButton;
    private boolean mHasText = false;
-
-   Typeface robotoLight;
+   private Typeface mRobotoLight;
 
    final static String ROBOTO_PATH = "fonts/roboto-light.ttf";
    final static String MAX_LENGTH = "/15";
@@ -36,7 +35,7 @@ public class SignUpActivity extends AppCompatActivity {
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_signup);
-      robotoLight = Typefaces.get(this, ROBOTO_PATH);
+      mRobotoLight = Typefaces.get(this, ROBOTO_PATH);
 
       mTitleLabel = (TextView) findViewById(R.id.title_label);
       mNameInput = (TextInputEditText) findViewById(R.id.name_input);
@@ -60,10 +59,10 @@ public class SignUpActivity extends AppCompatActivity {
          }
       });
 
-      if (robotoLight != null) {
-         mTitleLabel.setTypeface(robotoLight);
-         mNameInput.setTypeface(robotoLight);
-         mNameCount.setTypeface(robotoLight);
+      if (mRobotoLight != null) {
+         mTitleLabel.setTypeface(mRobotoLight);
+         mNameInput.setTypeface(mRobotoLight);
+         mNameCount.setTypeface(mRobotoLight);
       }
 
       mNameInput.addTextChangedListener(new TextWatcher() {

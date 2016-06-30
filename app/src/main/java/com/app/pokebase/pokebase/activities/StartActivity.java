@@ -17,24 +17,23 @@ import com.app.pokebase.pokebase.utilities.Typefaces;
 public class StartActivity extends AppCompatActivity {
    private TextView mTitleLabel;
    private Button mEnterButton;
-
-   Typeface robotoLight;
+   private Typeface mRobotoLight;
 
    final static String ROBOTO_PATH = "fonts/roboto-light.ttf";
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      robotoLight = Typefaces.get(this, ROBOTO_PATH);
+      mRobotoLight = Typefaces.get(this, ROBOTO_PATH);
 
       setContentView(R.layout.activity_start);
 
       mTitleLabel = (TextView) findViewById(R.id.title_label);
       mEnterButton = (Button) findViewById(R.id.enter_button);
 
-      if (robotoLight != null) {
-         mTitleLabel.setTypeface(robotoLight);
-         mEnterButton.setTypeface(robotoLight);
+      if (mRobotoLight != null) {
+         mTitleLabel.setTypeface(mRobotoLight);
+         mEnterButton.setTypeface(mRobotoLight);
       }
 
       boolean logoTransition = getIntent().getBooleanExtra("logo_transition", false);

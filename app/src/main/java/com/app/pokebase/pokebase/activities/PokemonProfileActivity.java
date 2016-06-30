@@ -29,7 +29,7 @@ import java.util.Locale;
 /**
  * @author Brittany Berlanga
  */
-public class ProfileActivity extends AppCompatActivity {
+public class PokemonProfileActivity extends AppCompatActivity {
    public static final String POKEMON_ID_KEY = "pokemon_id";
    public static final String POKEMON_NAME_KEY = "pokemon_name";
    private static final double FT_PER_DM = 0.32808399;
