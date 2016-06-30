@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
    private Fragment mCurrentFragment;
    private DatabaseOpenHelper mDatabaseHelper;
 
+   private boolean mPokemonAdd;
+
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -68,9 +70,9 @@ public class MainActivity extends AppCompatActivity {
       setSupportActionBar(mToolbar);
 
       Intent intent = getIntent();
-      boolean pokemonAdd = intent.getBooleanExtra("pokemonAdd", false);
+      mPokemonAdd = intent.getBooleanExtra("pokemonAdd", false);
 
-      if (pokemonAdd) {
+      if (mPokemonAdd) {
          mNavigationView.getMenu().getItem(1).setChecked(true);
          PokebaseFragment pokebaseFragment = new PokebaseFragment();
          mCurrentFragment = pokebaseFragment;
@@ -215,6 +217,10 @@ public class MainActivity extends AppCompatActivity {
 
    @Override
    public void onBackPressed() {
-
+      if (mPokemonAdd) {
+         Intent toIntent = new Intent(this, TeamViewActivity.class);
+         toIntent.putExtras(getIntent().getExtras());
+         startActivity(toIntent);
+      }
    }
 }

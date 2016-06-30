@@ -160,6 +160,10 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       addTeam();
       Intent intent = new Intent(this, MainActivity.class);
       Bundle extras = new Bundle();
+      extras.putInt(TEAM_ID_KEY, mTeamId);
+      extras.putBoolean(UPDATE_KEY, mUpdateKey);
+      extras.putString("teamName", mNameInput.getText().toString());
+      extras.putString("description", mDescriptionInput.getText().toString());
       extras.putBoolean("pokemonAdd", true);
       intent.putExtras(extras);
       startActivityForResult(intent, REQUEST_CODE);
