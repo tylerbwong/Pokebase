@@ -1,7 +1,5 @@
 package com.app.pokebase.pokebase.components;
 
-import java.util.List;
-
 /**
  * @author Tyler Wong
  */
@@ -12,11 +10,11 @@ public class PokemonProfile {
    private int mWeight;
    private int mBaseExp;
    private String mRegion;
-   private List<String> mTypes;
-   private List<String> mMoves;
+   private String[] mTypes;
+   private String[] mMoves;
 
    public PokemonProfile(int id, String name, int height, int weight, int baseExp, String region,
-                         List<String> types, List<String> moves) {
+                         String[] types, String[] moves) {
       this.mId = id;
       this.mName = name;
       this.mHeight = height;
@@ -51,11 +49,11 @@ public class PokemonProfile {
       return mRegion;
    }
 
-   public List<String> getTypes() {
+   public String[] getTypes() {
       return mTypes;
    }
 
-   public List<String> getMoves() {
+   public String[] getMoves() {
       return mMoves;
    }
 }

@@ -19,9 +19,13 @@ import java.util.List;
 /**
  * @author Tyler Wong
  */
-public class DatabaseOpenHelper extends SQLiteAssetHelper {
+public final class DatabaseOpenHelper extends SQLiteAssetHelper {
+   private static DatabaseOpenHelper mDatabaseOpenHelper;
+   private SQLiteDatabase mDatabase;
+
    private final static String DB_NAME = "Pokebase.db";
-   private static final int DB_VERSION = 1;
+   private final static int DB_VERSION = 1;
+   private final static int MAX_NUM_MOVES = 4;
    private final static int MAX_TEAM_SIZE = 6;
    private final static String NONE = "None";
    private final static String TEAM_POKEMON_TABLE = "TeamPokemon";
@@ -42,6 +46,8 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
    private final static String WEIGHT_COL = "weight";
    private final static String BASE_EXP_COL = "baseExp";
    private final static String REGION_COL = "region";
+   private final static String TYPES = "Types";
+   private final static String REGIONS = "Regions";
 
    private final static String ALL =
          "SELECT P.id, P.name " +
@@ -117,8 +123,16 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
    private final static String SINGLE_MOVE =
          "SELECT M.name FROM Moves AS M WHERE M.id = ?";
 
-   public DatabaseOpenHelper(Context context) {
+   private DatabaseOpenHelper(Context context) {
       super(context, DB_NAME, null, DB_VERSION);
+      mDatabase = getWritableDatabase();
+   }
+
+   public static DatabaseOpenHelper getInstance(Context context) {
+      if (mDatabaseOpenHelper == null) {
+         mDatabaseOpenHelper = new DatabaseOpenHelper(context);
+      }
+      return mDatabaseOpenHelper;
    }
 
    @Override
@@ -131,146 +145,136 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
 
    }
 
-   public List<String> queryAllTypes() {
-      SQLiteDatabase database = getReadableDatabase();
-      List<String> typeList = new ArrayList<>();
-      Cursor cursor = database.rawQuery(ALL_TYPES, null);
+   public String[] queryAllTypes() {
+      Cursor cursor = mDatabase.rawQuery(ALL_TYPES, null);
+      String[] types = new String[cursor.getCount() + 1];
+      types[0] = TYPES;
+      int index = 1;
       cursor.moveToFirst();
 
       while (!cursor.isAfterLast()) {
-         typeList.add(cursor.getString(cursor.getColumnIndex(NAME_COL)));
+         types[index] = cursor.getString(cursor.getColumnIndex(NAME_COL));
+         index++;
          cursor.moveToNext();
       }
       cursor.close();
-      database.close();
-      return typeList;
+      return types;
    }
 
-   public List<String> queryAllRegions() {
-      SQLiteDatabase database = getReadableDatabase();
-      List<String> regionList = new ArrayList<>();
-      Cursor cursor = database.rawQuery(ALL_REGIONS, null);
+   public String[] queryAllRegions() {
+      Cursor cursor = mDatabase.rawQuery(ALL_REGIONS, null);
+      String[] regions = new String[cursor.getCount() + 1];
+      regions[0] = REGIONS;
+      int index = 1;
       cursor.moveToFirst();
 
       while (!cursor.isAfterLast()) {
-         regionList.add(cursor.getString(cursor.getColumnIndex(NAME_COL)));
+         regions[index] = cursor.getString(cursor.getColumnIndex(NAME_COL));
+         index++;
          cursor.moveToNext();
       }
       cursor.close();
-      database.close();
-      return regionList;
+      return regions;
    }
 
-   public List<PokemonListItem> queryByType(String type) {
-      SQLiteDatabase database = getReadableDatabase();
-      List<PokemonListItem> typePokemon = new ArrayList<>();
-      Cursor cursor = database.rawQuery(TYPE_QUERY, new String[]{type});
+   public PokemonListItem[] queryByType(String type) {
+      Cursor cursor = mDatabase.rawQuery(TYPE_QUERY, new String[]{type});
+      PokemonListItem[] typePokemon = new PokemonListItem[cursor.getCount()];
+      int index = 0;
       cursor.moveToFirst();
 
-      PokemonListItem tempPokemon;
-
       while (!cursor.isAfterLast()) {
-         tempPokemon = new PokemonListItem(cursor.getInt(cursor.getColumnIndex(ID_COL)),
+         typePokemon[index] = new PokemonListItem(cursor.getInt(cursor.getColumnIndex(ID_COL)),
                cursor.getString(cursor.getColumnIndex(NAME_COL)));
-         typePokemon.add(tempPokemon);
+         index++;
          cursor.moveToNext();
       }
       cursor.close();
-      database.close();
       return typePokemon;
    }
 
-   public List<PokemonListItem> queryByRegion(String region) {
-      SQLiteDatabase database = getReadableDatabase();
-      List<PokemonListItem> regionPokemon = new ArrayList<>();
-      Cursor cursor = database.rawQuery(REGION_QUERY, new String[]{region});
+   public PokemonListItem[] queryByRegion(String region) {
+      Cursor cursor = mDatabase.rawQuery(REGION_QUERY, new String[]{region});
+      PokemonListItem[] regionPokemon = new PokemonListItem[cursor.getCount()];
+      int index = 0;
       cursor.moveToFirst();
 
-      PokemonListItem tempPokemon;
-
       while (!cursor.isAfterLast()) {
-         tempPokemon = new PokemonListItem(cursor.getInt(cursor.getColumnIndex(ID_COL)),
+         regionPokemon[index] = new PokemonListItem(cursor.getInt(cursor.getColumnIndex(ID_COL)),
                cursor.getString(cursor.getColumnIndex(NAME_COL)));
-         regionPokemon.add(tempPokemon);
+         ;
+         index++;
          cursor.moveToNext();
       }
       cursor.close();
-      database.close();
       return regionPokemon;
    }
 
-   public List<PokemonListItem> queryByTypeAndRegion(String type, String region) {
-      SQLiteDatabase database = getReadableDatabase();
-      List<PokemonListItem> typeRegionPokemon = new ArrayList<>();
-      Cursor cursor = database.rawQuery(TYPE_REGION_QUERY, new String[]{type, region});
+   public PokemonListItem[] queryByTypeAndRegion(String type, String region) {
+      Cursor cursor = mDatabase.rawQuery(TYPE_REGION_QUERY, new String[]{type, region});
+      PokemonListItem[] typeRegionPokemon = new PokemonListItem[cursor.getCount()];
+      int index = 0;
       cursor.moveToFirst();
 
-      PokemonListItem tempPokemon;
-
       while (!cursor.isAfterLast()) {
-         tempPokemon = new PokemonListItem(cursor.getInt(cursor.getColumnIndex(ID_COL)),
+         typeRegionPokemon[index] = new PokemonListItem(cursor.getInt(cursor.getColumnIndex(ID_COL)),
                cursor.getString(cursor.getColumnIndex(NAME_COL)));
-         typeRegionPokemon.add(tempPokemon);
+         index++;
          cursor.moveToNext();
       }
       cursor.close();
-      database.close();
       return typeRegionPokemon;
    }
 
-   public List<PokemonListItem> queryAll() {
-      SQLiteDatabase database = getReadableDatabase();
-      List<PokemonListItem> pokemon = new ArrayList<>();
-      Cursor cursor = database.rawQuery(ALL, null);
+   public PokemonListItem[] queryAll() {
+      Cursor cursor = mDatabase.rawQuery(ALL, null);
+      PokemonListItem[] pokemon = new PokemonListItem[cursor.getCount()];
+      int index = 0;
       cursor.moveToFirst();
 
-      PokemonListItem tempPokemon;
-
       while (!cursor.isAfterLast()) {
-         tempPokemon = new PokemonListItem(cursor.getInt(cursor.getColumnIndex(ID_COL)),
+         pokemon[index] = new PokemonListItem(cursor.getInt(cursor.getColumnIndex(ID_COL)),
                cursor.getString(cursor.getColumnIndex(NAME_COL)));
-         pokemon.add(tempPokemon);
+         index++;
          cursor.moveToNext();
       }
       cursor.close();
-      database.close();
       return pokemon;
    }
 
-   public List<String> querySelectedPokemonTypes(int id) {
-      SQLiteDatabase database = getReadableDatabase();
-      List<String> pokemonTypes = new ArrayList<>();
-      Cursor cursor = database.rawQuery(SELECTED_TYPES_QUERY, new String[]{String.valueOf(id)});
+   public String[] querySelectedPokemonTypes(int id) {
+      Cursor cursor = mDatabase.rawQuery(SELECTED_TYPES_QUERY, new String[]{String.valueOf(id)});
+      String[] pokemonTypes = new String[cursor.getCount()];
+      int index = 0;
       cursor.moveToFirst();
 
       while (!cursor.isAfterLast()) {
-         pokemonTypes.add(cursor.getString(cursor.getColumnIndex(NAME_COL)));
+         pokemonTypes[index] = cursor.getString(cursor.getColumnIndex(NAME_COL));
+         index++;
          cursor.moveToNext();
       }
       cursor.close();
-      database.close();
       return pokemonTypes;
    }
 
-   public List<String> querySelectedPokemonMoves(int id) {
-      SQLiteDatabase database = getReadableDatabase();
-      List<String> pokemonMoves = new ArrayList<>();
-      Cursor cursor = database.rawQuery(SELECTED_MOVES_QUERY, new String[]{String.valueOf(id)});
+   public String[] querySelectedPokemonMoves(int id) {
+      Cursor cursor = mDatabase.rawQuery(SELECTED_MOVES_QUERY, new String[]{String.valueOf(id)});
+      String[] pokemonMoves = new String[cursor.getCount()];
+      int index = 0;
       cursor.moveToFirst();
 
       while (!cursor.isAfterLast()) {
-         pokemonMoves.add(cursor.getString(cursor.getColumnIndex(NAME_COL)));
+         pokemonMoves[index] = cursor.getString(cursor.getColumnIndex(NAME_COL));
+         index++;
          cursor.moveToNext();
       }
       cursor.close();
-      database.close();
       return pokemonMoves;
    }
 
    public PokemonProfile querySelectedPokemonProfile(int id) {
-      SQLiteDatabase database = getReadableDatabase();
       PokemonProfile pokemon;
-      Cursor cursor = database.rawQuery(SELECTED_INFO_QUERY, new String[]{String.valueOf(id)});
+      Cursor cursor = mDatabase.rawQuery(SELECTED_INFO_QUERY, new String[]{String.valueOf(id)});
       cursor.moveToFirst();
 
       pokemon = new PokemonProfile(cursor.getInt(cursor.getColumnIndex(ID_COL)),
@@ -282,42 +286,35 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
             querySelectedPokemonTypes(id), querySelectedPokemonMoves(id));
 
       cursor.close();
-      database.close();
       return pokemon;
    }
 
-   public List<PokemonListItem> queryPokemonEvolutions(int id) {
-      SQLiteDatabase database = getReadableDatabase();
-      List<PokemonListItem> pokemonEvolutions = new ArrayList<>();
-      Cursor cursor = database.rawQuery(SELECTED_EVOLUTIONS_QUERY, new String[]{String.valueOf(id)});
+   public PokemonListItem[] queryPokemonEvolutions(int id) {
+      Cursor cursor = mDatabase.rawQuery(SELECTED_EVOLUTIONS_QUERY, new String[]{String.valueOf(id)});
+      PokemonListItem[] pokemonEvolutions = new PokemonListItem[cursor.getCount()];
+      int index = 0;
       cursor.moveToFirst();
 
-      PokemonListItem tempPokemon;
-
       while (!cursor.isAfterLast()) {
-         tempPokemon = new PokemonListItem(cursor.getInt(cursor.getColumnIndex(ID_COL)),
+         pokemonEvolutions[index] = new PokemonListItem(cursor.getInt(cursor.getColumnIndex(ID_COL)),
                cursor.getString(cursor.getColumnIndex(NAME_COL)));
-         pokemonEvolutions.add(tempPokemon);
+         index++;
          cursor.moveToNext();
       }
       cursor.close();
-      database.close();
       return pokemonEvolutions;
    }
 
    public boolean insertTeam(String name, String description) {
-      SQLiteDatabase database = getWritableDatabase();
       ContentValues contentValues = new ContentValues();
       contentValues.put(NAME_COL, name);
       contentValues.put(DESCRIPTION_COL, description);
-      database.insert(TEAMS_TABLE, null, contentValues);
-      database.close();
+      mDatabase.insert(TEAMS_TABLE, null, contentValues);
       return true;
    }
 
    public boolean insertTeamPokemon(int teamId, int pokemonId, String nickname, int level,
                                     int moveOne, int moveTwo, int moveThree, int moveFour) {
-      SQLiteDatabase database = getWritableDatabase();
       ContentValues contentValues = new ContentValues();
       contentValues.put(TEAM_ID_COL, teamId);
       contentValues.put(POKEMON_ID_COL, pokemonId);
@@ -327,135 +324,115 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
       contentValues.put(MOVE_TWO_COL, moveTwo);
       contentValues.put(MOVE_THREE_COL, moveThree);
       contentValues.put(MOVE_FOUR_COL, moveFour);
-      database.insert(TEAM_POKEMON_TABLE, null, contentValues);
-      database.close();
+      mDatabase.insert(TEAM_POKEMON_TABLE, null, contentValues);
       return true;
    }
 
    public boolean updateTeam(int teamId, String name, String description) {
-      SQLiteDatabase database = getWritableDatabase();
-      database.rawQuery(UPDATE_TEAM, new String[]{name, description, String.valueOf(teamId)});
-      database.close();
+      mDatabase.rawQuery(UPDATE_TEAM, new String[]{name, description, String.valueOf(teamId)});
       return true;
    }
 
    public int queryTeamCount(int teamId) {
-      SQLiteDatabase database = getReadableDatabase();
       int result = 0;
-      Cursor cursor = database.rawQuery(TEAM_SIZE, new String[]{String.valueOf(teamId)});
+      Cursor cursor = mDatabase.rawQuery(TEAM_SIZE, new String[]{String.valueOf(teamId)});
       cursor.moveToFirst();
       result = cursor.getInt(0);
 
       cursor.close();
-      database.close();
       return result;
    }
 
    public List<Pair<Integer, String>> queryTeamIdsAndNames() {
-      SQLiteDatabase database = getReadableDatabase();
       List<Pair<Integer, String>> teamNames = new ArrayList<>();
-      Cursor cursor = database.rawQuery(TEAM_NAMES, null);
-      cursor.moveToFirst();
-
-      Pair<Integer, String> tempPair;
+      Cursor cursor = mDatabase.rawQuery(TEAM_NAMES, null);
       int teamId;
+      cursor.moveToFirst();
 
       while (!cursor.isAfterLast()) {
          teamId = cursor.getInt(cursor.getColumnIndex(ROW_ID_COL));
 
          if (queryTeamCount(teamId) < MAX_TEAM_SIZE) {
-            tempPair = new Pair<>(teamId, cursor.getString(cursor.getColumnIndex(NAME_COL)));
-            teamNames.add(tempPair);
+            teamNames.add(new Pair<>(teamId, cursor.getString(cursor.getColumnIndex(NAME_COL))));
          }
          cursor.moveToNext();
       }
       cursor.close();
-      database.close();
       return teamNames;
    }
 
-   public List<PokemonTeamItem> queryTeamPokemonIds(int teamId) {
-      SQLiteDatabase database = getReadableDatabase();
-      List<PokemonTeamItem> teamPokemon = new ArrayList<>();
-      Cursor cursor = database.rawQuery(ALL_TEAM_POKEMON, new String[]{String.valueOf(teamId)});
+   public PokemonTeamItem[] queryTeamPokemonIds(int teamId) {
+      Cursor cursor = mDatabase.rawQuery(ALL_TEAM_POKEMON, new String[]{String.valueOf(teamId)});
+      PokemonTeamItem[] teamPokemon = new PokemonTeamItem[cursor.getCount()];
+      int index = 0;
       cursor.moveToFirst();
 
-      PokemonTeamItem tempPokemon;
-
       while (!cursor.isAfterLast()) {
-         tempPokemon = new PokemonTeamItem(cursor.getInt(cursor.getColumnIndex(POKEMON_ID_COL)));
-         teamPokemon.add(tempPokemon);
+         teamPokemon[index] = new PokemonTeamItem(cursor.getInt(cursor.getColumnIndex(POKEMON_ID_COL)));
+         index++;
          cursor.moveToNext();
       }
       cursor.close();
-      database.close();
       return teamPokemon;
    }
 
-   public List<Team> queryAllTeams() {
-      SQLiteDatabase database = getReadableDatabase();
-      List<Team> teams = new ArrayList<>();
-      Cursor cursor = database.rawQuery(ALL_TEAM_INFO, null);
+   public Team[] queryAllTeams() {
+      Cursor cursor = mDatabase.rawQuery(ALL_TEAM_INFO, null);
+      Team[] teams = new Team[cursor.getCount()];
+      int teamId, index = 0;
       cursor.moveToFirst();
-
-      Team tempTeam;
-      int teamId;
 
       while (!cursor.isAfterLast()) {
          teamId = cursor.getInt(cursor.getColumnIndex(ROW_ID_COL));
-         tempTeam = new Team(teamId, cursor.getString(cursor.getColumnIndex(NAME_COL)),
+         teams[index] = new Team(teamId, cursor.getString(cursor.getColumnIndex(NAME_COL)),
                cursor.getString(cursor.getColumnIndex(DESCRIPTION_COL)),
                queryTeamPokemonIds(teamId));
-         teams.add(tempTeam);
+         index++;
          cursor.moveToNext();
       }
       cursor.close();
-      database.close();
       return teams;
    }
 
    public String queryPokemonMove(int moveId) {
-      SQLiteDatabase database = getReadableDatabase();
       String result = "";
-      Cursor cursor = database.rawQuery(SINGLE_MOVE, new String[]{String.valueOf(moveId)});
+      Cursor cursor = mDatabase.rawQuery(SINGLE_MOVE, new String[]{String.valueOf(moveId)});
       cursor.moveToFirst();
       while (!cursor.isAfterLast()) {
          result = cursor.getString(cursor.getColumnIndex(NAME_COL));
          cursor.moveToNext();
       }
+
       if (result.equals("")) {
          result = NONE;
       }
       cursor.close();
-
       return result;
    }
 
-   public List<String> queryPokemonMoves(int moveOne, int moveTwo, int moveThree, int moveFour) {
-      List<String> moves = new ArrayList<>();
+   public String[] queryPokemonMoves(int moveOne, int moveTwo, int moveThree, int moveFour) {
+      String[] moves = new String[MAX_NUM_MOVES];
       String moveOneName = queryPokemonMove(moveOne);
       String moveTwoName = queryPokemonMove(moveTwo);
       String moveThreeName = queryPokemonMove(moveThree);
       String moveFourName = queryPokemonMove(moveFour);
 
-      moves.add(moveOneName);
-      moves.add(moveTwoName);
-      moves.add(moveThreeName);
-      moves.add(moveFourName);
+      moves[0] = moveOneName;
+      moves[1] = moveTwoName;
+      moves[2] = moveThreeName;
+      moves[3] = moveFourName;
 
       return moves;
    }
 
-   public List<PokemonTeamMember> queryPokemonTeamMembers(int teamId) {
-      SQLiteDatabase database = getReadableDatabase();
-      List<PokemonTeamMember> pokemon = new ArrayList<>();
-      Cursor cursor = database.rawQuery(POKEMON_BY_TEAM, new String[]{String.valueOf(teamId)});
+   public PokemonTeamMember[] queryPokemonTeamMembers(int teamId) {
+      Cursor cursor = mDatabase.rawQuery(POKEMON_BY_TEAM, new String[]{String.valueOf(teamId)});
+      PokemonTeamMember[] pokemon = new PokemonTeamMember[cursor.getCount()];
+      int index = 0;
       cursor.moveToFirst();
 
-      PokemonTeamMember tempPokemon;
-
       while (!cursor.isAfterLast()) {
-         tempPokemon = new PokemonTeamMember(cursor.getInt(cursor.getColumnIndex(ROW_ID_COL)),
+         pokemon[index] = new PokemonTeamMember(cursor.getInt(cursor.getColumnIndex(ROW_ID_COL)),
                cursor.getInt(cursor.getColumnIndex(POKEMON_ID_COL)),
                cursor.getString(cursor.getColumnIndex(NICKNAME_COL)),
                cursor.getInt(cursor.getColumnIndex(LEVEL_COL)),
@@ -463,18 +440,16 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
                      cursor.getInt(cursor.getColumnIndex(MOVE_TWO_COL)),
                      cursor.getInt(cursor.getColumnIndex(MOVE_THREE_COL)),
                      cursor.getInt(cursor.getColumnIndex(MOVE_FOUR_COL))));
-         pokemon.add(tempPokemon);
+         index++;
          cursor.moveToNext();
       }
       cursor.close();
-      database.close();
       return pokemon;
    }
 
    public int queryMoveIdByName(String moveName) {
-      SQLiteDatabase database = getReadableDatabase();
-      int moveId = 0;
-      Cursor cursor = database.rawQuery(QUERY_MOVE_ID, new String[]{moveName});
+      int moveId;
+      Cursor cursor = mDatabase.rawQuery(QUERY_MOVE_ID, new String[]{moveName});
       cursor.moveToFirst();
       moveId = cursor.getInt(0);
       return moveId;
@@ -482,7 +457,6 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
 
    public boolean updateTeamPokemon(int memberId, String nickname, int level, String moveOne,
                                     String moveTwo, String moveThree, String moveFour) {
-      SQLiteDatabase database = getWritableDatabase();
       int moveOneId = queryMoveIdByName(moveOne);
       int moveTwoId = queryMoveIdByName(moveTwo);
       int moveThreeId = queryMoveIdByName(moveThree);
@@ -496,29 +470,25 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
       contentValues.put(MOVE_TWO_COL, moveTwoId);
       contentValues.put(MOVE_THREE_COL, moveThreeId);
       contentValues.put(MOVE_FOUR_COL, moveFourId);
-      database.update(TEAM_POKEMON_TABLE, contentValues, idFilter, null);
-      database.close();
+      mDatabase.update(TEAM_POKEMON_TABLE, contentValues, idFilter, null);
       return true;
    }
 
    public boolean deleteTeam(int teamId) {
-      SQLiteDatabase database = getWritableDatabase();
       String teamFilter = ROW_ID_COL + "=" + teamId;
-      database.delete(TEAMS_TABLE, teamFilter, null);
+      mDatabase.delete(TEAMS_TABLE, teamFilter, null);
       return true;
    }
 
    public boolean deleteTeamPokemonAll(int teamId) {
-      SQLiteDatabase database = getWritableDatabase();
       String teamFilter = TEAM_ID_COL + "=" + teamId;
-      database.delete(TEAM_POKEMON_TABLE, teamFilter, null);
+      mDatabase.delete(TEAM_POKEMON_TABLE, teamFilter, null);
       return true;
    }
 
    public boolean deleteTeamPokemonSingle(int memberId) {
-      SQLiteDatabase database = getWritableDatabase();
       String memberFilter = ROW_ID_COL + "=" + memberId;
-      database.delete(TEAM_POKEMON_TABLE, memberFilter, null);
+      mDatabase.delete(TEAM_POKEMON_TABLE, memberFilter, null);
       return true;
    }
 }

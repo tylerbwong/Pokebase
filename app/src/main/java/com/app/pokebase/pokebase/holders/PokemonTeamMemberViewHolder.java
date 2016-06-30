@@ -31,8 +31,8 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
 
       this.view.setOnClickListener(new View.OnClickListener() {
          @Override
-         public void onClick(View v) {
-            Context cardContext = v.getContext();
+         public void onClick(View view) {
+            Context cardContext = view.getContext();
             Intent editorIntent = new Intent(cardContext, PokemonEditorActivity.class);
             editorIntent.putExtra("pokemonId", mPokemonData.mPokemonId);
             editorIntent.putExtra("teamId", mTeamId);
@@ -41,12 +41,12 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
             editorIntent.putExtra("memberId", mPokemonData.mMemberId);
             editorIntent.putExtra("level", mPokemonData.mLevel);
             editorIntent.putExtra("nickname", mPokemonData.mNickname);
-            editorIntent.putExtra("moveOne", mPokemonData.mMoves.get(0));
-            editorIntent.putExtra("moveTwo", mPokemonData.mMoves.get(1));
-            editorIntent.putExtra("moveThree", mPokemonData.mMoves.get(2));
-            editorIntent.putExtra("moveFour", mPokemonData.mMoves.get(3));
+            editorIntent.putExtra("moveOne", mPokemonData.mMoves[0]);
+            editorIntent.putExtra("moveTwo", mPokemonData.mMoves[1]);
+            editorIntent.putExtra("moveThree", mPokemonData.mMoves[2]);
+            editorIntent.putExtra("moveFour", mPokemonData.mMoves[3]);
 
-            v.getContext().startActivity(editorIntent);
+            view.getContext().startActivity(editorIntent);
          }
       });
 

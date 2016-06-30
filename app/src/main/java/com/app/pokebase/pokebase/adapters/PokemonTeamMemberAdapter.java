@@ -10,20 +10,18 @@ import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.components.PokemonTeamMember;
 import com.app.pokebase.pokebase.holders.PokemonTeamMemberViewHolder;
 
-import java.util.List;
-
 /**
  * @author Tyler Wong
  */
 public class PokemonTeamMemberAdapter extends RecyclerView.Adapter<PokemonTeamMemberViewHolder> {
 
-   private List<PokemonTeamMember> mPokemon;
+   private PokemonTeamMember[] mPokemon;
    private Context mContext;
    private String mName;
    private String mDescription;
    private int mTeamId;
 
-   public PokemonTeamMemberAdapter(Context context, List<PokemonTeamMember> pokemon, int teamId,
+   public PokemonTeamMemberAdapter(Context context, PokemonTeamMember[] pokemon, int teamId,
                                    String name, String description) {
       this.mContext = context;
       this.mPokemon = pokemon;
@@ -42,13 +40,13 @@ public class PokemonTeamMemberAdapter extends RecyclerView.Adapter<PokemonTeamMe
 
    @Override
    public void onBindViewHolder(final PokemonTeamMemberViewHolder holder, int position) {
-      PokemonTeamMember curPokemon = mPokemon.get(position);
+      PokemonTeamMember curPokemon = mPokemon[position];
       holder.mName.setText(curPokemon.mNickname);
       holder.mLevel.setText(String.valueOf(curPokemon.mLevel));
       int imageResourceId = mContext.getResources().getIdentifier("sprites_" +
             curPokemon.mPokemonId, "drawable", mContext.getPackageName());
       holder.mPokemon.setImageResource(imageResourceId);
-      List<String> moves = curPokemon.mMoves;
+      String[] moves = curPokemon.mMoves;
       String moveList = "";
       for (String move : moves) {
          moveList += move + "\n";
@@ -62,6 +60,6 @@ public class PokemonTeamMemberAdapter extends RecyclerView.Adapter<PokemonTeamMe
 
    @Override
    public int getItemCount() {
-      return mPokemon.size();
+      return mPokemon.length;
    }
 }

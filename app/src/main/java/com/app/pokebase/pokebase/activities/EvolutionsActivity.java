@@ -10,11 +10,8 @@ import android.view.MenuItem;
 
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.adapters.PokemonRecyclerViewAdapter;
-import com.app.pokebase.pokebase.components.PokemonListItem;
 import com.app.pokebase.pokebase.database.DatabaseOpenHelper;
 import com.app.pokebase.pokebase.utilities.AnimatedRecyclerView;
-
-import java.util.List;
 
 /**
  * @author Brittany Berlanga
@@ -29,7 +26,7 @@ public class EvolutionsActivity extends AppCompatActivity {
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_evolutions);
-      mDatabaseHelper = new DatabaseOpenHelper(this);
+      mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
 
       Intent intent = getIntent();
       Bundle extras = intent.getExtras();
@@ -45,11 +42,10 @@ public class EvolutionsActivity extends AppCompatActivity {
          mActionBar.setTitle("Evolutions of " + pokemonName);
       }
 
-      List<PokemonListItem> pokemonEvolutions = mDatabaseHelper.queryPokemonEvolutions(pokemonId);
       mEvolutionList = (AnimatedRecyclerView) findViewById(R.id.evolutions_list);
       mEvolutionList.setLayoutManager(new LinearLayoutManager(this));
       mEvolutionList.setAdapter(new PokemonRecyclerViewAdapter(
-            this, pokemonEvolutions.toArray(new PokemonListItem[pokemonEvolutions.size()])));
+            this, mDatabaseHelper.queryPokemonEvolutions(pokemonId)));
    }
 
    @Override

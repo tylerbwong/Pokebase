@@ -18,9 +18,8 @@ import android.widget.Toast;
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.adapters.TextViewSpinnerAdapter;
 import com.app.pokebase.pokebase.database.DatabaseOpenHelper;
+import com.app.pokebase.pokebase.utilities.ArrayUtils;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
-
-import java.util.List;
 
 /**
  * @author Brittany Berlanga
@@ -53,7 +52,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_pokemon_editor);
 
-      mDatabaseHelper = new DatabaseOpenHelper(this);
+      mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
 
       mToolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(mToolbar);
@@ -94,8 +93,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
       mMoveSpinners[2] = (Spinner) findViewById(R.id.move_three_spinner);
       mMoveSpinners[3] = (Spinner) findViewById(R.id.move_four_spinner);
 
-
-      List<String> moves = mDatabaseHelper.querySelectedPokemonMoves(mPokemonId);
+      String[] moves = mDatabaseHelper.querySelectedPokemonMoves(mPokemonId);
 
       String[] levels = new String[MAX_LEVEL];
       for (int lvl = MIN_LEVEL; lvl <= levels.length; lvl++) {
@@ -105,14 +103,14 @@ public class PokemonEditorActivity extends AppCompatActivity {
       mLevelSpinner.setAdapter(new TextViewSpinnerAdapter(this, levels, 18));
       mLevelSpinner.setSelection(mLevel - 1);
 
-      mMoveSpinners[0].setAdapter(new TextViewSpinnerAdapter(this, moves.toArray(new String[moves.size()])));
-      mMoveSpinners[0].setSelection(moves.indexOf(mMoveOne));
-      mMoveSpinners[1].setAdapter(new TextViewSpinnerAdapter(this, moves.toArray(new String[moves.size()])));
-      mMoveSpinners[1].setSelection(moves.indexOf(mMoveTwo));
-      mMoveSpinners[2].setAdapter(new TextViewSpinnerAdapter(this, moves.toArray(new String[moves.size()])));
-      mMoveSpinners[2].setSelection(moves.indexOf(mMoveThree));
-      mMoveSpinners[3].setAdapter(new TextViewSpinnerAdapter(this, moves.toArray(new String[moves.size()])));
-      mMoveSpinners[3].setSelection(moves.indexOf(mMoveFour));
+      mMoveSpinners[0].setAdapter(new TextViewSpinnerAdapter(this, moves));
+      mMoveSpinners[0].setSelection(ArrayUtils.indexOf(moves, mMoveOne));
+      mMoveSpinners[1].setAdapter(new TextViewSpinnerAdapter(this, moves));
+      mMoveSpinners[1].setSelection(ArrayUtils.indexOf(moves, mMoveTwo));
+      mMoveSpinners[2].setAdapter(new TextViewSpinnerAdapter(this, moves));
+      mMoveSpinners[2].setSelection(ArrayUtils.indexOf(moves, mMoveThree));
+      mMoveSpinners[3].setAdapter(new TextViewSpinnerAdapter(this, moves));
+      mMoveSpinners[3].setSelection(ArrayUtils.indexOf(moves, mMoveFour));
    }
 
    @Override

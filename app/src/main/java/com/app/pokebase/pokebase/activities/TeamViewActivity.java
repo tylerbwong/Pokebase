@@ -22,8 +22,6 @@ import com.app.pokebase.pokebase.database.DatabaseOpenHelper;
 import com.app.pokebase.pokebase.utilities.AnimatedRecyclerView;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
-import java.util.List;
-
 /**
  * @author Tyler Wong
  */
@@ -37,7 +35,7 @@ public class TeamViewActivity extends AppCompatActivity {
    private TextInputEditText mDescriptionInput;
 
    private PokemonTeamMemberAdapter mPokemonAdapter;
-   private List<PokemonTeamMember> mPokemon;
+   private PokemonTeamMember[] mPokemon;
    private DatabaseOpenHelper mDatabaseHelper;
 
    private boolean mUpdateKey;
@@ -63,7 +61,7 @@ public class TeamViewActivity extends AppCompatActivity {
 
       getSupportActionBar().setTitle(R.string.new_team);
 
-      mDatabaseHelper = new DatabaseOpenHelper(this);
+      mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
 
       Intent intent = getIntent();
       Bundle extras = intent.getExtras();
@@ -78,7 +76,8 @@ public class TeamViewActivity extends AppCompatActivity {
       if (mUpdateKey) {
          mPokemon = mDatabaseHelper.queryPokemonTeamMembers(mTeamId);
          mPokemonAdapter = new PokemonTeamMemberAdapter(this, mPokemon, mTeamId,
-               mNameInput.getText().toString(), mDescriptionInput.getText().toString());
+               mNameInput.getText().toString(),
+               mDescriptionInput.getText().toString());
          mPokemonList.setAdapter(mPokemonAdapter);
       }
 
@@ -86,7 +85,7 @@ public class TeamViewActivity extends AppCompatActivity {
       llm.setOrientation(LinearLayoutManager.VERTICAL);
       mPokemonList.setLayoutManager(llm);
 
-      if (mPokemon == null || mPokemon.isEmpty()) {
+      if (mPokemon == null || mPokemon.length == 0) {
          mPokemonList.setVisibility(View.GONE);
          mEmptyView.setVisibility(View.VISIBLE);
       }

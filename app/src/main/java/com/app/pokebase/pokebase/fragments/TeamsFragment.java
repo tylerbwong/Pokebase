@@ -21,8 +21,6 @@ import com.app.pokebase.pokebase.database.DatabaseOpenHelper;
 import com.app.pokebase.pokebase.utilities.AnimatedRecyclerView;
 import com.github.fabtransitionactivity.SheetLayout;
 
-import java.util.List;
-
 /**
  * @author Tyler Wong
  */
@@ -34,7 +32,7 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
    private LinearLayout mEmptyView;
 
    private TeamAdapter mTeamAdapter;
-   private List<Team> mTeams;
+   private Team[] mTeams;
    private DatabaseOpenHelper mDatabaseHelper;
 
    private final static int REQUEST_CODE = 1;
@@ -42,12 +40,12 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
    @Nullable
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-      View v = inflater.inflate(R.layout.teams_fragment, container, false);
+      View view = inflater.inflate(R.layout.teams_fragment, container, false);
 
-      mSheetLayout = (SheetLayout) v.findViewById(R.id.bottom_sheet);
-      mTeamList = (AnimatedRecyclerView) v.findViewById(R.id.team_list);
-      mFab = (FloatingActionButton) v.findViewById(R.id.fab);
-      mEmptyView = (LinearLayout) v.findViewById(R.id.empty_layout);
+      mSheetLayout = (SheetLayout) view.findViewById(R.id.bottom_sheet);
+      mTeamList = (AnimatedRecyclerView) view.findViewById(R.id.team_list);
+      mFab = (FloatingActionButton) view.findViewById(R.id.fab);
+      mEmptyView = (LinearLayout) view.findViewById(R.id.empty_layout);
 
       mFab.setOnClickListener(new View.OnClickListener() {
          @Override
@@ -64,7 +62,7 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
          actionBar.setTitle(R.string.teams);
       }
 
-      mDatabaseHelper = new DatabaseOpenHelper(getContext());
+      mDatabaseHelper = DatabaseOpenHelper.getInstance(getContext());
 
       mTeams = mDatabaseHelper.queryAllTeams();
 
@@ -74,7 +72,7 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
       mTeamAdapter = new TeamAdapter(getContext(), mTeams);
       mTeamList.setAdapter(mTeamAdapter);
 
-      if (mTeams.isEmpty()) {
+      if (mTeams.length == 0) {
          mTeamList.setVisibility(View.GONE);
          mEmptyView.setVisibility(View.VISIBLE);
       }
@@ -83,7 +81,7 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
          mEmptyView.setVisibility(View.GONE);
       }
 
-      return v;
+      return view;
    }
 
    public void onFabClick() {

@@ -60,7 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      mDatabaseHelper = new DatabaseOpenHelper(this);
+      mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
 
       setContentView(R.layout.activity_profile);
       mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -93,9 +93,7 @@ public class ProfileActivity extends AppCompatActivity {
       int pokemonId = extras.getInt(POKEMON_ID_KEY);
       PokemonProfile pokemon = mDatabaseHelper.querySelectedPokemonProfile(pokemonId);
 
-      List<String> pokemonMoves = pokemon.getMoves();
-      mMovesList.setAdapter(new TextViewAdapter(this,
-            pokemonMoves.toArray(new String[pokemonMoves.size()])));
+      mMovesList.setAdapter(new TextViewAdapter(this, pokemon.getMoves()));
 
       mPokemonId = pokemon.getId();
       mIdView.setText(String.valueOf(mPokemonId));
@@ -113,10 +111,10 @@ public class ProfileActivity extends AppCompatActivity {
       mNameView.setText(mPokemonName);
       mRegionView.setText(pokemon.getRegion());
 
-      List<String> types = pokemon.getTypes();
+      String[] types = pokemon.getTypes();
 
-      if (types.size() == 1) {
-         String type = types.get(0);
+      if (types.length == 1) {
+         String type = types[0];
          mTypeTwoView.setVisibility(View.GONE);
          mTypeOneView.setText(type);
          String colorName = "type" + type;
@@ -124,8 +122,8 @@ public class ProfileActivity extends AppCompatActivity {
          mTypeOneView.setBackgroundColor(ContextCompat.getColor(this, colorResId));
       }
       else {
-         String typeOne = types.get(0);
-         String typeTwo = types.get(1);
+         String typeOne = types[0];
+         String typeTwo = types[1];
          mTypeOneView.setText(typeOne);
          String colorName = "type" + typeOne;
          int colorResId = getResources().getIdentifier(colorName, "color", getPackageName());

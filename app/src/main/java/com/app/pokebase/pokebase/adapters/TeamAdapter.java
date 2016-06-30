@@ -10,17 +10,15 @@ import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.components.Team;
 import com.app.pokebase.pokebase.holders.TeamCardViewHolder;
 
-import java.util.List;
-
 /**
  * @author Tyler Wong
  */
 public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
 
-   private List<Team> mTeams;
+   private Team[] mTeams;
    private Context mContext;
 
-   public TeamAdapter(Context context, List<Team> teams) {
+   public TeamAdapter(Context context, Team[] teams) {
       this.mContext = context;
       this.mTeams = teams;
    }
@@ -34,14 +32,14 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
 
    @Override
    public void onBindViewHolder(final TeamCardViewHolder holder, int position) {
-      Team curTeam = mTeams.get(position);
+      Team curTeam = mTeams[position];
       holder.mTitleLabel.setText(curTeam.mName);
       holder.mDescription.setText(curTeam.mDescription);
-      int teamSize = curTeam.mTeam.size();
+      int teamSize = curTeam.mTeam.length;
 
-      for (int i = 0; i < teamSize; i++) {
-         holder.pokemonList.get(i).setImageResource(mContext.getResources()
-               .getIdentifier("icon_" + curTeam.mTeam.get(i).mPokemonId,
+      for (int index = 0; index < teamSize; index++) {
+         holder.pokemonList.get(index).setImageResource(mContext.getResources()
+               .getIdentifier("icon_" + curTeam.mTeam[index].mPokemonId,
                      "drawable", mContext.getPackageName()));
       }
 
@@ -50,7 +48,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
 
    @Override
    public int getItemCount() {
-      return mTeams.size();
+      return mTeams.length;
    }
 
    @Override

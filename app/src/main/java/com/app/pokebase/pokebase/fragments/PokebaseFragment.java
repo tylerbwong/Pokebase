@@ -18,8 +18,6 @@ import com.app.pokebase.pokebase.components.PokemonListItem;
 import com.app.pokebase.pokebase.database.DatabaseOpenHelper;
 import com.app.pokebase.pokebase.utilities.AnimatedRecyclerView;
 
-import java.util.List;
-
 /**
  * @author Tyler Wong
  */
@@ -28,7 +26,7 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
    private Spinner mRegionSpinner;
    private AnimatedRecyclerView mPokemonList;
    private DatabaseOpenHelper mDatabaseHelper;
-   private List<PokemonListItem> mPokemon;
+   private PokemonListItem[] mPokemon;
 
    private final static String TYPES = "Types";
    private final static String REGIONS = "Regions";
@@ -37,7 +35,7 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       getActivity().setTheme(R.style.PokemonEditorTheme);
-      mDatabaseHelper = new DatabaseOpenHelper(getContext());
+      mDatabaseHelper = DatabaseOpenHelper.getInstance(getContext());
    }
 
    @Override
@@ -68,17 +66,12 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
       mPokemonList = (AnimatedRecyclerView) view.findViewById(R.id.pokemon_list);
       mPokemonList.setLayoutManager(new LinearLayoutManager(getContext()));
 
-      List<String> types = mDatabaseHelper.queryAllTypes();
-      types.add(0, TYPES);
-      List<String> regions = mDatabaseHelper.queryAllRegions();
-      regions.add(0, REGIONS);
       mTypeSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(),
-            types.toArray(new String[types.size()])));
+            mDatabaseHelper.queryAllTypes()));
       mRegionSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(),
-            regions.toArray(new String[regions.size()])));
-      mPokemon = mDatabaseHelper.queryAll();
+            mDatabaseHelper.queryAllRegions()));
       mPokemonList.setAdapter(new PokemonRecyclerViewAdapter(getContext(),
-            mPokemon.toArray(new PokemonListItem[mPokemon.size()])));
+            mDatabaseHelper.queryAll()));
    }
 
    @Override
@@ -94,17 +87,16 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
       if (type.equals(TYPES) && !region.equals(REGIONS)) {
          mPokemon = mDatabaseHelper.queryByRegion(region);
       }
-      else if (!type.equals("Types") && region.equals("Regions")) {
+      else if (!type.equals(TYPES) && region.equals(REGIONS)) {
          mPokemon = mDatabaseHelper.queryByType(type);
       }
-      else if (!type.equals("Types") && !region.equals("Regions")) {
+      else if (!type.equals(TYPES) && !region.equals(REGIONS)) {
          mPokemon = mDatabaseHelper.queryByTypeAndRegion(type, region);
       }
       else {
          mPokemon = mDatabaseHelper.queryAll();
       }
 
-      mPokemonList.setAdapter(new PokemonRecyclerViewAdapter(getContext(),
-            mPokemon.toArray(new PokemonListItem[mPokemon.size()])));
+      mPokemonList.setAdapter(new PokemonRecyclerViewAdapter(getContext(), mPokemon));
    }
 }
