@@ -65,6 +65,8 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       mNameInput = (TextInputEditText) findViewById(R.id.name_input);
       mDescriptionInput = (TextInputEditText) findViewById(R.id.description_input);
 
+      mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
+
       mFab.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View view) {
@@ -79,8 +81,8 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       Bundle extras = intent.getExtras();
       mTeamId = extras.getInt(TEAM_ID_KEY);
       mUpdateKey = extras.getBoolean(UPDATE_KEY, false);
-      String teamTitle = extras.getString("teamName");
-      String description = extras.getString("description");
+      String teamTitle = extras.getString("teamName", DEFAULT_NAME + " " + (mDatabaseHelper.queryLastTeamAddedId() + 1));
+      String description = extras.getString("description", DEFAULT_DESCRIPTION);
 
       setSupportActionBar(mToolbar);
       final ActionBar actionBar = getSupportActionBar();
@@ -112,8 +114,6 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
          public void afterTextChanged(Editable editable) {
          }
       });
-
-      mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
 
       mNameInput.setText(teamTitle);
       mDescriptionInput.setText(description);
