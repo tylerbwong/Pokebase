@@ -156,19 +156,20 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
 
    @Override
    public void onFabAnimationEnd() {
-      addTeam();
-      Intent intent = new Intent(this, MainActivity.class);
-      Bundle extras = new Bundle();
-      if (mTeamId == 0) {
-         mTeamId = mDatabaseHelper.queryLastTeamAddedId();
+      if (addTeam()) {
+         Intent intent = new Intent(this, MainActivity.class);
+         Bundle extras = new Bundle();
+         if (mTeamId == 0) {
+            mTeamId = mDatabaseHelper.queryLastTeamAddedId();
+         }
+         extras.putInt(TEAM_ID_KEY, mTeamId);
+         extras.putBoolean(UPDATE_KEY, true);
+         extras.putString("teamName", mNameInput.getText().toString());
+         extras.putString("description", mDescriptionInput.getText().toString());
+         extras.putBoolean("pokemonAdd", true);
+         intent.putExtras(extras);
+         startActivityForResult(intent, REQUEST_CODE);
       }
-      extras.putInt(TEAM_ID_KEY, mTeamId);
-      extras.putBoolean(UPDATE_KEY, true);
-      extras.putString("teamName", mNameInput.getText().toString());
-      extras.putString("description", mDescriptionInput.getText().toString());
-      extras.putBoolean("pokemonAdd", true);
-      intent.putExtras(extras);
-      startActivityForResult(intent, REQUEST_CODE);
    }
 
    @Override
@@ -197,7 +198,9 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
             showDeleteDialog();
             break;
          case R.id.submit_action:
-            addTeam();
+            if (addTeam()) {
+               backToMain();
+            }
             break;
          default:
             break;
@@ -205,10 +208,11 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       return true;
    }
 
-   private void addTeam() {
+   private boolean addTeam() {
       String name = mNameInput.getText().toString();
       String description = mDescriptionInput.getText().toString();
-      boolean doesTeamNameExist = mDatabaseHelper.doesTeamNameExist(name, mUpdateKey);
+      boolean doesTeamNameExist = mDatabaseHelper.doesTeamNameExist(name, mTeamId, mUpdateKey);
+      boolean result = false;
 
       if (!mUpdateKey && !doesTeamNameExist) {
          if (name.length() == 0) {
@@ -219,16 +223,18 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
          }
          mDatabaseHelper.insertTeam(name, description);
          Toast.makeText(this, "Added new team " + name + "!", Toast.LENGTH_LONG).show();
-         backToMain();
+         result = true;
       }
-      else if (!doesTeamNameExist){
+      else if (mUpdateKey && !doesTeamNameExist){
          mDatabaseHelper.updateTeam(mTeamId, name, description);
          Toast.makeText(this, "Updated " + name + "!", Toast.LENGTH_LONG).show();
-         backToMain();
+         result = true;
       }
       else {
          showUsedNameDialog();
       }
+
+      return result;
    }
 
    private void showUsedNameDialog() {

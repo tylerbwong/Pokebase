@@ -133,6 +133,8 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
          "SELECT MAX(T._id) FROM Teams AS T";
    private final static String DOES_TEAM_EXIST =
          "SELECT COUNT(*) FROM Teams AS T WHERE T.name = ?";
+   private final static String TEAM_NAME_BY_ID =
+         "SELECT T.name FROM Teams AS T WHERE T._id = ?";
 
    private DatabaseOpenHelper(Context context) {
       super(context, DB_NAME, null, DB_VERSION);
@@ -409,19 +411,36 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return true;
    }
 
-   public boolean doesTeamNameExist(String name, boolean updateKey) {
-      boolean result = false;
-      if (!updateKey) {
-         int count;
-         Cursor cursor = mDatabase.rawQuery(DOES_TEAM_EXIST, new String[]{name});
-         cursor.moveToFirst();
-         count = cursor.getInt(0);
+   public boolean doesTeamNameExist(String name, int teamId, boolean updateKey) {
+      boolean result = true;
+      int count;
+      Cursor cursor = mDatabase.rawQuery(DOES_TEAM_EXIST, new String[]{name});
+      cursor.moveToFirst();
+      count = cursor.getInt(0);
 
-         if (count != 0) {
-            result = true;
+      if (updateKey && count == 1) {
+         String previousName = queryTeamName(teamId);
+
+         if (name.equals(previousName)) {
+            result = false;
          }
       }
 
+      if (count == 0) {
+         result = false;
+      }
+
+      cursor.close();
+      return result;
+   }
+
+   public String queryTeamName(int teamId) {
+      String result;
+      Cursor cursor = mDatabase.rawQuery(TEAM_NAME_BY_ID, new String[]{String.valueOf(teamId)});
+      cursor.moveToFirst();
+      result = cursor.getString(0);
+
+      cursor.close();
       return result;
    }
 
