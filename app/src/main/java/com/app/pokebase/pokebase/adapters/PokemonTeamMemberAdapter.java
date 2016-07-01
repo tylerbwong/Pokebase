@@ -21,6 +21,8 @@ public class PokemonTeamMemberAdapter extends RecyclerView.Adapter<PokemonTeamMe
    private String mDescription;
    private int mTeamId;
 
+   private final static String LAST_UPDATED = "Last Updated: ";
+
    public PokemonTeamMemberAdapter(Context context, PokemonTeamMember[] pokemon, int teamId,
                                    String name, String description) {
       this.mContext = context;
@@ -43,6 +45,7 @@ public class PokemonTeamMemberAdapter extends RecyclerView.Adapter<PokemonTeamMe
       PokemonTeamMember curPokemon = mPokemon[position];
       holder.mName.setText(curPokemon.mNickname);
       holder.mLevel.setText(String.valueOf(curPokemon.mLevel));
+      holder.mLastUpdated.setText(LAST_UPDATED + curPokemon.mLastUpdated);
       int imageResourceId = mContext.getResources().getIdentifier("sprites_" +
             curPokemon.mPokemonId, "drawable", mContext.getPackageName());
       holder.mPokemon.setImageResource(imageResourceId);

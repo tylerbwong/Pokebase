@@ -48,7 +48,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
    private boolean mUpdateKey;
    private int mTeamId;
 
-   private final static String DEFAULT_NAME = "My Team";
+   private final static String DEFAULT_NAME = "Team";
    private final static String DEFAULT_DESCRIPTION = "None";
    private final static int REQUEST_CODE = 1;
 
@@ -159,8 +159,11 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       addTeam();
       Intent intent = new Intent(this, MainActivity.class);
       Bundle extras = new Bundle();
+      if (mTeamId == 0) {
+         mTeamId = mDatabaseHelper.queryLastTeamAddedId();
+      }
       extras.putInt(TEAM_ID_KEY, mTeamId);
-      extras.putBoolean(UPDATE_KEY, mUpdateKey);
+      extras.putBoolean(UPDATE_KEY, true);
       extras.putString("teamName", mNameInput.getText().toString());
       extras.putString("description", mDescriptionInput.getText().toString());
       extras.putBoolean("pokemonAdd", true);
@@ -205,22 +208,37 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
    private void addTeam() {
       String name = mNameInput.getText().toString();
       String description = mDescriptionInput.getText().toString();
+      boolean doesTeamNameExist = mDatabaseHelper.doesTeamNameExist(name, mUpdateKey);
 
-      if (!mUpdateKey) {
+      if (!mUpdateKey && !doesTeamNameExist) {
          if (name.length() == 0) {
-            name = DEFAULT_NAME;
+            name = DEFAULT_NAME + " " + (mDatabaseHelper.queryLastTeamAddedId() + 1);
          }
          if (description.length() == 0) {
             description = DEFAULT_DESCRIPTION;
          }
          mDatabaseHelper.insertTeam(name, description);
          Toast.makeText(this, "Added new team " + name + "!", Toast.LENGTH_LONG).show();
+         backToMain();
       }
-      else {
+      else if (!doesTeamNameExist){
          mDatabaseHelper.updateTeam(mTeamId, name, description);
          Toast.makeText(this, "Updated " + name + "!", Toast.LENGTH_LONG).show();
+         backToMain();
       }
-      backToMain();
+      else {
+         showUsedNameDialog();
+      }
+   }
+
+   private void showUsedNameDialog() {
+      new LovelyStandardDialog(this)
+            .setIcon(R.drawable.ic_info_white_24dp)
+            .setTitle(R.string.used_name)
+            .setMessage(mNameInput.getText().toString() + " " + getString(R.string.used_name_info))
+            .setCancelable(true)
+            .setNeutralButton(getString(R.string.ok), null).setTopColor(
+            ContextCompat.getColor(this, R.color.colorPrimary)).show();
    }
 
    private void showDeleteDialog() {

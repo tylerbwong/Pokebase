@@ -13,8 +13,12 @@ import com.app.pokebase.pokebase.components.PokemonTeamMember;
 import com.app.pokebase.pokebase.components.Team;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Tyler Wong
@@ -45,9 +49,11 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
    private final static String HEIGHT_COL = "height";
    private final static String WEIGHT_COL = "weight";
    private final static String BASE_EXP_COL = "baseExp";
+   private final static String LAST_UPDATED_COL = "lastUpdated";
    private final static String REGION_COL = "region";
    private final static String TYPES = "Types";
    private final static String REGIONS = "Regions";
+   private final static String DATE_FORMAT = "M/d/yyyy h:mm a";
 
    private final static String ALPHABETIZE =
          " ORDER BY P.name";
@@ -101,7 +107,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
                "JOIN Pokemon AS K ON E.id = K.id " +
                "WHERE P.id = ?";
    private final static String ALL_TEAM_INFO =
-         "SELECT T._id, T.name, T.description " +
+         "SELECT T._id, T.name, T.description, T.lastUpdated " +
                "FROM Teams AS T " +
                "ORDER BY T._id";
    private final static String ALL_TEAM_POKEMON =
@@ -109,7 +115,8 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
                "FROM TeamPokemon AS T " +
                "WHERE T.teamId = ?";
    private final static String POKEMON_BY_TEAM =
-         "SELECT P._id, P.pokemonId, P.nickname, P.level, P.moveOne, P.moveTwo, P.moveThree, P.moveFour " +
+         "SELECT P._id, P.pokemonId, P.nickname, P.level, P.moveOne, P.moveTwo, P.moveThree, " +
+               "P.moveFour, P.lastUpdated " +
                "FROM TeamPokemon AS P " +
                "WHERE P.teamId = ?";
    private final static String TEAM_NAMES =
@@ -122,6 +129,10 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
          "SELECT M.id FROM Moves AS M WHERE M.name = ?";
    private final static String SINGLE_MOVE =
          "SELECT M.name FROM Moves AS M WHERE M.id = ?";
+   private final static String LAST_TEAM_ADDED =
+         "SELECT MAX(T._id) FROM Teams AS T";
+   private final static String DOES_TEAM_EXIST =
+         "SELECT COUNT(*) FROM Teams AS T WHERE T.name = ?";
 
    private DatabaseOpenHelper(Context context) {
       super(context, DB_NAME, null, DB_VERSION);
@@ -338,6 +349,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       ContentValues contentValues = new ContentValues();
       contentValues.put(NAME_COL, name);
       contentValues.put(DESCRIPTION_COL, description);
+      contentValues.put(LAST_UPDATED_COL, getDate());
       mDatabase.insert(TEAMS_TABLE, null, contentValues);
       return true;
    }
@@ -353,7 +365,9 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       contentValues.put(MOVE_TWO_COL, moveTwo);
       contentValues.put(MOVE_THREE_COL, moveThree);
       contentValues.put(MOVE_FOUR_COL, moveFour);
+      contentValues.put(LAST_UPDATED_COL, getDate());
       mDatabase.insert(TEAM_POKEMON_TABLE, null, contentValues);
+      updateTeamLastUpdated(teamId);
       return true;
    }
 
@@ -362,17 +376,52 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       String idFilter = ROW_ID_COL + "=" + teamId;
       contentValues.put(NAME_COL, name);
       contentValues.put(DESCRIPTION_COL, description);
+      contentValues.put(LAST_UPDATED_COL, getDate());
       mDatabase.update(TEAMS_TABLE, contentValues, idFilter, null);
       return true;
    }
 
    public int queryTeamCount(int teamId) {
-      int result = 0;
+      int result;
       Cursor cursor = mDatabase.rawQuery(TEAM_SIZE, new String[]{String.valueOf(teamId)});
       cursor.moveToFirst();
       result = cursor.getInt(0);
 
       cursor.close();
+      return result;
+   }
+
+   public int queryLastTeamAddedId() {
+      int result;
+      Cursor cursor = mDatabase.rawQuery(LAST_TEAM_ADDED, null);
+      cursor.moveToFirst();
+      result = cursor.getInt(0);
+
+      cursor.close();
+      return result;
+   }
+
+   public boolean updateTeamLastUpdated(int teamId) {
+      String teamFilter = ROW_ID_COL + "=" + teamId;
+      ContentValues contentValues = new ContentValues();
+      contentValues.put(LAST_UPDATED_COL, getDate());
+      mDatabase.update(TEAMS_TABLE, contentValues, teamFilter, null);
+      return true;
+   }
+
+   public boolean doesTeamNameExist(String name, boolean updateKey) {
+      boolean result = false;
+      if (!updateKey) {
+         int count;
+         Cursor cursor = mDatabase.rawQuery(DOES_TEAM_EXIST, new String[]{name});
+         cursor.moveToFirst();
+         count = cursor.getInt(0);
+
+         if (count != 0) {
+            result = true;
+         }
+      }
+
       return result;
    }
 
@@ -419,6 +468,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
          teamId = cursor.getInt(cursor.getColumnIndex(ROW_ID_COL));
          teams[index] = new Team(teamId, cursor.getString(cursor.getColumnIndex(NAME_COL)),
                cursor.getString(cursor.getColumnIndex(DESCRIPTION_COL)),
+               cursor.getString(cursor.getColumnIndex(LAST_UPDATED_COL)),
                queryTeamPokemonIds(teamId));
          index++;
          cursor.moveToNext();
@@ -472,7 +522,8 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
                queryPokemonMoves(cursor.getInt(cursor.getColumnIndex(MOVE_ONE_COL)),
                      cursor.getInt(cursor.getColumnIndex(MOVE_TWO_COL)),
                      cursor.getInt(cursor.getColumnIndex(MOVE_THREE_COL)),
-                     cursor.getInt(cursor.getColumnIndex(MOVE_FOUR_COL))));
+                     cursor.getInt(cursor.getColumnIndex(MOVE_FOUR_COL))),
+               cursor.getString(cursor.getColumnIndex(LAST_UPDATED_COL)));
          index++;
          cursor.moveToNext();
       }
@@ -488,7 +539,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return moveId;
    }
 
-   public boolean updateTeamPokemon(int memberId, String nickname, int level, String moveOne,
+   public boolean updateTeamPokemon(int memberId, int teamId, String nickname, int level, String moveOne,
                                     String moveTwo, String moveThree, String moveFour) {
       int moveOneId = queryMoveIdByName(moveOne);
       int moveTwoId = queryMoveIdByName(moveTwo);
@@ -503,7 +554,9 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       contentValues.put(MOVE_TWO_COL, moveTwoId);
       contentValues.put(MOVE_THREE_COL, moveThreeId);
       contentValues.put(MOVE_FOUR_COL, moveFourId);
+      contentValues.put(LAST_UPDATED_COL, getDate());
       mDatabase.update(TEAM_POKEMON_TABLE, contentValues, idFilter, null);
+      updateTeamLastUpdated(teamId);
       return true;
    }
 
@@ -529,5 +582,11 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       mDatabase.delete(TEAM_POKEMON_TABLE, null, null);
       mDatabase.delete(TEAMS_TABLE, null, null);
       return true;
+   }
+
+   private String getDate() {
+      DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+      Date date = new Date();
+      return dateFormat.format(date);
    }
 }

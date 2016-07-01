@@ -28,11 +28,19 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="40dp"/>
 
+        <TextView
+            android:id="@+id/last_updated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="60dp"
+            android:textStyle="italic"/>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="65dp">
+            android:layout_marginTop="80dp">
 
             <ImageView
                 android:id="@+id/pokemon_1"

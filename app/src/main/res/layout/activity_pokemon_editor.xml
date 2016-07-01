@@ -43,7 +43,7 @@
                     android:hint="@string/nickname"
                     android:imeOptions="actionDone"
                     android:inputType="text"
-                    android:maxLength="15"/>
+                    android:maxLength="11"/>
             </android.support.design.widget.TextInputLayout>
 
             <TextView

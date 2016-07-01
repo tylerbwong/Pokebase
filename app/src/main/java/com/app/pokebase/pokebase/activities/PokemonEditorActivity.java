@@ -185,7 +185,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
    }
 
    private void updatePokemon() {
-      mDatabaseHelper.updateTeamPokemon(mMemberId, mNicknameInput.getText().toString(),
+      mDatabaseHelper.updateTeamPokemon(mMemberId, mTeamId, mNicknameInput.getText().toString(),
             Integer.parseInt(String.valueOf(mLevelSpinner.getSelectedItem())),
             String.valueOf(mMoveSpinners[0].getSelectedItem()),
             String.valueOf(mMoveSpinners[1].getSelectedItem()),

@@ -18,6 +18,7 @@ public class TeamCardViewHolder extends RecyclerView.ViewHolder {
    public View view;
    public TextView mTitleLabel;
    public TextView mDescription;
+   public TextView mLastUpdated;
    public ImageView mPokemonOne;
    public ImageView mPokemonTwo;
    public ImageView mPokemonThree;
@@ -52,6 +53,7 @@ public class TeamCardViewHolder extends RecyclerView.ViewHolder {
 
       mTitleLabel = (TextView) itemView.findViewById(R.id.title_label);
       mDescription = (TextView) itemView.findViewById(R.id.description);
+      mLastUpdated = (TextView) itemView.findViewById(R.id.last_updated);
       mPokemonOne = (ImageView) itemView.findViewById(R.id.pokemon_1);
       mPokemonTwo = (ImageView) itemView.findViewById(R.id.pokemon_2);
       mPokemonThree = (ImageView) itemView.findViewById(R.id.pokemon_3);

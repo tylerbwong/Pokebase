@@ -78,4 +78,6 @@
     <string name="cleared_teams">Cleared All Teams</string>
     <string name="by_number">Sort By Number</string>
     <string name="by_name">Sort By Name</string>
+    <string name="used_name">Invalid Team Name</string>
+    <string name="used_name_info">has already been taken!\nPlease choose a different name.</string>
 </resources>

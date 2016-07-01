@@ -21,6 +21,7 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
    public ImageView mPokemon;
    public TextView mName;
    public TextView mLevel;
+   public TextView mLastUpdated;
    public TextView mMoveset;
    private PokemonTeamMember mPokemonData;
    private String mTitle;
@@ -58,6 +59,7 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
       mPokemon = (ImageView) itemView.findViewById(R.id.pokemon);
       mName = (TextView) itemView.findViewById(R.id.name);
       mLevel = (TextView) itemView.findViewById(R.id.level);
+      mLastUpdated = (TextView) itemView.findViewById(R.id.last_updated);
       mMoveset = (TextView) itemView.findViewById(R.id.moveset);
    }
 
