@@ -6,6 +6,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -27,6 +30,7 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
    private AnimatedRecyclerView mPokemonList;
    private DatabaseOpenHelper mDatabaseHelper;
    private PokemonListItem[] mPokemon;
+   private boolean mIsAlphabetical = false;
 
    private final static String TYPES = "Types";
    private final static String REGIONS = "Regions";
@@ -36,6 +40,7 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
       super.onCreate(savedInstanceState);
       getActivity().setTheme(R.style.PokemonEditorTheme);
       mDatabaseHelper = DatabaseOpenHelper.getInstance(getContext());
+      setHasOptionsMenu(true);
    }
 
    @Override
@@ -57,6 +62,32 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
    }
 
    @Override
+   public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+      super.onCreateOptionsMenu(menu, inflater);
+      menu.findItem(R.id.clear_all_teams_action).setVisible(false);
+      menu.findItem(R.id.logout_action).setVisible(false);
+      menu.findItem(R.id.number_action).setVisible(true);
+      menu.findItem(R.id.name_action).setVisible(true);
+   }
+
+   @Override
+   public boolean onOptionsItemSelected(MenuItem item) {
+      switch(item.getItemId()) {
+         case R.id.number_action:
+            mIsAlphabetical = false;
+            refreshData();
+            break;
+         case R.id.name_action:
+            mIsAlphabetical = true;
+            refreshData();
+            break;
+         default:
+            break;
+      }
+      return super.onOptionsItemSelected(item);
+   }
+
+   @Override
    public void onViewCreated(View view, Bundle savedInstanceState) {
       super.onViewCreated(view, savedInstanceState);
       mTypeSpinner = (Spinner) view.findViewById(R.id.type_spinner);
@@ -71,7 +102,7 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
       mRegionSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(),
             mDatabaseHelper.queryAllRegions()));
       mPokemonList.setAdapter(new PokemonRecyclerViewAdapter(getContext(),
-            mDatabaseHelper.queryAll()));
+            mDatabaseHelper.queryAll(mIsAlphabetical)));
    }
 
    @Override
@@ -81,20 +112,24 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
 
    @Override
    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+      refreshData();
+   }
+
+   private void refreshData() {
       String type = (String) mTypeSpinner.getSelectedItem();
       String region = (String) mRegionSpinner.getSelectedItem();
 
       if (type.equals(TYPES) && !region.equals(REGIONS)) {
-         mPokemon = mDatabaseHelper.queryByRegion(region);
+         mPokemon = mDatabaseHelper.queryByRegion(region, mIsAlphabetical);
       }
       else if (!type.equals(TYPES) && region.equals(REGIONS)) {
-         mPokemon = mDatabaseHelper.queryByType(type);
+         mPokemon = mDatabaseHelper.queryByType(type, mIsAlphabetical);
       }
       else if (!type.equals(TYPES) && !region.equals(REGIONS)) {
-         mPokemon = mDatabaseHelper.queryByTypeAndRegion(type, region);
+         mPokemon = mDatabaseHelper.queryByTypeAndRegion(type, region, mIsAlphabetical);
       }
       else {
-         mPokemon = mDatabaseHelper.queryAll();
+         mPokemon = mDatabaseHelper.queryAll(mIsAlphabetical);
       }
 
       mPokemonList.setAdapter(new PokemonRecyclerViewAdapter(getContext(), mPokemon));

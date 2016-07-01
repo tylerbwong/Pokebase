@@ -3,6 +3,16 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".activities.MainActivity">
     <item
+        android:id="@+id/number_action"
+        android:orderInCategory="100"
+        android:title="@string/by_number"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/name_action"
+        android:orderInCategory="100"
+        android:title="@string/by_name"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/clear_all_teams_action"
         android:orderInCategory="100"
         android:title="@string/clear_all_teams"

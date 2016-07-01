@@ -146,6 +146,10 @@ public class MainActivity extends AppCompatActivity {
    public boolean onCreateOptionsMenu(Menu menu) {
       MenuInflater inflater = getMenuInflater();
       inflater.inflate(R.menu.menu_main, menu);
+      menu.findItem(R.id.clear_all_teams_action).setVisible(true);
+      menu.findItem(R.id.logout_action).setVisible(true);
+      menu.findItem(R.id.number_action).setVisible(false);
+      menu.findItem(R.id.name_action).setVisible(false);
       return true;
    }
 
@@ -159,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
             showLogoutDialog();
             break;
          default:
-            break;
+            return false;
       }
       return true;
    }

@@ -49,6 +49,8 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
    private final static String TYPES = "Types";
    private final static String REGIONS = "Regions";
 
+   private final static String ALPHABETIZE =
+         " ORDER BY P.name";
    private final static String ALL =
          "SELECT P.id, P.name " +
                "FROM Pokemon AS P";
@@ -175,8 +177,16 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return regions;
    }
 
-   public PokemonListItem[] queryByType(String type) {
-      Cursor cursor = mDatabase.rawQuery(TYPE_QUERY, new String[]{type});
+   public PokemonListItem[] queryByType(String type, boolean alphabetical) {
+      String query;
+
+      if (alphabetical) {
+         query = TYPE_QUERY + ALPHABETIZE;
+      }
+      else {
+         query = TYPE_QUERY;
+      }
+      Cursor cursor = mDatabase.rawQuery(query, new String[]{type});
       PokemonListItem[] typePokemon = new PokemonListItem[cursor.getCount()];
       int index = 0;
       cursor.moveToFirst();
@@ -191,8 +201,15 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return typePokemon;
    }
 
-   public PokemonListItem[] queryByRegion(String region) {
-      Cursor cursor = mDatabase.rawQuery(REGION_QUERY, new String[]{region});
+   public PokemonListItem[] queryByRegion(String region, boolean alphabetical) {
+      String query;
+      if (alphabetical) {
+         query = REGION_QUERY + ALPHABETIZE;
+      }
+      else {
+         query = REGION_QUERY;
+      }
+      Cursor cursor = mDatabase.rawQuery(query, new String[]{region});
       PokemonListItem[] regionPokemon = new PokemonListItem[cursor.getCount()];
       int index = 0;
       cursor.moveToFirst();
@@ -208,8 +225,15 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return regionPokemon;
    }
 
-   public PokemonListItem[] queryByTypeAndRegion(String type, String region) {
-      Cursor cursor = mDatabase.rawQuery(TYPE_REGION_QUERY, new String[]{type, region});
+   public PokemonListItem[] queryByTypeAndRegion(String type, String region, boolean alphabetical) {
+      String query;
+      if (alphabetical) {
+         query = TYPE_REGION_QUERY + ALPHABETIZE;
+      }
+      else {
+         query = TYPE_REGION_QUERY;
+      }
+      Cursor cursor = mDatabase.rawQuery(query, new String[]{type, region});
       PokemonListItem[] typeRegionPokemon = new PokemonListItem[cursor.getCount()];
       int index = 0;
       cursor.moveToFirst();
@@ -224,8 +248,15 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return typeRegionPokemon;
    }
 
-   public PokemonListItem[] queryAll() {
-      Cursor cursor = mDatabase.rawQuery(ALL, null);
+   public PokemonListItem[] queryAll(boolean alphabetical) {
+      String query;
+      if (alphabetical) {
+         query = ALL + ALPHABETIZE;
+      }
+      else {
+         query = ALL;
+      }
+      Cursor cursor = mDatabase.rawQuery(query, null);
       PokemonListItem[] pokemon = new PokemonListItem[cursor.getCount()];
       int index = 0;
       cursor.moveToFirst();

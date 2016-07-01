@@ -75,4 +75,6 @@
     <string name="clear_all_teams">Clear All Teams</string>
     <string name="clear_all_teams_prompt">Are you sure you want to clear all teams?</string>
     <string name="cleared_teams">Cleared All Teams</string>
+    <string name="by_number">Sort By Number</string>
+    <string name="by_name">Sort By Name</string>
 </resources>

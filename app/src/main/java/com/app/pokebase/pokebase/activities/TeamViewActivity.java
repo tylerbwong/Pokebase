@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -125,10 +126,8 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
          mPokemonList.setAdapter(mPokemonAdapter);
 
          if (mPokemon.length == 6) {
-            mFab.setVisibility(View.GONE);
-         }
-         else {
-            mFab.setVisibility(View.VISIBLE);
+            ViewGroup viewGroup = (ViewGroup) mFab.getParent();
+            viewGroup.removeView(mFab);
          }
       }
       else {
