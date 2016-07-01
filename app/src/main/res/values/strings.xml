@@ -22,8 +22,9 @@
 
     <!-- VALUES -->
     <string name="logo_transition">Logo transition</string>
-    <string name="closeDrawer">Navigation View</string>
-    <string name="openDrawer">Navigation View Closed</string>
+    <string name="close_drawer">Navigation View</string>
+    <string name="open_drawer">Navigation View Closed</string>
+    <string name="shared_transition">shared transition</string>
 
     <!-- BUTTONS -->
     <string name="get_started">Get Started</string>

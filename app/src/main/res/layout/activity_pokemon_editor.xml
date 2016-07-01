@@ -107,5 +107,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="-80dp"
         android:background="@drawable/circle_shape"
-        android:scaleType="center"/>
+        android:scaleType="center"
+        android:transitionName="@string/shared_transition"/>
 </RelativeLayout>

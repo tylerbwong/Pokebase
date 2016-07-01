@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
       });
 
       ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
-            this, mDrawerLayout, mToolbar, R.string.openDrawer, R.string.closeDrawer) {
+            this, mDrawerLayout, mToolbar, R.string.open_drawer, R.string.close_drawer) {
 
          @Override
          public void onDrawerClosed(View drawerView) {

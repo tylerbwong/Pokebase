@@ -1,5 +1,6 @@
 package com.app.pokebase.pokebase.holders;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.activities.PokemonEditorActivity;
+import com.app.pokebase.pokebase.activities.TeamViewActivity;
 import com.app.pokebase.pokebase.components.PokemonTeamMember;
 
 /**
@@ -34,6 +36,9 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
          public void onClick(View view) {
             Context cardContext = view.getContext();
             Intent editorIntent = new Intent(cardContext, PokemonEditorActivity.class);
+            String transitionName = cardContext.getString(R.string.shared_transition);
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(
+                  (TeamViewActivity) cardContext, mPokemon, transitionName);
             editorIntent.putExtra("pokemonId", mPokemonData.mPokemonId);
             editorIntent.putExtra("teamId", mTeamId);
             editorIntent.putExtra("title", mTitle);
@@ -46,7 +51,7 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
             editorIntent.putExtra("moveThree", mPokemonData.mMoves[2]);
             editorIntent.putExtra("moveFour", mPokemonData.mMoves[3]);
 
-            view.getContext().startActivity(editorIntent);
+            view.getContext().startActivity(editorIntent, transitionActivityOptions.toBundle());
          }
       });
 
