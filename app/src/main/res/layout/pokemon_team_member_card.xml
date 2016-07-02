@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
                                     android:layout_width="match_parent"
-                                    android:layout_height="140dp"
+                                    android:layout_height="160dp"
                                     android:layout_marginBottom="6dp"
                                     android:layout_marginEnd="14dp"
                                     android:layout_marginStart="14dp"
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/card_ripple"
-        android:padding="10dp">
+        android:padding="20dp">
 
         <ImageView
             android:id="@+id/pokemon"
@@ -27,7 +27,7 @@
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="20dp"
             android:layout_toEndOf="@id/pokemon"
             android:textSize="18sp"/>
 
@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/name"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="20dp"
             android:layout_toEndOf="@id/pokemon"
             android:text="@string/lvl"
             android:textSize="12sp"
@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/level_label"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="20dp"
             android:layout_toEndOf="@id/pokemon"
             android:textSize="12sp"
             android:textStyle="italic"/>
@@ -68,7 +68,8 @@
             android:layout_height="match_parent"
             android:layout_below="@id/last_updated"
             android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
             android:layout_toEndOf="@id/pokemon"
             android:singleLine="false"
             android:textSize="12sp"/>
