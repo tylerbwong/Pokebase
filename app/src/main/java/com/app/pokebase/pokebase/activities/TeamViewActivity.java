@@ -153,28 +153,25 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
    }
 
    public void onFabClick() {
-      mSheetLayout.expandFab();
+      if (addTeam()) {
+         mSheetLayout.expandFab();
+      }
    }
 
    @Override
    public void onFabAnimationEnd() {
-      if (addTeam()) {
-         Intent intent = new Intent(this, MainActivity.class);
-         Bundle extras = new Bundle();
-         if (mTeamId == 0) {
-            mTeamId = mDatabaseHelper.queryLastTeamAddedId();
-         }
-         extras.putInt(TEAM_ID_KEY, mTeamId);
-         extras.putBoolean(UPDATE_KEY, true);
-         extras.putString("teamName", mNameInput.getText().toString().trim());
-         extras.putString("description", mDescriptionInput.getText().toString().trim());
-         extras.putBoolean("pokemonAdd", true);
-         intent.putExtras(extras);
-         startActivityForResult(intent, REQUEST_CODE);
+      Intent intent = new Intent(this, MainActivity.class);
+      Bundle extras = new Bundle();
+      if (mTeamId == 0) {
+         mTeamId = mDatabaseHelper.queryLastTeamAddedId();
       }
-      else {
-         mSheetLayout.contractFab();
-      }
+      extras.putInt(TEAM_ID_KEY, mTeamId);
+      extras.putBoolean(UPDATE_KEY, true);
+      extras.putString("teamName", mNameInput.getText().toString().trim());
+      extras.putString("description", mDescriptionInput.getText().toString().trim());
+      extras.putBoolean("pokemonAdd", true);
+      intent.putExtras(extras);
+      startActivityForResult(intent, REQUEST_CODE);
    }
 
    @Override
@@ -230,7 +227,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
          Toast.makeText(this, "Added new team " + name + "!", Toast.LENGTH_LONG).show();
          result = true;
       }
-      else if (mUpdateKey && !doesTeamNameExist){
+      else if (mUpdateKey && !doesTeamNameExist) {
          mDatabaseHelper.updateTeam(mTeamId, name, description);
          Toast.makeText(this, "Updated " + name + "!", Toast.LENGTH_LONG).show();
          result = true;
