@@ -66,6 +66,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       mDescriptionInput = (TextInputEditText) findViewById(R.id.description_input);
 
       mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
+      mPokemonList.setHasFixedSize(true);
 
       mFab.setOnClickListener(new View.OnClickListener() {
          @Override
@@ -81,7 +82,8 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       Bundle extras = intent.getExtras();
       mTeamId = extras.getInt(TEAM_ID_KEY);
       mUpdateKey = extras.getBoolean(UPDATE_KEY, false);
-      String teamTitle = extras.getString("teamName", DEFAULT_NAME + " " + (mDatabaseHelper.queryLastTeamAddedId() + 1));
+      String teamTitle = extras.getString("teamName", DEFAULT_NAME + " "
+            + (mDatabaseHelper.queryLastTeamAddedId() + 1));
       String description = extras.getString("description", DEFAULT_DESCRIPTION);
 
       setSupportActionBar(mToolbar);

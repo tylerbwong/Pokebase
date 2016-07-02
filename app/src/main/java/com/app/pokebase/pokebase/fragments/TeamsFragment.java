@@ -47,6 +47,8 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
       mFab = (FloatingActionButton) view.findViewById(R.id.fab);
       mEmptyView = (LinearLayout) view.findViewById(R.id.empty_layout);
 
+      mTeamList.setHasFixedSize(true);
+
       mFab.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View view) {

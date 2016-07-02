@@ -97,6 +97,8 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
       mPokemonList = (AnimatedRecyclerView) view.findViewById(R.id.pokemon_list);
       mPokemonList.setLayoutManager(new LinearLayoutManager(getContext()));
 
+      mPokemonList.setHasFixedSize(true);
+
       mTypeSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(),
             mDatabaseHelper.queryAllTypes()));
       mRegionSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(),

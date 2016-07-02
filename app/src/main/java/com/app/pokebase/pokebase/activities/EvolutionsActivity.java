@@ -43,6 +43,7 @@ public class EvolutionsActivity extends AppCompatActivity {
       }
 
       mEvolutionList = (AnimatedRecyclerView) findViewById(R.id.evolutions_list);
+      mEvolutionList.setHasFixedSize(true);
       mEvolutionList.setLayoutManager(new LinearLayoutManager(this));
       mEvolutionList.setAdapter(new PokemonRecyclerViewAdapter(
             this, mDatabaseHelper.queryPokemonEvolutions(pokemonId)));

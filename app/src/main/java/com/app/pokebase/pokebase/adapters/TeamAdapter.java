@@ -18,8 +18,6 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
    private Team[] mTeams;
    private Context mContext;
 
-   private final static String LAST_UPDATED = "Last Updated: ";
-
    public TeamAdapter(Context context, Team[] teams) {
       this.mContext = context;
       this.mTeams = teams;
@@ -37,7 +35,8 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
       Team curTeam = mTeams[position];
       holder.mTitleLabel.setText(curTeam.mName);
       holder.mDescription.setText(curTeam.mDescription);
-      holder.mLastUpdated.setText(LAST_UPDATED + curTeam.mLastUpdated);
+      holder.mLastUpdated.setText(String.format(mContext.getString(R.string.last_updated),
+            curTeam.mLastUpdated));
       int teamSize = curTeam.mTeam.length;
 
       for (int index = 0; index < teamSize; index++) {
