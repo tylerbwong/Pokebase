@@ -123,8 +123,8 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       if (mUpdateKey) {
          mPokemon = mDatabaseHelper.queryPokemonTeamMembers(mTeamId);
          mPokemonAdapter = new PokemonTeamMemberAdapter(this, mPokemon, mTeamId,
-               mNameInput.getText().toString(),
-               mDescriptionInput.getText().toString());
+               mNameInput.getText().toString().trim(),
+               mDescriptionInput.getText().toString().trim());
          mPokemonList.setAdapter(mPokemonAdapter);
 
          if (mPokemon.length == 6) {
@@ -166,11 +166,14 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
          }
          extras.putInt(TEAM_ID_KEY, mTeamId);
          extras.putBoolean(UPDATE_KEY, true);
-         extras.putString("teamName", mNameInput.getText().toString());
-         extras.putString("description", mDescriptionInput.getText().toString());
+         extras.putString("teamName", mNameInput.getText().toString().trim());
+         extras.putString("description", mDescriptionInput.getText().toString().trim());
          extras.putBoolean("pokemonAdd", true);
          intent.putExtras(extras);
          startActivityForResult(intent, REQUEST_CODE);
+      }
+      else {
+         mSheetLayout.contractFab();
       }
    }
 
@@ -211,8 +214,8 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
    }
 
    private boolean addTeam() {
-      String name = mNameInput.getText().toString();
-      String description = mDescriptionInput.getText().toString();
+      String name = mNameInput.getText().toString().trim();
+      String description = mDescriptionInput.getText().toString().trim();
       boolean doesTeamNameExist = mDatabaseHelper.doesTeamNameExist(name, mTeamId, mUpdateKey);
       boolean result = false;
 
@@ -243,7 +246,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       new LovelyStandardDialog(this)
             .setIcon(R.drawable.ic_info_white_24dp)
             .setTitle(R.string.used_name)
-            .setMessage(mNameInput.getText().toString() + " " + getString(R.string.used_name_info))
+            .setMessage(mNameInput.getText().toString().trim() + " " + getString(R.string.used_name_info))
             .setCancelable(true)
             .setNeutralButton(getString(R.string.ok), null).setTopColor(
             ContextCompat.getColor(this, R.color.colorPrimary)).show();
@@ -254,7 +257,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
             .setIcon(R.drawable.ic_info_white_24dp)
             .setTitle(R.string.delete_team)
             .setMessage(getResources().getString(R.string.delete_team_prompt)
-                  + " " + mNameInput.getText().toString() + "?").setCancelable(true)
+                  + " " + mNameInput.getText().toString().trim() + "?").setCancelable(true)
             .setPositiveButton(R.string.yes, new View.OnClickListener() {
                @Override
                public void onClick(View v) {
@@ -268,7 +271,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       mDatabaseHelper.deleteTeamPokemonAll(mTeamId);
       mDatabaseHelper.deleteTeam(mTeamId);
 
-      Toast.makeText(this, "Deleted " + mNameInput.getText().toString(),
+      Toast.makeText(this, "Deleted " + mNameInput.getText().toString().trim(),
             Toast.LENGTH_LONG).show();
       backToMain();
    }
