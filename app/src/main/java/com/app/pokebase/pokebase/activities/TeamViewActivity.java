@@ -224,12 +224,12 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
             description = DEFAULT_DESCRIPTION;
          }
          mDatabaseHelper.insertTeam(name, description);
-         Toast.makeText(this, "Added new team " + name + "!", Toast.LENGTH_LONG).show();
+         Toast.makeText(this, "Added new team " + name + "!", Toast.LENGTH_SHORT).show();
          result = true;
       }
       else if (mUpdateKey && !doesTeamNameExist) {
          mDatabaseHelper.updateTeam(mTeamId, name, description);
-         Toast.makeText(this, "Updated " + name + "!", Toast.LENGTH_LONG).show();
+         Toast.makeText(this, "Updated " + name + "!", Toast.LENGTH_SHORT).show();
          result = true;
       }
       else {
@@ -269,7 +269,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       mDatabaseHelper.deleteTeam(mTeamId);
 
       Toast.makeText(this, "Deleted " + mNameInput.getText().toString().trim(),
-            Toast.LENGTH_LONG).show();
+            Toast.LENGTH_SHORT).show();
       backToMain();
    }
 

@@ -180,7 +180,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
       mDatabaseHelper.deleteTeamPokemonSingle(mMemberId);
 
       Toast.makeText(this, "Deleted " + mNicknameInput.getText().toString(),
-            Toast.LENGTH_LONG).show();
+            Toast.LENGTH_SHORT).show();
       backToTeamView();
    }
 
@@ -193,7 +193,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
             String.valueOf(mMoveSpinners[3].getSelectedItem()));
 
       Toast.makeText(this, "Updated " + mNicknameInput.getText().toString() + "!",
-            Toast.LENGTH_LONG).show();
+            Toast.LENGTH_SHORT).show();
       backToTeamView();
    }
 

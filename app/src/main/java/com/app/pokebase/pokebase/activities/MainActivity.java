@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
          ((TeamsFragment) mCurrentFragment).refreshAdapter();
       }
       Toast.makeText(this, getResources().getString(R.string.cleared_teams),
-            Toast.LENGTH_LONG).show();
+            Toast.LENGTH_SHORT).show();
    }
 
    private void logout() {

@@ -1,6 +1,7 @@
 package com.app.pokebase.pokebase.activities;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.adapters.TextViewAdapter;
@@ -193,6 +195,9 @@ public class PokemonProfileActivity extends AppCompatActivity {
          case android.R.id.home:
             onBackPressed();
             break;
+         case R.id.audio_action:
+            playAudio();
+            break;
          case R.id.add_action:
             showAddToTeamDialog(mDatabaseHelper.queryTeamIdsAndNames());
             break;
@@ -200,6 +205,19 @@ public class PokemonProfileActivity extends AppCompatActivity {
             break;
       }
       return true;
+   }
+
+   private void playAudio() {
+      final MediaPlayer player = MediaPlayer.create(this, getResources().getIdentifier(
+            "audio_" + mPokemonId, "raw", getPackageName()));
+      player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+         @Override
+         public void onCompletion(MediaPlayer mediaPlayer) {
+            player.release();
+         }
+      });
+      player.start();
+      Toast.makeText(this, getString(R.string.sound_played), Toast.LENGTH_SHORT).show();
    }
 
    public void showEvolutions(View view) {
@@ -214,6 +232,7 @@ public class PokemonProfileActivity extends AppCompatActivity {
    @Override
    public boolean onCreateOptionsMenu(Menu menu) {
       MenuInflater inflater = getMenuInflater();
+      inflater.inflate(R.menu.menu_audio, menu);
       inflater.inflate(R.menu.menu_add, menu);
       return true;
    }
