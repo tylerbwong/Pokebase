@@ -21,6 +21,7 @@ import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.adapters.TextViewAdapter;
 import com.app.pokebase.pokebase.components.PokemonProfile;
 import com.app.pokebase.pokebase.database.DatabaseOpenHelper;
+import com.app.pokebase.pokebase.utilities.OnSwipeTouchListener;
 import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
 
 import java.util.List;
@@ -40,6 +41,8 @@ public class PokemonProfileActivity extends AppCompatActivity {
    private static final int PROFILE_IMG_ELEVATION = 40;
    private static final int DEFAULT_LEVEL = 1;
    private static final int DEFAULT_MOVE = 0;
+   private static final int FIRST_POKEMON = 1;
+   private static final int LAST_POKEMON = 721;
    private int mPokemonId;
    private String mPokemonName;
    private Toolbar mToolbar;
@@ -78,6 +81,24 @@ public class PokemonProfileActivity extends AppCompatActivity {
       mMovesList = (ListView) findViewById(R.id.moves_list);
       mLayout = (RelativeLayout) findViewById(R.id.layout);
 
+      OnSwipeTouchListener swipeTouchListener = new OnSwipeTouchListener(PokemonProfileActivity.this) {
+         @Override
+         public void onSwipeLeft() {
+            if (mPokemonId != LAST_POKEMON) {
+               switchPokemon(mPokemonId + 1);
+            }
+         }
+
+         @Override
+         public void onSwipeRight() {
+            if (mPokemonId != FIRST_POKEMON) {
+               switchPokemon(mPokemonId - 1);
+            }
+         }
+      };
+
+      mLayout.setOnTouchListener(swipeTouchListener);
+
       setSupportActionBar(mToolbar);
       mActionBar = getSupportActionBar();
       if (mActionBar != null) {
@@ -85,6 +106,15 @@ public class PokemonProfileActivity extends AppCompatActivity {
       }
 
       loadPokemonProfile();
+   }
+
+   private void switchPokemon(int pokemonId) {
+      Intent intent = getIntent();
+      Bundle extras = new Bundle();
+      extras.putInt(PokemonProfileActivity.POKEMON_ID_KEY, pokemonId);
+      intent.putExtras(extras);
+      finish();
+      startActivity(getIntent());
    }
 
    private void loadPokemonProfile() {
