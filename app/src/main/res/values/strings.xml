@@ -81,4 +81,7 @@
     <string name="last_updated">Last Updated: %1$s</string>
     <string name="audio">Audio</string>
     <string name="sound_played">Played sound!</string>
+    <string name="settings">Settings</string>
+    <string name="trainer">Trainer %1$s</string>
+    <string name="items">Items</string>
 </resources>

@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
    private boolean mPokemonAdd;
 
+   private final static String TRAINER = "Trainer ";
+
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -57,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
       mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
 
       SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
-      mUsernameView.setText(pref.getString("username", ""));
+      mUsernameView.setText(String.format(getString(R.string.trainer),
+            pref.getString("username", "")));
 
       if (pref.getString("gender", "M").equals("M")) {
          mProfilePicture.setImageDrawable(getDrawable(R.drawable.boy));
@@ -112,6 +115,12 @@ public class MainActivity extends AppCompatActivity {
                   fragmentTransaction.commit();
                   return true;
 
+               case R.id.items:
+                  return true;
+
+               case R.id.settings:
+                  return true;
+
                default:
                   return false;
             }
@@ -153,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
       switch (item.getItemId()) {
          case R.id.clear_all_teams_action:
             showClearAllTeamsDialog();
+            break;
+         case R.id.settings:
             break;
          default:
             return false;

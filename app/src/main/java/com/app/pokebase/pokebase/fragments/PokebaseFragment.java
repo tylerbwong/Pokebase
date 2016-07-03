@@ -80,6 +80,8 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
             mIsAlphabetical = true;
             refreshData();
             break;
+         case R.id.settings:
+            break;
          default:
             break;
       }
