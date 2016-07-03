@@ -81,7 +81,7 @@ public class GenderActivity extends AppCompatActivity {
    private void submitGender() {
       SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
       SharedPreferences.Editor ed = pref.edit();
-      ed.putBoolean("loggedIn", true);
+      ed.putBoolean("signUpComplete", true);
       if (mIsBoy) {
          ed.putString("gender", "M");
       }

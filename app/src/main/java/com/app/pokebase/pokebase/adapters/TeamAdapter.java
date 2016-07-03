@@ -36,8 +36,7 @@ public class TeamAdapter extends RecyclerView.Adapter {
       Team curTeam = mTeams[position];
       holder.mTitleLabel.setText(curTeam.mName);
       holder.mDescription.setText(curTeam.mDescription);
-      holder.mLastUpdated.setText(String.format(mContext.getString(R.string.last_updated),
-            curTeam.mLastUpdated));
+      holder.mLastUpdated.setText(curTeam.mLastUpdated);
       int teamSize = curTeam.mTeam.length;
 
       if (teamSize > 0) {

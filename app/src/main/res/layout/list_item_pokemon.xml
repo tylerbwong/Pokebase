@@ -36,9 +36,9 @@
 
     <ImageView
         android:id="@+id/small_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:scaleType="centerCrop"/>
+        android:scaleType="fitCenter"/>
 </RelativeLayout>

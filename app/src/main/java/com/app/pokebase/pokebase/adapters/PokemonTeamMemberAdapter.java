@@ -43,8 +43,7 @@ public class PokemonTeamMemberAdapter extends RecyclerView.Adapter<PokemonTeamMe
       PokemonTeamMember curPokemon = mPokemon[position];
       holder.mName.setText(curPokemon.mNickname);
       holder.mLevel.setText(String.valueOf(curPokemon.mLevel));
-      holder.mLastUpdated.setText(String.format(mContext.getString(R.string.last_updated),
-            curPokemon.mLastUpdated));
+      holder.mLastUpdated.setText(curPokemon.mLastUpdated);
       int imageResourceId = mContext.getResources().getIdentifier("sprites_" +
             curPokemon.mPokemonId, "drawable", mContext.getPackageName());
       holder.mPokemon.setImageResource(imageResourceId);

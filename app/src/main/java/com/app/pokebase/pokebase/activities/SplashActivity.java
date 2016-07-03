@@ -39,9 +39,16 @@ public class SplashActivity extends AppCompatActivity {
 
       SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
       boolean appIntroFinished = pref.getBoolean("appIntroFinished", false);
-      if (appIntroFinished) {
+      boolean signUpComplete = pref.getBoolean("signUpComplete", false);
+
+      if (appIntroFinished && signUpComplete) {
          Intent mainIntent = new Intent(this, MainActivity.class);
          startActivity(mainIntent);
+         finish();
+      }
+      else if (appIntroFinished && !signUpComplete) {
+         Intent signUpIntent = new Intent(this, SignUpActivity.class);
+         startActivity(signUpIntent);
          finish();
       }
    }

@@ -78,7 +78,6 @@
     <string name="by_name">Sort By Name</string>
     <string name="used_name">Invalid Team Name</string>
     <string name="used_name_info">has already been taken!\nPlease choose a different name.</string>
-    <string name="last_updated">Last Updated: %1$s</string>
     <string name="audio">Audio</string>
     <string name="sound_played">Played sound!</string>
     <string name="settings">Settings</string>
