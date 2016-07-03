@@ -3,7 +3,6 @@ package com.app.pokebase.pokebase.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,22 +38,11 @@ public class SplashActivity extends AppCompatActivity {
       }
 
       SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
-      boolean loggedIn = pref.getBoolean("loggedIn", false);
       boolean appIntroFinished = pref.getBoolean("appIntroFinished", false);
-      if (loggedIn) {
+      if (appIntroFinished) {
          Intent mainIntent = new Intent(this, MainActivity.class);
          startActivity(mainIntent);
          finish();
-      }
-      else if (appIntroFinished && !loggedIn) {
-         Intent loginIntent = new Intent(this, LoginActivity.class);
-         startActivity(loginIntent);
-         finish();
-      }
-      else {
-         Editor ed = pref.edit();
-         ed.putBoolean("appIntroFinished", true);
-         ed.apply();
       }
    }
 

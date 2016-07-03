@@ -33,12 +33,6 @@
             android:theme="@style/StartTheme">
         </activity>
         <activity
-            android:name=".activities.LoginActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/StartTheme">
-        </activity>
-        <activity
             android:name=".activities.SignUpActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"

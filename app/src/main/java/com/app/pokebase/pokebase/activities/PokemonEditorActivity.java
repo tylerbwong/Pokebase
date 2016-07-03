@@ -172,8 +172,9 @@ public class PokemonEditorActivity extends AppCompatActivity {
                public void onClick(View v) {
                   deletePokemon();
                }
-            }).setNegativeButton(R.string.no, null).setTopColor(
-            ContextCompat.getColor(this, R.color.colorPrimary)).show();
+            }).setNegativeButton(R.string.no, null)
+            .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
+            .show();
    }
 
    private void deletePokemon() {
@@ -212,14 +213,17 @@ public class PokemonEditorActivity extends AppCompatActivity {
       new LovelyStandardDialog(this)
             .setIcon(R.drawable.ic_info_white_24dp)
             .setTitle(R.string.go_back)
-            .setMessage(R.string.back_prompt).setCancelable(true)
+            .setMessage(R.string.back_prompt)
+            .setCancelable(true)
             .setPositiveButton(R.string.yes, new View.OnClickListener() {
                @Override
                public void onClick(View v) {
                   backToTeamView();
                }
-            }).setNegativeButton(R.string.no, null).setTopColor(
-            ContextCompat.getColor(this, R.color.colorPrimary)).show();
+            })
+            .setNegativeButton(R.string.no, null)
+            .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
+            .show();
    }
 
    @Override

@@ -11,10 +11,5 @@
             android:id="@+id/pokebase"
             android:checked="false"
             android:title="@string/pokebase"/>
-
-        <item
-            android:id="@+id/logout"
-            android:checked="false"
-            android:title="@string/logout"/>
     </group>
 </menu>

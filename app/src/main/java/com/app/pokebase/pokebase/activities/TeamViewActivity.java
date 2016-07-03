@@ -243,10 +243,12 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       new LovelyStandardDialog(this)
             .setIcon(R.drawable.ic_info_white_24dp)
             .setTitle(R.string.used_name)
-            .setMessage(mNameInput.getText().toString().trim() + " " + getString(R.string.used_name_info))
+            .setMessage(mNameInput.getText().toString().trim() + " "
+                  + getString(R.string.used_name_info))
             .setCancelable(true)
-            .setNeutralButton(getString(R.string.ok), null).setTopColor(
-            ContextCompat.getColor(this, R.color.colorPrimary)).show();
+            .setPositiveButton(getString(R.string.ok), null)
+            .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
+            .show();
    }
 
    private void showDeleteDialog() {
@@ -254,14 +256,17 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
             .setIcon(R.drawable.ic_info_white_24dp)
             .setTitle(R.string.delete_team)
             .setMessage(getResources().getString(R.string.delete_team_prompt)
-                  + " " + mNameInput.getText().toString().trim() + "?").setCancelable(true)
+                  + " " + mNameInput.getText().toString().trim() + "?")
+            .setCancelable(true)
             .setPositiveButton(R.string.yes, new View.OnClickListener() {
                @Override
                public void onClick(View v) {
                   deleteTeam();
                }
-            }).setNegativeButton(R.string.no, null).setTopColor(
-            ContextCompat.getColor(this, R.color.colorPrimary)).show();
+            })
+            .setNegativeButton(R.string.no, null)
+            .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
+            .show();
    }
 
    private void deleteTeam() {
@@ -277,14 +282,17 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       new LovelyStandardDialog(this)
             .setIcon(R.drawable.ic_info_white_24dp)
             .setTitle(R.string.go_back)
-            .setMessage(R.string.back_prompt).setCancelable(true)
+            .setMessage(R.string.back_prompt)
+            .setCancelable(true)
             .setPositiveButton(R.string.yes, new View.OnClickListener() {
                @Override
                public void onClick(View v) {
                   backToMain();
                }
-            }).setNegativeButton(R.string.no, null).setTopColor(
-            ContextCompat.getColor(this, R.color.colorPrimary)).show();
+            })
+            .setNegativeButton(R.string.no, null)
+            .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
+            .show();
    }
 
    private void backToMain() {

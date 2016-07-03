@@ -4,6 +4,6 @@
     <item
         android:id="@+id/add_action"
         android:icon="@drawable/ic_add_circle_outline_white_24dp"
-        android:title="@string/add"
+        android:title="@string/add_pokemon"
         app:showAsAction="always"/>
 </menu>

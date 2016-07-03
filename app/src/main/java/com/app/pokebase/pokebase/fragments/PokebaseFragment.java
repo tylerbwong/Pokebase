@@ -65,7 +65,6 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
       super.onCreateOptionsMenu(menu, inflater);
       menu.findItem(R.id.clear_all_teams_action).setVisible(false);
-      menu.findItem(R.id.logout_action).setVisible(false);
       menu.findItem(R.id.number_action).setVisible(true);
       menu.findItem(R.id.name_action).setVisible(true);
    }

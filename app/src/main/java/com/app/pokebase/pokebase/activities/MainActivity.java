@@ -112,10 +112,6 @@ public class MainActivity extends AppCompatActivity {
                   fragmentTransaction.commit();
                   return true;
 
-               case R.id.logout:
-                  showLogoutDialog();
-                  return true;
-
                default:
                   return false;
             }
@@ -147,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
       MenuInflater inflater = getMenuInflater();
       inflater.inflate(R.menu.menu_main, menu);
       menu.findItem(R.id.clear_all_teams_action).setVisible(true);
-      menu.findItem(R.id.logout_action).setVisible(true);
       menu.findItem(R.id.number_action).setVisible(false);
       menu.findItem(R.id.name_action).setVisible(false);
       return true;
@@ -159,9 +154,6 @@ public class MainActivity extends AppCompatActivity {
          case R.id.clear_all_teams_action:
             showClearAllTeamsDialog();
             break;
-         case R.id.logout_action:
-            showLogoutDialog();
-            break;
          default:
             return false;
       }
@@ -171,25 +163,18 @@ public class MainActivity extends AppCompatActivity {
    private void showClearAllTeamsDialog() {
       new LovelyStandardDialog(this)
             .setIcon(R.drawable.ic_info_white_24dp)
-            .setTitle(R.string.clear_all_teams).setMessage(R.string.clear_all_teams_prompt).setCancelable(true).setPositiveButton(R.string.yes, new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-            clearAllTeams();
-         }
-      }).setNegativeButton(R.string.no, null)
-            .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary)).show();
-   }
-
-   private void showLogoutDialog() {
-      new LovelyStandardDialog(this)
-            .setIcon(R.drawable.ic_info_white_24dp)
-            .setTitle(R.string.logout_question).setCancelable(true).setPositiveButton(R.string.yes, new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-            logout();
-         }
-      }).setNegativeButton(R.string.no, null)
-            .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary)).show();
+            .setTitle(R.string.clear_all_teams)
+            .setMessage(R.string.clear_all_teams_prompt)
+            .setCancelable(true)
+            .setPositiveButton(R.string.yes, new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                  clearAllTeams();
+               }
+            })
+            .setNegativeButton(R.string.no, null)
+            .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
+            .show();
    }
 
    private void clearAllTeams() {
@@ -199,15 +184,6 @@ public class MainActivity extends AppCompatActivity {
       }
       Toast.makeText(this, getResources().getString(R.string.cleared_teams),
             Toast.LENGTH_SHORT).show();
-   }
-
-   private void logout() {
-      SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
-      SharedPreferences.Editor ed = pref.edit();
-      ed.putBoolean("loggedIn", false);
-      ed.apply();
-      Intent loginIntent = new Intent(this, LoginActivity.class);
-      startActivity(loginIntent);
    }
 
    private void hideKeyboard() {

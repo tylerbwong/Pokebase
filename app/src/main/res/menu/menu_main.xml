@@ -17,9 +17,4 @@
         android:orderInCategory="100"
         android:title="@string/clear_all_teams"
         app:showAsAction="never"/>
-    <item
-        android:id="@+id/logout_action"
-        android:orderInCategory="100"
-        android:title="@string/logout"
-        app:showAsAction="never"/>
 </menu>

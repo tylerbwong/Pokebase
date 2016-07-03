@@ -12,8 +12,7 @@
     <string name="setup_title">Setting up\nyour Pokébase&#8230;</string>
     <string name="go_back">Go Back</string>
     <string name="submit">Submit</string>
-    <string name="search">Search</string>
-    <string name="add">Add</string>
+    <string name="add_pokemon">Add Pokémon</string>
     <string name="login_title">What was your\nname again?</string>
     <string name="add_team_title">Choose a team to add to!</string>
     <string name="logout_question">Are you sure you want to logout?</string>
@@ -55,7 +54,6 @@
     <string name="nickname_hint">Enter your Pokémon\'s nickname</string>
     <string name="team_name">Team Name</string>
     <string name="description">Description</string>
-    <string name="add_pokemon">Add Pokémon</string>
     <string name="no_pokemon">No Pokémon Added Yet!</string>
     <string name="lvl">Lvl.</string>
     <string name="exit">Exit</string>
