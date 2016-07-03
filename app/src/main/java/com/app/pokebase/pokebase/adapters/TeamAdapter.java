@@ -13,7 +13,7 @@ import com.app.pokebase.pokebase.holders.TeamCardViewHolder;
 /**
  * @author Tyler Wong
  */
-public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
+public class TeamAdapter extends RecyclerView.Adapter {
 
    private Team[] mTeams;
    private Context mContext;
@@ -25,13 +25,14 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
 
    @Override
    public TeamCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      View view = LayoutInflater.from(parent.getContext())
+      View view = LayoutInflater.from(mContext)
             .inflate(R.layout.team_card, parent, false);
       return new TeamCardViewHolder(view);
    }
 
    @Override
-   public void onBindViewHolder(final TeamCardViewHolder holder, int position) {
+   public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+      TeamCardViewHolder holder = (TeamCardViewHolder) viewHolder;
       Team curTeam = mTeams[position];
       holder.mTitleLabel.setText(curTeam.mName);
       holder.mDescription.setText(curTeam.mDescription);
@@ -39,10 +40,20 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamCardViewHolder> {
             curTeam.mLastUpdated));
       int teamSize = curTeam.mTeam.length;
 
-      for (int index = 0; index < teamSize; index++) {
-         holder.pokemonList[index].setImageResource(mContext.getResources()
-               .getIdentifier("icon_" + curTeam.mTeam[index].mPokemonId,
-                     "drawable", mContext.getPackageName()));
+      if (teamSize > 0) {
+         for (int index = 0; index < teamSize; index++) {
+            holder.pokemonList[index].setImageResource(mContext.getResources()
+                  .getIdentifier("icon_" + curTeam.mTeam[index].mPokemonId,
+                        "drawable", mContext.getPackageName()));
+         }
+      }
+      else {
+         holder.mPokemonOne.setImageDrawable(null);
+         holder.mPokemonTwo.setImageDrawable(null);
+         holder.mPokemonThree.setImageDrawable(null);
+         holder.mPokemonFour.setImageDrawable(null);
+         holder.mPokemonFive.setImageDrawable(null);
+         holder.mPokemonSix.setImageDrawable(null);
       }
 
       holder.setTeamId(curTeam.mId);

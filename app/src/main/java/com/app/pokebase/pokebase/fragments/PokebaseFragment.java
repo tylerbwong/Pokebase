@@ -15,7 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import com.app.pokebase.pokebase.R;
-import com.app.pokebase.pokebase.adapters.PokemonRecyclerViewAdapter;
+import com.app.pokebase.pokebase.adapters.PokemonListAdapter;
 import com.app.pokebase.pokebase.adapters.TextViewSpinnerAdapter;
 import com.app.pokebase.pokebase.components.PokemonListItem;
 import com.app.pokebase.pokebase.database.DatabaseOpenHelper;
@@ -103,7 +103,7 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
             mDatabaseHelper.queryAllTypes()));
       mRegionSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(),
             mDatabaseHelper.queryAllRegions()));
-      mPokemonList.setAdapter(new PokemonRecyclerViewAdapter(getContext(),
+      mPokemonList.setAdapter(new PokemonListAdapter(getContext(),
             mDatabaseHelper.queryAll(mIsAlphabetical)));
    }
 
@@ -134,6 +134,6 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
          mPokemon = mDatabaseHelper.queryAll(mIsAlphabetical);
       }
 
-      mPokemonList.setAdapter(new PokemonRecyclerViewAdapter(getContext(), mPokemon));
+      mPokemonList.setAdapter(new PokemonListAdapter(getContext(), mPokemon));
    }
 }

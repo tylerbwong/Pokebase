@@ -17,11 +17,11 @@ import com.app.pokebase.pokebase.holders.PokemonListItemHolder;
 /**
  * @author Brittany Berlanga
  */
-public class PokemonRecyclerViewAdapter extends RecyclerView.Adapter implements View.OnClickListener {
+public class PokemonListAdapter extends RecyclerView.Adapter implements View.OnClickListener {
    private Context mContext;
    private PokemonListItem[] mItems;
 
-   public PokemonRecyclerViewAdapter(Context context, PokemonListItem[] items) {
+   public PokemonListAdapter(Context context, PokemonListItem[] items) {
       this.mContext = context;
       this.mItems = items;
    }

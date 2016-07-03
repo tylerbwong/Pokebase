@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.app.pokebase.pokebase.R;
-import com.app.pokebase.pokebase.adapters.PokemonRecyclerViewAdapter;
+import com.app.pokebase.pokebase.adapters.PokemonListAdapter;
 import com.app.pokebase.pokebase.database.DatabaseOpenHelper;
 import com.app.pokebase.pokebase.utilities.AnimatedRecyclerView;
 
@@ -45,7 +45,7 @@ public class EvolutionsActivity extends AppCompatActivity {
       mEvolutionList = (AnimatedRecyclerView) findViewById(R.id.evolutions_list);
       mEvolutionList.setHasFixedSize(true);
       mEvolutionList.setLayoutManager(new LinearLayoutManager(this));
-      mEvolutionList.setAdapter(new PokemonRecyclerViewAdapter(
+      mEvolutionList.setAdapter(new PokemonListAdapter(
             this, mDatabaseHelper.queryPokemonEvolutions(pokemonId)));
    }
 
