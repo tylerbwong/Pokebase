@@ -17,6 +17,12 @@
             android:title="@string/pokebase"/>
 
         <item
+            android:id="@+id/moves"
+            android:checked="false"
+            android:icon="@drawable/ic_book_grey_900_24dp"
+            android:title="@string/moves"/>
+
+        <item
             android:id="@+id/items"
             android:checked="false"
             android:icon="@drawable/ic_business_center_grey_900_24dp"

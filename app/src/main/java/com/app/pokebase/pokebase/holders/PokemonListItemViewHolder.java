@@ -10,13 +10,13 @@ import com.app.pokebase.pokebase.R;
 /**
  * @author Brittany Berlanga
  */
-public class PokemonListItemHolder extends RecyclerView.ViewHolder {
+public class PokemonListItemViewHolder extends RecyclerView.ViewHolder {
    public final View mView;
    public final TextView mIdView;
    public final TextView mNameView;
    public final ImageView mIconView;
 
-   public PokemonListItemHolder(View itemView) {
+   public PokemonListItemViewHolder(View itemView) {
       super(itemView);
       mView = itemView;
       mIdView = (TextView) itemView.findViewById(R.id.id);

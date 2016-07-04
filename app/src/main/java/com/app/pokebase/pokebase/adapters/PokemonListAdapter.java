@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.app.pokebase.pokebase.R;
 import com.app.pokebase.pokebase.activities.PokemonProfileActivity;
 import com.app.pokebase.pokebase.components.PokemonListItem;
-import com.app.pokebase.pokebase.holders.PokemonListItemHolder;
+import com.app.pokebase.pokebase.holders.PokemonListItemViewHolder;
 
 /**
  * @author Brittany Berlanga
@@ -29,12 +29,12 @@ public class PokemonListAdapter extends RecyclerView.Adapter implements View.OnC
    @Override
    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
       View view = LayoutInflater.from(mContext).inflate(R.layout.list_item_pokemon, parent, false);
-      return new PokemonListItemHolder(view);
+      return new PokemonListItemViewHolder(view);
    }
 
    @Override
    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-      PokemonListItemHolder holder = (PokemonListItemHolder) viewHolder;
+      PokemonListItemViewHolder holder = (PokemonListItemViewHolder) viewHolder;
       PokemonListItem item = mItems[position];
       holder.mIdView.setText(String.valueOf(item.mId));
       holder.mNameView.setText(item.mName);
