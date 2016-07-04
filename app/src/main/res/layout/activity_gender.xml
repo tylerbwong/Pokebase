@@ -7,28 +7,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_above="@+id/gender_select">
         <TextView
             android:id="@+id/title_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="170dp"
             android:lines="2"
             android:text="@string/gender_title"
             android:textAlignment="textStart"
             android:textColor="@color/colorAccent"
             android:textSize="40sp"/>
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
             android:orientation="horizontal">
-
             <ImageButton
                 android:id="@+id/boy_button"
                 style="?android:attr/buttonBarButtonStyle"

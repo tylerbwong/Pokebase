@@ -35,12 +35,12 @@
 
     <!-- LABELS -->
     <string name="count">0/15</string>
-    <string name="team_description">Create your own teams\n
-        to save for later when it\'s time to battle!</string>
-    <string name="pokedex_description">View your Pokébase and look up\n
-        information on all 721 Pokémon.</string>
+    <string name="team_description">Create your own teams to save for later when it\'s time to
+        battle!</string>
+    <string name="pokedex_description">View your Pokébase and look up information on all 721
+        Pokémon.</string>
     <string name="make_team">Make your first team!</string>
-    <string name="back_prompt">Are you sure you want to go back?\nAll changes will be lost.</string>
+    <string name="back_prompt">Are you sure you want to go back? All changes will be lost.</string>
     <string name="type">Type</string>
     <string name="species">Species</string>
     <string name="region">Region</string>
