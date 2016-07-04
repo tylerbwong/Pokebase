@@ -39,7 +39,7 @@ public class SplashActivity extends AppCompatActivity {
    private class DatabaseTask extends AsyncTask<Void, Void, Void> {
       @Override
       protected Void doInBackground(Void... voids) {
-         DatabaseOpenHelper database = DatabaseOpenHelper.getInstance(SplashActivity.this);
+         DatabaseOpenHelper.getInstance(SplashActivity.this);
          return null;
       }
 
