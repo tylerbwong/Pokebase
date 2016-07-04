@@ -54,17 +54,14 @@
             android:name=".activities.PokemonProfileActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/MainTheme"/>
-        <activity
-            android:name=".activities.EvolutionsActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/MainTheme"/>
+            android:theme="@style/MainTheme">
+        </activity>
         <activity
             android:name=".activities.PokemonEditorActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/PokemonEditorTheme"/>
+            android:theme="@style/PokemonEditorTheme">
+        </activity>
     </application>
 
 </manifest>

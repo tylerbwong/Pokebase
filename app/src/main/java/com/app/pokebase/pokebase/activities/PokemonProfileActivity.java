@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 import android.view.Menu;
@@ -14,17 +15,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.pokebase.pokebase.R;
-import com.app.pokebase.pokebase.adapters.TextViewAdapter;
+import com.app.pokebase.pokebase.adapters.PokemonListAdapter;
+import com.app.pokebase.pokebase.components.PokemonListItem;
 import com.app.pokebase.pokebase.components.PokemonProfile;
 import com.app.pokebase.pokebase.database.DatabaseOpenHelper;
+import com.app.pokebase.pokebase.utilities.AnimatedRecyclerView;
 import com.app.pokebase.pokebase.utilities.OnSwipeTouchListener;
+import com.db.chart.model.BarSet;
+import com.db.chart.view.AxisController;
+import com.db.chart.view.BarChartView;
+import com.db.chart.view.animation.Animation;
+import com.db.chart.view.animation.easing.BounceEase;
 import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
+import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 
 import java.util.List;
 import java.util.Locale;
@@ -33,34 +41,38 @@ import java.util.Locale;
  * @author Brittany Berlanga
  */
 public class PokemonProfileActivity extends AppCompatActivity {
-   public static final String POKEMON_ID_KEY = "pokemon_id";
-   public static final String POKEMON_NAME_KEY = "pokemon_name";
-   private static final double FT_PER_DM = 0.32808399;
-   private static final double LB_PER_HG = 0.22046226218;
-   private static final int KG_PER_HG = 10;
-   private static final int IN_PER_FT = 12;
-   private static final int DM_PER_M = 10;
-   private static final int PROFILE_IMG_ELEVATION = 40;
-   private static final int DEFAULT_LEVEL = 1;
-   private static final int DEFAULT_MOVE = 0;
-   private static final int FIRST_POKEMON = 1;
-   private static final int LAST_POKEMON = 721;
+   public final static String POKEMON_ID_KEY = "pokemon_id";
+   private final static double FT_PER_DM = 0.32808399;
+   private final static double LB_PER_HG = 0.22046226218;
+   private final static int KG_PER_HG = 10;
+   private final static int IN_PER_FT = 12;
+   private final static int DM_PER_M = 10;
+   private final static int PROFILE_IMG_ELEVATION = 40;
+   private final static int DEFAULT_LEVEL = 1;
+   private final static int DEFAULT_MOVE = 0;
+   private final static int FIRST_POKEMON = 1;
+   private final static int LAST_POKEMON = 721;
+   private final static String[] STATS =
+         {"HP", "Attack", "Defense", "Sp. Attack", "Sp. Defense", "Speed"};
    private int mPokemonId;
    private String mPokemonName;
    private Toolbar mToolbar;
    private ImageView mProfileImg;
-   private TextView mIdView;
-   private TextView mNameView;
    private TextView mTypeOneView;
    private TextView mTypeTwoView;
    private TextView mRegionView;
    private TextView mHeightView;
    private TextView mWeightView;
    private TextView mExpView;
-   private ListView mMovesList;
+   private TextView[] mStats;
    private RelativeLayout mLayout;
+   private LovelyChoiceDialog mMovesDialog;
+   private BarChartView mBarChart;
    private ActionBar mActionBar;
    private DatabaseOpenHelper mDatabaseHelper;
+   private AnimatedRecyclerView mEvolutionsList;
+
+   private PokemonListItem[] mEvolutions;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -72,16 +84,22 @@ public class PokemonProfileActivity extends AppCompatActivity {
       mProfileImg = (ImageView) findViewById(R.id.profile_image);
       mProfileImg.setClipToOutline(true);
       mProfileImg.setElevation(PROFILE_IMG_ELEVATION);
-      mIdView = (TextView) findViewById(R.id.id);
-      mNameView = (TextView) findViewById(R.id.name);
       mTypeOneView = (TextView) findViewById(R.id.type_one);
       mTypeTwoView = (TextView) findViewById(R.id.type_two);
       mRegionView = (TextView) findViewById(R.id.region);
       mHeightView = (TextView) findViewById(R.id.height);
       mWeightView = (TextView) findViewById(R.id.weight);
       mExpView = (TextView) findViewById(R.id.exp);
-      mMovesList = (ListView) findViewById(R.id.moves_list);
+      mBarChart = (BarChartView) findViewById(R.id.chart);
       mLayout = (RelativeLayout) findViewById(R.id.layout);
+
+      mStats = new TextView[STATS.length];
+      mStats[0] = (TextView) findViewById(R.id.hp);
+      mStats[1] = (TextView) findViewById(R.id.attack);
+      mStats[2] = (TextView) findViewById(R.id.defense);
+      mStats[3] = (TextView) findViewById(R.id.special_attack);
+      mStats[4] = (TextView) findViewById(R.id.special_defense);
+      mStats[5] = (TextView) findViewById(R.id.speed);
 
       OnSwipeTouchListener swipeTouchListener = new OnSwipeTouchListener(PokemonProfileActivity.this) {
          @Override
@@ -125,10 +143,30 @@ public class PokemonProfileActivity extends AppCompatActivity {
       int pokemonId = extras.getInt(POKEMON_ID_KEY);
       PokemonProfile pokemon = mDatabaseHelper.querySelectedPokemonProfile(pokemonId);
 
-      mMovesList.setAdapter(new TextViewAdapter(this, pokemon.getMoves()));
+      mMovesDialog = new LovelyChoiceDialog(this)
+            .setTopColorRes(R.color.colorPrimary)
+            .setTitle(R.string.moveset)
+            .setIcon(R.drawable.ic_book_white_24dp)
+            .setItems(pokemon.getMoves(), null)
+            .setCancelable(true);
 
+      mEvolutions = mDatabaseHelper.queryPokemonEvolutions(pokemonId);
       mPokemonId = pokemon.getId();
-      mIdView.setText(String.valueOf(mPokemonId));
+
+      float[] data = mDatabaseHelper.querySelectedPokemonStats(pokemonId);
+      BarSet dataset = new BarSet();
+      float tempVal;
+      for (int index = 0; index < data.length; index++) {
+         tempVal = data[index];
+         dataset.addBar(STATS[index], tempVal);
+         mStats[index].setText(String.valueOf(Math.round(tempVal)));
+      }
+      dataset.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
+      mBarChart.addData(dataset);
+      mBarChart.setYLabels(AxisController.LabelPosition.NONE);
+      Animation animation = new Animation(1000);
+      animation.setEasing(new BounceEase());
+      mBarChart.show(animation);
 
       int imageResourceId = this.getResources().getIdentifier("sprites_" + mPokemonId,
             "drawable", this.getPackageName());
@@ -139,8 +177,7 @@ public class PokemonProfileActivity extends AppCompatActivity {
       mExpView.setText(String.valueOf(pokemon.getBaseExp()));
 
       mPokemonName = pokemon.getName();
-      mActionBar.setTitle(mPokemonName);
-      mNameView.setText(mPokemonName);
+      mActionBar.setTitle("#" + mPokemonId + " " + mPokemonName);
       mRegionView.setText(pokemon.getRegion());
 
       String[] types = pokemon.getTypes();
@@ -220,13 +257,23 @@ public class PokemonProfileActivity extends AppCompatActivity {
       Toast.makeText(this, getString(R.string.sound_played), Toast.LENGTH_SHORT).show();
    }
 
+   public void showMoves(View view) {
+      mMovesDialog.show();
+   }
+
    public void showEvolutions(View view) {
-      Intent evolutionsIntent = new Intent(this, EvolutionsActivity.class);
-      Bundle extras = new Bundle();
-      extras.putInt(POKEMON_ID_KEY, mPokemonId);
-      extras.putString(POKEMON_NAME_KEY, mPokemonName);
-      evolutionsIntent.putExtras(extras);
-      startActivity(evolutionsIntent);
+      mEvolutionsList = new AnimatedRecyclerView(this);
+      mEvolutionsList.setLayoutManager(new LinearLayoutManager(this));
+      mEvolutionsList.setHasFixedSize(true);
+      mEvolutionsList.setAdapter(new PokemonListAdapter(this, mEvolutions));
+
+      new LovelyCustomDialog(this)
+            .setTopColorRes(R.color.colorPrimary)
+            .setView(mEvolutionsList)
+            .setIcon(R.drawable.ic_group_work_white_24dp)
+            .setTitle(R.string.evolutions)
+            .setCancelable(true)
+            .show();
    }
 
    @Override

@@ -43,4 +43,5 @@ dependencies {
     compile 'com.github.coyarzun89:fabtransitionactivity:0.2.0'
     compile 'com.yarolegovich:lovely-dialog:1.0.4'
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
+    compile 'com.diogobernardino:williamchart:2.2'
 }

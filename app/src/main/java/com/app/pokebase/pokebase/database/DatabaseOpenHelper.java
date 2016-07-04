@@ -51,6 +51,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
    private final static String BASE_EXP_COL = "baseExp";
    private final static String LAST_UPDATED_COL = "lastUpdated";
    private final static String REGION_COL = "region";
+   private final static String BASE_STAT_COL = "baseStat";
    private final static String TYPES = "Types";
    private final static String REGIONS = "Regions";
    private final static String DATE_FORMAT = "M/d/yyyy h:mm a";
@@ -135,6 +136,10 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
          "SELECT COUNT(*) FROM Teams AS T WHERE T.name = ?";
    private final static String TEAM_NAME_BY_ID =
          "SELECT T.name FROM Teams AS T WHERE T._id = ?";
+   private final static String SELECTED_POKEMON_STATS =
+         "SELECT * " +
+               "FROM PokemonStats AS P JOIN Stats AS S ON P.statId = S.id " +
+               "WHERE P.pokemonId = ?";
 
    private DatabaseOpenHelper(Context context) {
       super(context, DB_NAME, null, DB_VERSION);
@@ -601,6 +606,22 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       mDatabase.delete(TEAM_POKEMON_TABLE, null, null);
       mDatabase.delete(TEAMS_TABLE, null, null);
       return true;
+   }
+
+   public float[] querySelectedPokemonStats(int pokemonId) {
+      Cursor cursor = mDatabase.rawQuery(SELECTED_POKEMON_STATS,
+            new String[]{String.valueOf(pokemonId)});
+      int index = 0;
+      float[] stats = new float[cursor.getCount()];
+      cursor.moveToFirst();
+
+      while (!cursor.isAfterLast()) {
+         stats[index] = (float) cursor.getInt(cursor.getColumnIndex(BASE_STAT_COL));
+         index++;
+         cursor.moveToNext();
+      }
+      cursor.close();
+      return stats;
    }
 
    private String getDate() {
