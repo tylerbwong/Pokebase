@@ -21,12 +21,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.StartActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/StartTheme">
-        </activity>
-        <activity
             android:name=".activities.IntroActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
