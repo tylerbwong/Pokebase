@@ -291,6 +291,14 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    }
 
    public void showEvolutions(View view) {
+      String evolutionsTitle;
+      if (mEvolutions.length == 0) {
+         evolutionsTitle = getString(R.string.no_evolutions);
+      }
+      else {
+         evolutionsTitle = getString(R.string.evolutions);
+      }
+
       mEvolutionsList = new AnimatedRecyclerView(this);
       mEvolutionsList.setLayoutManager(new LinearLayoutManager(this));
       mEvolutionsList.setHasFixedSize(true);
@@ -300,7 +308,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
             .setTopColorRes(R.color.colorPrimary)
             .setView(mEvolutionsList)
             .setIcon(R.drawable.ic_group_work_white_24dp)
-            .setTitle(R.string.evolutions)
+            .setTitle(evolutionsTitle)
             .setCancelable(true)
             .show();
    }
