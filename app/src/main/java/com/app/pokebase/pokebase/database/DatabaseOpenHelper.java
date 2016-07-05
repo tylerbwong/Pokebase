@@ -142,6 +142,8 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
                "WHERE P.pokemonId = ?";
    private final static String ALL_MOVES =
          "SELECT * FROM MOVES AS M ORDER BY M.name";
+   private final static String POKEMON_DESCRIPTION =
+         "SELECT P.description FROM PokemonDescriptions AS P WHERE P.pokemonId = ?";
 
    private DatabaseOpenHelper(Context context) {
       super(context, DB_NAME, null, DB_VERSION);
@@ -639,6 +641,15 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       }
       cursor.close();
       return moves;
+   }
+
+   public String queryPokemonDescription(int pokemonId) {
+      String result;
+      Cursor cursor = mDatabase.rawQuery(POKEMON_DESCRIPTION, new String[]{String.valueOf(pokemonId)});
+      cursor.moveToFirst();
+      result = cursor.getString(0);
+      cursor.close();
+      return result;
    }
 
    private String getDate() {

@@ -57,6 +57,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private TextView mTitle;
    private TextView mMainTitle;
    private TextView[] mStats;
+   private TextView mDescription;
    private CoordinatorLayout mLayout;
    private LovelyChoiceDialog mMovesDialog;
    private LinearLayout mTitleContainer;
@@ -108,6 +109,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       mLayout = (CoordinatorLayout) findViewById(R.id.layout);
       mTitle = (TextView) findViewById(R.id.pokemon_name);
       mMainTitle = (TextView) findViewById(R.id.main_title);
+      mDescription = (TextView) findViewById(R.id.description);
       mTitleContainer = (LinearLayout) findViewById(R.id.title_layout);
       mAppBar = (AppBarLayout) findViewById(R.id.app_bar);
 
@@ -174,6 +176,8 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       mEvolutions = mDatabaseHelper.queryPokemonEvolutions(pokemonId);
       mPokemonId = pokemon.getId();
 
+      mDescription.setText(mDatabaseHelper.queryPokemonDescription(mPokemonId));
+
       float[] data = mDatabaseHelper.querySelectedPokemonStats(pokemonId);
       BarSet dataset = new BarSet();
       float tempVal;
@@ -184,6 +188,8 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       }
       dataset.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
       mBarChart.addData(dataset);
+      mBarChart.setXAxis(false);
+      mBarChart.setYAxis(false);
       mBarChart.setYLabels(AxisController.LabelPosition.NONE);
       Animation animation = new Animation(1000);
       animation.setEasing(new BounceEase());

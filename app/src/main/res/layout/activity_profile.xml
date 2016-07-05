@@ -61,6 +61,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nested_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none"
@@ -76,6 +77,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/more_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:layout_marginBottom="7dp"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="7dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="30dp">
+
+                        <TextView
+                            android:id="@+id/description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:textSize="16sp"/>
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/basic_info"
@@ -247,8 +274,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/chart"
-                            android:layout_marginStart="20dp"
                             android:layout_centerHorizontal="true"
+                            android:layout_marginStart="20dp"
                             android:orientation="horizontal">
 
                             <TextView
@@ -256,64 +283,52 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:textSize="12sp"
-                                android:textAlignment="center"/>
+                                android:textAlignment="center"
+                                android:textSize="12sp"/>
 
                             <TextView
                                 android:id="@+id/attack"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:textSize="12sp"
-                                android:textAlignment="center"/>
+                                android:textAlignment="center"
+                                android:textSize="12sp"/>
 
                             <TextView
                                 android:id="@+id/defense"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:textSize="12sp"
-                                android:textAlignment="center"/>
+                                android:textAlignment="center"
+                                android:textSize="12sp"/>
 
                             <TextView
                                 android:id="@+id/special_attack"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:textSize="12sp"
-                                android:textAlignment="center"/>
+                                android:textAlignment="center"
+                                android:textSize="12sp"/>
 
                             <TextView
                                 android:id="@+id/special_defense"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:textSize="12sp"
-                                android:textAlignment="center"/>
+                                android:textAlignment="center"
+                                android:textSize="12sp"/>
 
                             <TextView
                                 android:id="@+id/speed"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:textSize="12sp"
-                                android:textAlignment="center"/>
+                                android:textAlignment="center"
+                                android:textSize="12sp"/>
 
                         </LinearLayout>
 
                     </RelativeLayout>
-
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/more_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:layout_marginBottom="7dp"
-                    android:layout_marginEnd="14dp"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginTop="7dp"
-                    android:orientation="horizontal">
 
                 </android.support.v7.widget.CardView>
 
