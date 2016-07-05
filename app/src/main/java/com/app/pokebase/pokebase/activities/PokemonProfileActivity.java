@@ -85,9 +85,9 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private final static String[] STATS =
          {"HP", "Attack", "Defense", "Sp. Attack", "Sp. Defense", "Speed"};
 
-   private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.9f;
-   private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
-   private static final int ALPHA_ANIMATIONS_DURATION              = 200;
+   private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.9f;
+   private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
+   private static final int ALPHA_ANIMATIONS_DURATION = 200;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -358,12 +358,13 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private void handleToolbarTitleVisibility(float percentage) {
       if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
 
-         if(!mIsTheTitleVisible) {
+         if (!mIsTheTitleVisible) {
             startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
             mIsTheTitleVisible = true;
          }
 
-      } else {
+      }
+      else {
 
          if (mIsTheTitleVisible) {
             startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
@@ -374,12 +375,13 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
 
    private void handleAlphaOnTitle(float percentage) {
       if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
-         if(mIsTheTitleContainerVisible) {
+         if (mIsTheTitleContainerVisible) {
             startAlphaAnimation(mTitleContainer, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
             mIsTheTitleContainerVisible = false;
          }
 
-      } else {
+      }
+      else {
 
          if (!mIsTheTitleContainerVisible) {
             startAlphaAnimation(mTitleContainer, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
@@ -388,7 +390,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       }
    }
 
-   public static void startAlphaAnimation (View view, long duration, int visibility) {
+   public static void startAlphaAnimation(View view, long duration, int visibility) {
       AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
             ? new AlphaAnimation(0f, 1f)
             : new AlphaAnimation(1f, 0f);
