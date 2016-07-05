@@ -3,6 +3,8 @@ package com.app.pokebase.pokebase.activities;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -14,8 +16,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +43,33 @@ import java.util.Locale;
 /**
  * @author Brittany Berlanga
  */
-public class PokemonProfileActivity extends AppCompatActivity {
+public class PokemonProfileActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
+   private int mPokemonId;
+   private String mPokemonName;
+   private Toolbar mToolbar;
+   private ImageView mProfileImg;
+   private TextView mTypeOneView;
+   private TextView mTypeTwoView;
+   private TextView mRegionView;
+   private TextView mHeightView;
+   private TextView mWeightView;
+   private TextView mExpView;
+   private TextView mTitle;
+   private TextView mMainTitle;
+   private TextView[] mStats;
+   private CoordinatorLayout mLayout;
+   private LovelyChoiceDialog mMovesDialog;
+   private LinearLayout mTitleContainer;
+   private BarChartView mBarChart;
+   private AppBarLayout mAppBar;
+   private ActionBar mActionBar;
+   private DatabaseOpenHelper mDatabaseHelper;
+   private AnimatedRecyclerView mEvolutionsList;
+
+   private PokemonListItem[] mEvolutions;
+   private boolean mIsTheTitleVisible = false;
+   private boolean mIsTheTitleContainerVisible = true;
+
    public final static String POKEMON_ID_KEY = "pokemon_id";
    private final static double FT_PER_DM = 0.32808399;
    private final static double LB_PER_HG = 0.22046226218;
@@ -54,25 +83,10 @@ public class PokemonProfileActivity extends AppCompatActivity {
    private final static int LAST_POKEMON = 721;
    private final static String[] STATS =
          {"HP", "Attack", "Defense", "Sp. Attack", "Sp. Defense", "Speed"};
-   private int mPokemonId;
-   private String mPokemonName;
-   private Toolbar mToolbar;
-   private ImageView mProfileImg;
-   private TextView mTypeOneView;
-   private TextView mTypeTwoView;
-   private TextView mRegionView;
-   private TextView mHeightView;
-   private TextView mWeightView;
-   private TextView mExpView;
-   private TextView[] mStats;
-   private RelativeLayout mLayout;
-   private LovelyChoiceDialog mMovesDialog;
-   private BarChartView mBarChart;
-   private ActionBar mActionBar;
-   private DatabaseOpenHelper mDatabaseHelper;
-   private AnimatedRecyclerView mEvolutionsList;
 
-   private PokemonListItem[] mEvolutions;
+   private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.9f;
+   private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
+   private static final int ALPHA_ANIMATIONS_DURATION              = 200;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +105,11 @@ public class PokemonProfileActivity extends AppCompatActivity {
       mWeightView = (TextView) findViewById(R.id.weight);
       mExpView = (TextView) findViewById(R.id.exp);
       mBarChart = (BarChartView) findViewById(R.id.chart);
-      mLayout = (RelativeLayout) findViewById(R.id.layout);
+      mLayout = (CoordinatorLayout) findViewById(R.id.layout);
+      mTitle = (TextView) findViewById(R.id.pokemon_name);
+      mMainTitle = (TextView) findViewById(R.id.main_title);
+      mTitleContainer = (LinearLayout) findViewById(R.id.title_layout);
+      mAppBar = (AppBarLayout) findViewById(R.id.app_bar);
 
       mStats = new TextView[STATS.length];
       mStats[0] = (TextView) findViewById(R.id.hp);
@@ -123,7 +141,10 @@ public class PokemonProfileActivity extends AppCompatActivity {
       mActionBar = getSupportActionBar();
       if (mActionBar != null) {
          mActionBar.setDisplayHomeAsUpEnabled(true);
+         mActionBar.setDisplayShowTitleEnabled(false);
       }
+      mAppBar.addOnOffsetChangedListener(this);
+      startAlphaAnimation(mTitle, 0, View.INVISIBLE);
 
       loadPokemonProfile();
    }
@@ -177,7 +198,9 @@ public class PokemonProfileActivity extends AppCompatActivity {
       mExpView.setText(String.valueOf(pokemon.getBaseExp()));
 
       mPokemonName = pokemon.getName();
-      mActionBar.setTitle("#" + mPokemonId + " " + mPokemonName);
+      String formattedName = String.format(getString(R.string.pokemon_name), mPokemonId, mPokemonName);
+      mTitle.setText(formattedName);
+      mMainTitle.setText(formattedName);
       mRegionView.setText(pokemon.getRegion());
 
       String[] types = pokemon.getTypes();
@@ -315,5 +338,57 @@ public class PokemonProfileActivity extends AppCompatActivity {
                .setIcon(R.drawable.ic_add_circle_outline_white_24dp)
                .show();
       }
+   }
+
+   @Override
+   public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
+      int maxScroll = appBarLayout.getTotalScrollRange();
+      float percentage = (float) Math.abs(offset) / (float) maxScroll;
+
+      handleAlphaOnTitle(percentage);
+      handleToolbarTitleVisibility(percentage);
+   }
+
+   private void handleToolbarTitleVisibility(float percentage) {
+      if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
+
+         if(!mIsTheTitleVisible) {
+            startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+            mIsTheTitleVisible = true;
+         }
+
+      } else {
+
+         if (mIsTheTitleVisible) {
+            startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+            mIsTheTitleVisible = false;
+         }
+      }
+   }
+
+   private void handleAlphaOnTitle(float percentage) {
+      if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
+         if(mIsTheTitleContainerVisible) {
+            startAlphaAnimation(mTitleContainer, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+            mIsTheTitleContainerVisible = false;
+         }
+
+      } else {
+
+         if (!mIsTheTitleContainerVisible) {
+            startAlphaAnimation(mTitleContainer, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+            mIsTheTitleContainerVisible = true;
+         }
+      }
+   }
+
+   public static void startAlphaAnimation (View view, long duration, int visibility) {
+      AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
+            ? new AlphaAnimation(0f, 1f)
+            : new AlphaAnimation(1f, 0f);
+
+      alphaAnimation.setDuration(duration);
+      alphaAnimation.setFillAfter(true);
+      view.startAnimation(alphaAnimation);
    }
 }
