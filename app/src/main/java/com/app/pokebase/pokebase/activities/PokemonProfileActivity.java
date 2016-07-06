@@ -189,8 +189,8 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       Bundle extras = new Bundle();
       extras.putInt(PokemonProfileActivity.POKEMON_ID_KEY, pokemonId);
       intent.putExtras(extras);
-      finish();
       startActivity(getIntent());
+      finish();
    }
 
    private void loadPokemonProfile() {
@@ -209,6 +209,75 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       mEvolutions = mDatabaseHelper.queryPokemonEvolutions(pokemonId);
       mPokemonId = pokemon.getId();
 
+      loadNextPrevious();
+
+      mDescription.setText(mDatabaseHelper.queryPokemonDescription(mPokemonId));
+
+      loadChart();
+
+      int imageResourceId = this.getResources().getIdentifier("sprites_" + mPokemonId,
+            "drawable", this.getPackageName());
+      mProfileImg.setImageResource(imageResourceId);
+
+      setHeightViewText(pokemon.getHeight());
+      setWeightViewText(pokemon.getWeight());
+      mExpView.setText(String.valueOf(pokemon.getBaseExp()));
+
+      mPokemonName = pokemon.getName();
+      String formattedName = String.format(getString(R.string.pokemon_name), mPokemonId, mPokemonName);
+      mTitle.setText(formattedName);
+      mMainTitle.setText(formattedName);
+      mRegionView.setText(pokemon.getRegion());
+
+      String[] types = pokemon.getTypes();
+
+      loadTypes(types);
+   }
+
+   private void loadTypes(String[] types) {
+      if (types.length == 1) {
+         String type = types[0];
+         mTypeTwoView.setVisibility(View.GONE);
+         mTypeOneView.setText(type);
+         String colorName = "type" + type;
+         int colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
+         mTypeOneView.setBackgroundColor(ContextCompat.getColor(this, colorResId));
+      }
+      else {
+         String typeOne = types[0];
+         String typeTwo = types[1];
+         mTypeOneView.setText(typeOne);
+         String colorName = "type" + typeOne;
+         int colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
+         mTypeOneView.setBackgroundColor(ContextCompat.getColor(this, colorResId));
+         mTypeTwoView.setVisibility(View.VISIBLE);
+         mTypeTwoView.setText(typeTwo);
+         colorName = "type" + typeTwo;
+         colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
+         mTypeTwoView.setBackgroundColor(ContextCompat.getColor(this, colorResId));
+      }
+   }
+
+   private void loadChart() {
+      float[] data = mDatabaseHelper.querySelectedPokemonStats(mPokemonId);
+      BarSet dataset = new BarSet();
+      float tempVal;
+      for (int index = 0; index < data.length; index++) {
+         tempVal = data[index];
+         dataset.addBar(STATS[index], tempVal);
+         mStats[index].setText(String.valueOf(Math.round(tempVal)));
+      }
+      dataset.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
+      mBarChart.addData(dataset);
+      mBarChart.setXAxis(false);
+      mBarChart.setYAxis(false);
+      mBarChart.setYLabels(AxisController.LabelPosition.NONE);
+      Animation animation = new Animation(1000);
+      animation.setEasing(new BounceEase());
+      mBarChart.show(animation);
+   }
+
+   private void loadNextPrevious() {
       String nextPokemonId, previousPokemonId;
       int nextImageId, previousImageId;
 
@@ -233,63 +302,6 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       mPreviousImage.setImageResource(previousImageId);
       mNextLabel.setText(String.format(getString(R.string.hashtag_format), nextPokemonId));
       mNextImage.setImageResource(nextImageId);
-
-      mDescription.setText(mDatabaseHelper.queryPokemonDescription(mPokemonId));
-
-      float[] data = mDatabaseHelper.querySelectedPokemonStats(pokemonId);
-      BarSet dataset = new BarSet();
-      float tempVal;
-      for (int index = 0; index < data.length; index++) {
-         tempVal = data[index];
-         dataset.addBar(STATS[index], tempVal);
-         mStats[index].setText(String.valueOf(Math.round(tempVal)));
-      }
-      dataset.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
-      mBarChart.addData(dataset);
-      mBarChart.setXAxis(false);
-      mBarChart.setYAxis(false);
-      mBarChart.setYLabels(AxisController.LabelPosition.NONE);
-      Animation animation = new Animation(1000);
-      animation.setEasing(new BounceEase());
-      mBarChart.show(animation);
-
-      int imageResourceId = this.getResources().getIdentifier("sprites_" + mPokemonId,
-            "drawable", this.getPackageName());
-      mProfileImg.setImageResource(imageResourceId);
-
-      setHeightViewText(pokemon.getHeight());
-      setWeightViewText(pokemon.getWeight());
-      mExpView.setText(String.valueOf(pokemon.getBaseExp()));
-
-      mPokemonName = pokemon.getName();
-      String formattedName = String.format(getString(R.string.pokemon_name), mPokemonId, mPokemonName);
-      mTitle.setText(formattedName);
-      mMainTitle.setText(formattedName);
-      mRegionView.setText(pokemon.getRegion());
-
-      String[] types = pokemon.getTypes();
-
-      if (types.length == 1) {
-         String type = types[0];
-         mTypeTwoView.setVisibility(View.GONE);
-         mTypeOneView.setText(type);
-         String colorName = "type" + type;
-         int colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
-         mTypeOneView.setBackgroundColor(ContextCompat.getColor(this, colorResId));
-      }
-      else {
-         String typeOne = types[0];
-         String typeTwo = types[1];
-         mTypeOneView.setText(typeOne);
-         String colorName = "type" + typeOne;
-         int colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
-         mTypeOneView.setBackgroundColor(ContextCompat.getColor(this, colorResId));
-         mTypeTwoView.setVisibility(View.VISIBLE);
-         mTypeTwoView.setText(typeTwo);
-         colorName = "type" + typeTwo;
-         colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
-         mTypeTwoView.setBackgroundColor(ContextCompat.getColor(this, colorResId));
-      }
    }
 
    private void setHeightViewText(int decimeters) {
@@ -360,7 +372,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       mEvolutionsList = new AnimatedRecyclerView(this);
       mEvolutionsList.setLayoutManager(new LinearLayoutManager(this));
       mEvolutionsList.setHasFixedSize(true);
-      mEvolutionsList.setAdapter(new PokemonListAdapter(this, mEvolutions));
+      mEvolutionsList.setAdapter(new PokemonListAdapter(this, mEvolutions, true));
 
       new LovelyCustomDialog(this)
             .setTopColorRes(R.color.colorPrimary)

@@ -105,7 +105,7 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
       mRegionSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(),
             mDatabaseHelper.queryAllRegions()));
       mPokemonList.setAdapter(new PokemonListAdapter(getContext(),
-            mDatabaseHelper.queryAll(mIsAlphabetical)));
+            mDatabaseHelper.queryAll(mIsAlphabetical), false));
    }
 
    @Override
@@ -135,6 +135,6 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
          mPokemon = mDatabaseHelper.queryAll(mIsAlphabetical);
       }
 
-      mPokemonList.setAdapter(new PokemonListAdapter(getContext(), mPokemon));
+      mPokemonList.setAdapter(new PokemonListAdapter(getContext(), mPokemon, false));
    }
 }

@@ -20,10 +20,12 @@ import com.app.pokebase.pokebase.holders.PokemonListItemViewHolder;
 public class PokemonListAdapter extends RecyclerView.Adapter implements View.OnClickListener {
    private Context mContext;
    private PokemonListItem[] mItems;
+   private boolean mIsEvolutions = false;
 
-   public PokemonListAdapter(Context context, PokemonListItem[] items) {
+   public PokemonListAdapter(Context context, PokemonListItem[] items, boolean isEvolutions) {
       this.mContext = context;
       this.mItems = items;
+      mIsEvolutions = isEvolutions;
    }
 
    @Override
@@ -57,5 +59,9 @@ public class PokemonListAdapter extends RecyclerView.Adapter implements View.OnC
       extras.putInt(PokemonProfileActivity.POKEMON_ID_KEY, pokemonId);
       profileIntent.putExtras(extras);
       mContext.startActivity(profileIntent);
+
+      if (mIsEvolutions) {
+         ((PokemonProfileActivity) mContext).finish();
+      }
    }
 }

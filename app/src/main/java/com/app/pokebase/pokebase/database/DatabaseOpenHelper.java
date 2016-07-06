@@ -59,10 +59,9 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
    private final static String ALPHABETIZE =
          " ORDER BY P.name";
    private final static String ALL =
-         "SELECT P.id, P.name " +
-               "FROM Pokemon AS P";
+         "SELECT P.id, P.name FROM Pokemon AS P";
    private final static String ALL_TYPES =
-         "SELECT T.name FROM Types AS T";
+         "SELECT T.name FROM Types AS T ORDER BY T.name";
    private final static String ALL_REGIONS =
          "SELECT R.name FROM Regions AS R";
    private final static String TYPE_QUERY =
@@ -100,7 +99,8 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
                "FROM Pokemon AS P " +
                "JOIN PokemonMoves AS O ON P.id = O.pokemonId " +
                "JOIN Moves AS M ON O.moveId = M.id " +
-               "WHERE P.id = ?";
+               "WHERE P.id = ? " +
+               "ORDER BY M.name";
    private final static String SELECTED_EVOLUTIONS_QUERY =
          "SELECT K.id, K.name " +
                "FROM Pokemon AS P " +
