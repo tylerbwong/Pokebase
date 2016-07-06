@@ -1,6 +1,7 @@
 package com.app.pokebase.pokebase.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -28,12 +29,13 @@ import com.app.pokebase.pokebase.components.PokemonListItem;
 import com.app.pokebase.pokebase.components.PokemonProfile;
 import com.app.pokebase.pokebase.database.DatabaseOpenHelper;
 import com.app.pokebase.pokebase.utilities.AnimatedRecyclerView;
-import com.app.pokebase.pokebase.utilities.OnSwipeTouchListener;
 import com.db.chart.model.BarSet;
 import com.db.chart.view.AxisController;
 import com.db.chart.view.BarChartView;
 import com.db.chart.view.animation.Animation;
 import com.db.chart.view.animation.easing.BounceEase;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrConfig;
 import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
 import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 
@@ -47,6 +49,8 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private int mPokemonId;
    private String mPokemonName;
    private Toolbar mToolbar;
+   private LinearLayout mPrevious;
+   private LinearLayout mNext;
    private ImageView mProfileImg;
    private TextView mTypeOneView;
    private TextView mTypeTwoView;
@@ -56,6 +60,10 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private TextView mExpView;
    private TextView mTitle;
    private TextView mMainTitle;
+   private TextView mPreviousLabel;
+   private TextView mNextLabel;
+   private ImageView mPreviousImage;
+   private ImageView mNextImage;
    private TextView[] mStats;
    private TextView mDescription;
    private CoordinatorLayout mLayout;
@@ -96,6 +104,8 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
 
       setContentView(R.layout.activity_profile);
       mToolbar = (Toolbar) findViewById(R.id.toolbar);
+      mPrevious = (LinearLayout) findViewById(R.id.previous);
+      mNext = (LinearLayout) findViewById(R.id.next);
       mProfileImg = (ImageView) findViewById(R.id.profile_image);
       mProfileImg.setClipToOutline(true);
       mProfileImg.setElevation(PROFILE_IMG_ELEVATION);
@@ -110,6 +120,10 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       mTitle = (TextView) findViewById(R.id.pokemon_name);
       mMainTitle = (TextView) findViewById(R.id.main_title);
       mDescription = (TextView) findViewById(R.id.description);
+      mPreviousLabel = (TextView) findViewById(R.id.previous_label);
+      mPreviousImage = (ImageView) findViewById(R.id.previous_image);
+      mNextLabel = (TextView) findViewById(R.id.next_label);
+      mNextImage = (ImageView) findViewById(R.id.next_image);
       mTitleContainer = (LinearLayout) findViewById(R.id.title_layout);
       mAppBar = (AppBarLayout) findViewById(R.id.app_bar);
 
@@ -121,23 +135,29 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       mStats[4] = (TextView) findViewById(R.id.special_defense);
       mStats[5] = (TextView) findViewById(R.id.speed);
 
-      OnSwipeTouchListener swipeTouchListener = new OnSwipeTouchListener(PokemonProfileActivity.this) {
+      mPrevious.setOnClickListener(new View.OnClickListener() {
          @Override
-         public void onSwipeLeft() {
-            if (mPokemonId != LAST_POKEMON) {
-               switchPokemon(mPokemonId + 1);
+         public void onClick(View view) {
+            if (mPokemonId == FIRST_POKEMON) {
+               switchPokemon(LAST_POKEMON);
             }
-         }
-
-         @Override
-         public void onSwipeRight() {
-            if (mPokemonId != FIRST_POKEMON) {
+            else {
                switchPokemon(mPokemonId - 1);
             }
          }
-      };
+      });
 
-      mLayout.setOnTouchListener(swipeTouchListener);
+      mNext.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+            if (mPokemonId == LAST_POKEMON) {
+               switchPokemon(FIRST_POKEMON);
+            }
+            else {
+               switchPokemon(mPokemonId + 1);
+            }
+         }
+      });
 
       setSupportActionBar(mToolbar);
       mActionBar = getSupportActionBar();
@@ -149,6 +169,19 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       startAlphaAnimation(mTitle, 0, View.INVISIBLE);
 
       loadPokemonProfile();
+
+      SlidrConfig config = new SlidrConfig.Builder()
+            .sensitivity(1f)
+            .scrimColor(Color.BLACK)
+            .scrimStartAlpha(0.8f)
+            .scrimEndAlpha(0f)
+            .velocityThreshold(2400)
+            .distanceThreshold(0.25f)
+            .edge(true)
+            .edgeSize(0.18f)
+            .build();
+
+      Slidr.attach(this, config);
    }
 
    private void switchPokemon(int pokemonId) {
@@ -175,6 +208,31 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
 
       mEvolutions = mDatabaseHelper.queryPokemonEvolutions(pokemonId);
       mPokemonId = pokemon.getId();
+
+      String nextPokemonId, previousPokemonId;
+      int nextImageId, previousImageId;
+
+      if (mPokemonId == FIRST_POKEMON) {
+         previousPokemonId = String.valueOf(LAST_POKEMON);
+         nextPokemonId = String.valueOf(mPokemonId + 1);
+      }
+      else if (mPokemonId == LAST_POKEMON) {
+         previousPokemonId = String.valueOf(mPokemonId - 1);
+         nextPokemonId = String.valueOf(FIRST_POKEMON);
+      }
+      else {
+         previousPokemonId = String.valueOf(mPokemonId - 1);
+         nextPokemonId = String.valueOf(mPokemonId + 1);
+      }
+      previousImageId = getResources().getIdentifier("icon_" + previousPokemonId,
+            "drawable", getPackageName());
+      nextImageId = getResources().getIdentifier("icon_" + nextPokemonId,
+            "drawable", getPackageName());
+
+      mPreviousLabel.setText(String.format(getString(R.string.hashtag_format), previousPokemonId));
+      mPreviousImage.setImageResource(previousImageId);
+      mNextLabel.setText(String.format(getString(R.string.hashtag_format), nextPokemonId));
+      mNextImage.setImageResource(nextImageId);
 
       mDescription.setText(mDatabaseHelper.queryPokemonDescription(mPokemonId));
 

@@ -5,6 +5,7 @@
                                                  android:id="@+id/layout"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
+                                                 android:background="@color/colorAccent"
                                                  tools:ignore="RtlHardcoded">
 
     <android.support.design.widget.AppBarLayout
@@ -21,13 +22,70 @@
             android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-            <View
+            <RelativeLayout
                 android:id="@+id/header"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:background="@color/colorPrimary"
+                android:orientation="horizontal"
                 app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.9"/>
+                app:layout_collapseParallaxMultiplier="0.5">
+
+                <LinearLayout
+                    android:id="@+id/previous"
+                    android:layout_width="100dp"
+                    android:layout_height="120dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/previous_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="18sp"/>
+
+                    <ImageView
+                        android:id="@+id/previous_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/next"
+                    android:layout_width="100dp"
+                    android:layout_height="120dp"
+                    android:layout_alignParentEnd="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/next_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="18sp"/>
+
+                    <ImageView
+                        android:id="@+id/next_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter"/>
+
+                </LinearLayout>
+            </RelativeLayout>
 
             <FrameLayout
                 android:id="@+id/frame_layout"

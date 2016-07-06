@@ -54,7 +54,7 @@
             android:name=".activities.PokemonProfileActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/MainTheme">
+            android:theme="@style/PokemonProfileTheme">
         </activity>
         <activity
             android:name=".activities.PokemonEditorActivity"
