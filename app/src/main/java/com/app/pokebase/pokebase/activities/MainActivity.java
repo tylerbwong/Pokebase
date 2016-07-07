@@ -124,12 +124,6 @@ public class MainActivity extends AppCompatActivity {
                   fragmentTransaction.commit();
                   return true;
 
-               case R.id.items:
-                  return true;
-
-               case R.id.settings:
-                  return true;
-
                default:
                   return false;
             }
@@ -171,8 +165,6 @@ public class MainActivity extends AppCompatActivity {
       switch (item.getItemId()) {
          case R.id.clear_all_teams_action:
             showClearAllTeamsDialog();
-            break;
-         case R.id.settings:
             break;
          default:
             return false;

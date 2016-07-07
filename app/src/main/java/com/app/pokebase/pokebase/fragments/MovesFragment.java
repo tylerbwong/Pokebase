@@ -62,8 +62,6 @@ public class MovesFragment extends Fragment implements AdapterView.OnItemSelecte
    @Override
    public boolean onOptionsItemSelected(MenuItem item) {
       switch(item.getItemId()) {
-         case R.id.settings:
-            break;
          default:
             break;
       }
