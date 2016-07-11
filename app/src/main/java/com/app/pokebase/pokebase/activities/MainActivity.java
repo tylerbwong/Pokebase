@@ -207,12 +207,34 @@ public class MainActivity extends AppCompatActivity {
       }
    }
 
+   private void showCloseDialog() {
+      new LovelyStandardDialog(this)
+            .setIcon(R.drawable.ic_info_white_24dp)
+            .setTitle(R.string.close_title)
+            .setMessage(R.string.close_prompt)
+            .setCancelable(true)
+            .setPositiveButton(R.string.yes, new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                  Intent intent = new Intent(Intent.ACTION_MAIN);
+                  intent.addCategory(Intent.CATEGORY_HOME);
+                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                  startActivity(intent);
+               }
+            }).setNegativeButton(R.string.no, null)
+            .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
+            .show();
+   }
+
    @Override
    public void onBackPressed() {
       if (mPokemonAdd) {
          Intent toIntent = new Intent(this, TeamViewActivity.class);
          toIntent.putExtras(getIntent().getExtras());
          startActivity(toIntent);
+      }
+      else {
+         showCloseDialog();
       }
    }
 }
