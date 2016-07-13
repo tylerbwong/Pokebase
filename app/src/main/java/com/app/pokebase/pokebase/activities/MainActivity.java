@@ -166,6 +166,9 @@ public class MainActivity extends AppCompatActivity {
          case R.id.clear_all_teams_action:
             showClearAllTeamsDialog();
             break;
+         case R.id.exit_action:
+            showExitDialog();
+            break;
          default:
             return false;
       }
@@ -207,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
       }
    }
 
-   private void showCloseDialog() {
+   private void showExitDialog() {
       new LovelyStandardDialog(this)
             .setIcon(R.drawable.ic_info_white_24dp)
             .setTitle(R.string.close_title)
@@ -234,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
          startActivity(toIntent);
       }
       else {
-         showCloseDialog();
+         showExitDialog();
       }
    }
 }
