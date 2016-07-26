@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="com.app.pokebase.pokebase"
+          package="com.app.main.pokebase"
           android:installLocation="auto">
 
     <application
@@ -12,7 +12,7 @@
         android:theme="@style/MainTheme"
         tools:replace="android:theme">
         <activity
-            android:name=".activities.SplashActivity"
+            android:name="com.app.main.pokebase.activities.SplashActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
@@ -22,43 +22,43 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.IntroActivity"
+            android:name="com.app.main.pokebase.activities.IntroActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/StartTheme">
         </activity>
         <activity
-            android:name=".activities.SignUpActivity"
+            android:name="com.app.main.pokebase.activities.SignUpActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/StartTheme">
         </activity>
         <activity
-            android:name=".activities.GenderActivity"
+            android:name="com.app.main.pokebase.activities.GenderActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/StartTheme">
         </activity>
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.app.main.pokebase.activities.MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/MainTheme">
         </activity>
         <activity
-            android:name=".activities.TeamViewActivity"
+            android:name="com.app.main.pokebase.activities.TeamViewActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/MainTheme">
         </activity>
         <activity
-            android:name=".activities.PokemonProfileActivity"
+            android:name="com.app.main.pokebase.activities.PokemonProfileActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/PokemonProfileTheme">
         </activity>
         <activity
-            android:name=".activities.PokemonEditorActivity"
+            android:name="com.app.main.pokebase.activities.PokemonEditorActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/PokemonEditorTheme">

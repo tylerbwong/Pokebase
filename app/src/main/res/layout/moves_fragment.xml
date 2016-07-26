@@ -4,7 +4,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <com.app.pokebase.pokebase.utilities.AnimatedRecyclerView
+    <com.app.main.pokebase.utilities.AnimatedRecyclerView
         android:id="@+id/moves_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

@@ -40,7 +40,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <com.app.pokebase.pokebase.utilities.AnimatedRecyclerView
+    <com.app.main.pokebase.utilities.AnimatedRecyclerView
         android:id="@+id/team_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
