@@ -29,9 +29,9 @@ No internet connection is required.
 
 ### Disclaimer
 
-This application has no affiliation with Nintendo, The Pokémon Company or Game Freak. All images and information used belong to © 2016 Pokémon. © 1995–2016 Nintendo/Creatures Inc./Game Freak inc. Pokémon, Pokémon character names and images are trademarks of Nintendo. No copyright or trademark infringement is intended.
+This application has no affiliation with Nintendo, The Pokémon Company or Game Freak. All images and information used belong to ©1998-2016 The Pokémon Company. No copyright or trademark infringement is intended.
 
-Database provided by www.serebii.net and www.veekun.com/dex
+Databases provided by www.serebii.net and www.veekun.com/dex
 
 ### Libraries Used
 
