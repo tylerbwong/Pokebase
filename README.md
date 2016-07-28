@@ -1,4 +1,4 @@
-### Pokebase
+# Pokebase
 
 This Android application uses a SQLite database to store and query 
 information about all 721 Pokémon. You are able to view information about each Pokémon as well as
@@ -12,14 +12,14 @@ Requires Android 5.1 (Lollipop) or higher. Simply install the APK.
 
 Pokébase is simple Pokémon application to view information and save information about your own teams.
 
-# View Quick Pokémon Profiles
+### View Quick Pokémon Profiles
 
 * View basic information about all 721 Pokémon (Mega and other forms excluded for now)
 * Short descriptions, base stats and more
 * Play Pokémon cries
 * Add to your teams
 
-# Create Custom Teams
+### Create Custom Teams
 
 * Give your team a name and description
 * Keep track of your team by adding up to 6 Pokémon
@@ -27,13 +27,13 @@ Pokébase is simple Pokémon application to view information and save informatio
 
 No internet connection is required.
 
-## Disclaimer
+### Disclaimer
 
 This application has no affiliation with Nintendo, The Pokémon Company or Game Freak. All images and information used belong to © 2016 Pokémon. © 1995–2016 Nintendo/Creatures Inc./Game Freak inc. Pokémon, Pokémon character names and images are trademarks of Nintendo. No copyright or trademark infringement is intended.
 
 Database provided by www.serebii.net and www.veekun.com/dex
 
-## Libraries Used
+### Libraries Used
 
 * hdodenhof/CircleImageView
 * paolorotolo/AppIntro
