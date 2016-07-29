@@ -4,7 +4,7 @@
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent">
 
-    <com.app.main.pokebase.utilities.AnimatedRecyclerView
+    <com.app.main.pokebase.views.AnimatedRecyclerView
         android:id="@+id/team_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,7 +23,7 @@
         app:fabSize="normal"
         app:layout_anchor="@+id/team_list"
         app:layout_anchorGravity="bottom|end"
-        app:layout_behavior="com.app.pokebase.pokebase.utilities.FABScrollBehavior"
+        app:layout_behavior="com.app.main.pokebase.utilities.FABScrollBehavior"
         app:rippleColor="@color/colorAccent"/>
 
     <LinearLayout

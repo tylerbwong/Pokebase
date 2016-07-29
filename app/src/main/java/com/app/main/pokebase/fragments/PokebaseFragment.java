@@ -19,7 +19,7 @@ import com.app.main.pokebase.adapters.PokemonListAdapter;
 import com.app.main.pokebase.adapters.TextViewSpinnerAdapter;
 import com.app.main.pokebase.components.PokemonListItem;
 import com.app.main.pokebase.database.DatabaseOpenHelper;
-import com.app.main.pokebase.utilities.AnimatedRecyclerView;
+import com.app.main.pokebase.views.AnimatedRecyclerView;
 
 /**
  * @author Tyler Wong
@@ -89,13 +89,14 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
    @Override
    public void onViewCreated(View view, Bundle savedInstanceState) {
       super.onViewCreated(view, savedInstanceState);
+
       mTypeSpinner = (Spinner) view.findViewById(R.id.type_spinner);
       mTypeSpinner.setOnItemSelectedListener(this);
       mRegionSpinner = (Spinner) view.findViewById(R.id.region_spinner);
       mRegionSpinner.setOnItemSelectedListener(this);
+
       mPokemonList = (AnimatedRecyclerView) view.findViewById(R.id.pokemon_list);
       mPokemonList.setLayoutManager(new LinearLayoutManager(getContext()));
-
       mPokemonList.setHasFixedSize(true);
 
       mTypeSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(),

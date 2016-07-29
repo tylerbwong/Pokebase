@@ -23,7 +23,7 @@ import com.app.main.pokebase.R;
 import com.app.main.pokebase.adapters.PokemonTeamMemberAdapter;
 import com.app.main.pokebase.components.PokemonTeamMember;
 import com.app.main.pokebase.database.DatabaseOpenHelper;
-import com.app.main.pokebase.utilities.AnimatedRecyclerView;
+import com.app.main.pokebase.views.AnimatedRecyclerView;
 import com.github.fabtransitionactivity.SheetLayout;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 

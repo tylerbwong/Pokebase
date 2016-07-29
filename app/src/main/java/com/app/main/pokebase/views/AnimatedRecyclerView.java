@@ -1,4 +1,4 @@
-package com.app.main.pokebase.utilities;
+package com.app.main.pokebase.views;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

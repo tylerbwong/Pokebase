@@ -22,4 +22,7 @@
     <color name="typeSteel">#8B8BA9</color>
     <color name="typeFairy">#E18DE0</color>
     <color name="typeDark">#654F42</color>
+    <color name="classStatus">#455A64</color>
+    <color name="classPhysical">#EF5350</color>
+    <color name="classSpecial">#1976D2</color>
 </resources>

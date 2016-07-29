@@ -24,11 +24,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.main.pokebase.R;
+import com.app.main.pokebase.adapters.MoveListAdapter;
 import com.app.main.pokebase.adapters.PokemonListAdapter;
 import com.app.main.pokebase.components.PokemonListItem;
 import com.app.main.pokebase.components.PokemonProfile;
 import com.app.main.pokebase.database.DatabaseOpenHelper;
-import com.app.main.pokebase.utilities.AnimatedRecyclerView;
+import com.app.main.pokebase.views.AnimatedRecyclerView;
 import com.db.chart.model.BarSet;
 import com.db.chart.view.AxisController;
 import com.db.chart.view.BarChartView;
@@ -67,7 +68,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private TextView[] mStats;
    private TextView mDescription;
    private CoordinatorLayout mLayout;
-   private LovelyChoiceDialog mMovesDialog;
+   private LovelyCustomDialog mMovesDialog;
    private LinearLayout mTitleContainer;
    private BarChartView mBarChart;
    private AppBarLayout mAppBar;
@@ -199,11 +200,16 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       int pokemonId = extras.getInt(POKEMON_ID_KEY);
       PokemonProfile pokemon = mDatabaseHelper.querySelectedPokemonProfile(pokemonId);
 
-      mMovesDialog = new LovelyChoiceDialog(this)
+      AnimatedRecyclerView movesList = new AnimatedRecyclerView(this);
+      movesList.setLayoutManager(new LinearLayoutManager(this));
+      movesList.setHasFixedSize(true);
+      movesList.setAdapter(new MoveListAdapter(this, pokemon.getMoves()));
+
+      mMovesDialog = new LovelyCustomDialog(this)
             .setTopColorRes(R.color.colorPrimary)
             .setTitle(R.string.moveset)
             .setIcon(R.drawable.ic_book_white_24dp)
-            .setItems(pokemon.getMoves(), null)
+            .setView(movesList)
             .setCancelable(true);
 
       mEvolutions = mDatabaseHelper.queryPokemonEvolutions(pokemonId);

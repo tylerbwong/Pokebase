@@ -12,7 +12,7 @@ import com.app.main.pokebase.holders.MoveListItemViewHolder;
 /**
  * @author Tyler Wong
  */
-public class MoveListAdapter extends RecyclerView.Adapter implements View.OnClickListener {
+public class MoveListAdapter extends RecyclerView.Adapter {
    private Context mContext;
    private String[] mItems;
 
@@ -36,10 +36,5 @@ public class MoveListAdapter extends RecyclerView.Adapter implements View.OnClic
    @Override
    public int getItemCount() {
       return mItems.length;
-   }
-
-   @Override
-   public void onClick(View v) {
-
    }
 }

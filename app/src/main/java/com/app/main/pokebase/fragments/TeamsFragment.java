@@ -18,7 +18,7 @@ import com.app.main.pokebase.activities.TeamViewActivity;
 import com.app.main.pokebase.adapters.TeamAdapter;
 import com.app.main.pokebase.components.Team;
 import com.app.main.pokebase.database.DatabaseOpenHelper;
-import com.app.main.pokebase.utilities.AnimatedRecyclerView;
+import com.app.main.pokebase.views.AnimatedRecyclerView;
 import com.github.fabtransitionactivity.SheetLayout;
 
 /**

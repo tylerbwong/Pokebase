@@ -43,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
    private boolean mPokemonAdd;
 
-   private final static String TRAINER = "Trainer ";
-
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Pair;
 
+import com.app.main.pokebase.components.Move;
 import com.app.main.pokebase.components.PokemonListItem;
 import com.app.main.pokebase.components.PokemonProfile;
 import com.app.main.pokebase.components.PokemonTeamItem;
@@ -52,8 +53,14 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
    private final static String LAST_UPDATED_COL = "lastUpdated";
    private final static String REGION_COL = "region";
    private final static String BASE_STAT_COL = "baseStat";
+   private final static String MOVE_ID_COL = "moveId";
+   private final static String TYPE_ID_COL = "typeId";
+   private final static String POWER_COL = "power";
+   private final static String PP_COL = "pp";
+   private final static String ACCURACY_COL = "accuracy";
    private final static String TYPES = "Types";
    private final static String REGIONS = "Regions";
+   private final static String CLASSES = "Classes";
    private final static String DATE_FORMAT = "M/d/yyyy h:mm a";
 
    private final static String ALPHABETIZE =
@@ -141,9 +148,28 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
                "FROM PokemonStats AS P JOIN Stats AS S ON P.statId = S.id " +
                "WHERE P.pokemonId = ?";
    private final static String ALL_MOVES =
-         "SELECT * FROM MOVES AS M ORDER BY M.name";
+         "SELECT * FROM Moves AS M ORDER BY M.name";
    private final static String POKEMON_DESCRIPTION =
          "SELECT P.description FROM PokemonDescriptions AS P WHERE P.pokemonId = ?";
+   private final static String MOVE_INFO_BY_NAME =
+         "SELECT * FROM MovesInfo AS I JOIN Moves M ON I.moveId = M.id JOIN DamageClasses " +
+               "C ON I.classId = C.id WHERE M.name = ?";
+   private final static String TYPE_BY_ID =
+         "SELECT T.name FROM Types AS T WHERE T.id = ?";
+   private final static String MOVE_DESCRIPTION_BY_ID =
+         "SELECT M.description FROM MoveDescriptions AS M WHERE M.moveId = ?";
+   private final static String ALL_CLASSES =
+         "SELECT C.name FROM DamageClasses AS C ORDER BY C.name";
+   private final static String MOVES_BY_TYPE =
+         "SELECT M.name FROM Moves AS M JOIN MovesInfo I ON M.id = I.moveId JOIN Types AS T ON " +
+               "T.id = I.typeId WHERE T.name = ? ORDER BY M.name";
+   private final static String MOVES_BY_CLASS =
+         "SELECT M.name FROM Moves AS M JOIN MovesInfo I ON M.id = I.moveId JOIN DamageClasses C ON " +
+               "C.id = I.classId WHERE C.name = ? ORDER BY M.name";
+   private final static String MOVES_BY_TYPE_AND_CLASS =
+         "SELECT M.name FROM Moves AS M JOIN MovesInfo I ON M.id = I.moveId JOIN DamageClasses C ON " +
+               "C.id = I.classId JOIN Types T ON T.id = I.typeId WHERE T.name = ? AND C.name = ? " +
+               "ORDER BY M.name";
 
    private DatabaseOpenHelper(Context context) {
       super(context, DB_NAME, null, DB_VERSION);
@@ -197,6 +223,22 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       }
       cursor.close();
       return regions;
+   }
+
+   public String[] queryAllClasses() {
+      Cursor cursor = mDatabase.rawQuery(ALL_CLASSES, null);
+      String[] classes = new String[cursor.getCount() + 1];
+      classes[0] = CLASSES;
+      int index = 1;
+      cursor.moveToFirst();
+
+      while (!cursor.isAfterLast()) {
+         classes[index] = cursor.getString(cursor.getColumnIndex(NAME_COL));
+         index++;
+         cursor.moveToNext();
+      }
+      cursor.close();
+      return classes;
    }
 
    public PokemonListItem[] queryByType(String type, boolean alphabetical) {
@@ -537,7 +579,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
    }
 
    public PokemonTeamMember[] queryPokemonTeamMembers(int teamId) {
-      Cursor cursor = mDatabase.rawQuery(POKEMON_BY_TEAM, new String[]{String.valueOf(teamId)});
+      Cursor cursor = mDatabase.rawQuery(POKEMON_BY_TEAM, new String[] {String.valueOf(teamId)});
       PokemonTeamMember[] pokemon = new PokemonTeamMember[cursor.getCount()];
       int index = 0;
       cursor.moveToFirst();
@@ -559,12 +601,83 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return pokemon;
    }
 
+   public String[] queryMovesByType(String type) {
+      Cursor cursor = mDatabase.rawQuery(MOVES_BY_TYPE, new String[] {type});
+      String[] moves = new String[cursor.getCount()];
+      int index = 0;
+      cursor.moveToFirst();
+
+      while (!cursor.isAfterLast()) {
+         moves[index] = cursor.getString(cursor.getColumnIndex(NAME_COL));
+         index++;
+         cursor.moveToNext();
+      }
+      cursor.close();
+      return moves;
+   }
+
+   public String[] queryMovesByClass(String className) {
+      Cursor cursor = mDatabase.rawQuery(MOVES_BY_CLASS, new String[] {className});
+      String[] moves = new String[cursor.getCount()];
+      int index = 0;
+      cursor.moveToFirst();
+
+      while (!cursor.isAfterLast()) {
+         moves[index] = cursor.getString(cursor.getColumnIndex(NAME_COL));
+         index++;
+         cursor.moveToNext();
+      }
+      cursor.close();
+      return moves;
+   }
+
+   public String[] queryMovesByTypeAndClass(String type, String className) {
+      Cursor cursor = mDatabase.rawQuery(MOVES_BY_TYPE_AND_CLASS, new String[] {type, className});
+      String[] moves = new String[cursor.getCount()];
+      int index = 0;
+      cursor.moveToFirst();
+
+      while (!cursor.isAfterLast()) {
+         moves[index] = cursor.getString(cursor.getColumnIndex(NAME_COL));
+         index++;
+         cursor.moveToNext();
+      }
+      cursor.close();
+      return moves;
+   }
+
    public int queryMoveIdByName(String moveName) {
       int moveId;
-      Cursor cursor = mDatabase.rawQuery(QUERY_MOVE_ID, new String[]{moveName});
+      Cursor cursor = mDatabase.rawQuery(QUERY_MOVE_ID, new String[] {moveName});
       cursor.moveToFirst();
       moveId = cursor.getInt(0);
+      cursor.close();
       return moveId;
+   }
+
+   public Move queryMoveInfoByName(String name) {
+      Move move;
+      Cursor cursor = mDatabase.rawQuery(MOVE_INFO_BY_NAME, new String[] {name});
+      cursor.moveToFirst();
+
+      move = new Move(cursor.getInt(cursor.getColumnIndex(MOVE_ID_COL)), name,
+            cursor.getInt(cursor.getColumnIndex(TYPE_ID_COL)),
+            cursor.getInt(cursor.getColumnIndex(POWER_COL)),
+            cursor.getInt(cursor.getColumnIndex(PP_COL)),
+            cursor.getInt(cursor.getColumnIndex(ACCURACY_COL)),
+            cursor.getString(cursor.getColumnIndex(NAME_COL)));
+
+      cursor.close();
+      return move;
+   }
+
+   public String queryMoveDescriptionById(int moveId) {
+      String result;
+      Cursor cursor = mDatabase.rawQuery(MOVE_DESCRIPTION_BY_ID, new String[] {String.valueOf(moveId)});
+      cursor.moveToFirst();
+      result = cursor.getString(0);
+      cursor.close();
+      return result;
    }
 
    public boolean updateTeamPokemon(int memberId, int teamId, String nickname, int level, String moveOne,
@@ -645,7 +758,16 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
 
    public String queryPokemonDescription(int pokemonId) {
       String result;
-      Cursor cursor = mDatabase.rawQuery(POKEMON_DESCRIPTION, new String[]{String.valueOf(pokemonId)});
+      Cursor cursor = mDatabase.rawQuery(POKEMON_DESCRIPTION, new String[] {String.valueOf(pokemonId)});
+      cursor.moveToFirst();
+      result = cursor.getString(0);
+      cursor.close();
+      return result;
+   }
+
+   public String queryTypeById(int typeId) {
+      String result;
+      Cursor cursor = mDatabase.rawQuery(TYPE_BY_ID, new String[] {String.valueOf(typeId)});
       cursor.moveToFirst();
       result = cursor.getString(0);
       cursor.close();

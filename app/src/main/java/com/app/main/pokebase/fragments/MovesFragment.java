@@ -12,18 +12,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import com.app.main.pokebase.R;
 import com.app.main.pokebase.adapters.MoveListAdapter;
+import com.app.main.pokebase.adapters.TextViewSpinnerAdapter;
 import com.app.main.pokebase.database.DatabaseOpenHelper;
-import com.app.main.pokebase.utilities.AnimatedRecyclerView;
+import com.app.main.pokebase.views.AnimatedRecyclerView;
 
 /**
  * @author Tyler Wong
  */
 public class MovesFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+   private Spinner mTypeSpinner;
+   private Spinner mClassSpinner;
    private AnimatedRecyclerView mMovesList;
+
    private DatabaseOpenHelper mDatabaseHelper;
+   private String[] mMoves;
+
+   private final static String TYPES = "Types";
+   private final static String CLASSES = "Classes";
 
    @Override
    public void onCreate(Bundle savedInstanceState) {
@@ -71,9 +80,20 @@ public class MovesFragment extends Fragment implements AdapterView.OnItemSelecte
    @Override
    public void onViewCreated(View view, Bundle savedInstanceState) {
       super.onViewCreated(view, savedInstanceState);
+
+      mTypeSpinner = (Spinner) view.findViewById(R.id.type_spinner);
+      mTypeSpinner.setOnItemSelectedListener(this);
+      mClassSpinner = (Spinner) view.findViewById(R.id.class_spinner);
+      mClassSpinner.setOnItemSelectedListener(this);
+
       mMovesList = (AnimatedRecyclerView) view.findViewById(R.id.moves_list);
       mMovesList.setLayoutManager(new LinearLayoutManager(getContext()));
       mMovesList.setHasFixedSize(true);
+
+      mTypeSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(),
+            mDatabaseHelper.queryAllTypes()));
+      mClassSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(),
+            mDatabaseHelper.queryAllClasses()));
       mMovesList.setAdapter(new MoveListAdapter(getContext(),
             mDatabaseHelper.queryAllMoves()));
    }
@@ -85,6 +105,26 @@ public class MovesFragment extends Fragment implements AdapterView.OnItemSelecte
 
    @Override
    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+      refreshData();
+   }
 
+   private void refreshData() {
+      String type = (String) mTypeSpinner.getSelectedItem();
+      String className = (String) mClassSpinner.getSelectedItem();
+
+      if (type.equals(TYPES) && !className.equals(CLASSES)) {
+         mMoves = mDatabaseHelper.queryMovesByClass(className);
+      }
+      else if (!type.equals(TYPES) && className.equals(CLASSES)) {
+         mMoves = mDatabaseHelper.queryMovesByType(type);
+      }
+      else if (!type.equals(TYPES) && !className.equals(CLASSES)) {
+         mMoves = mDatabaseHelper.queryMovesByTypeAndClass(type, className);
+      }
+      else {
+         mMoves = mDatabaseHelper.queryAllMoves();
+      }
+
+      mMovesList.setAdapter(new MoveListAdapter(getContext(), mMoves));
    }
 }

@@ -25,7 +25,7 @@
             android:layout_weight="1"/>
     </LinearLayout>
 
-    <com.app.main.pokebase.utilities.AnimatedRecyclerView
+    <com.app.main.pokebase.views.AnimatedRecyclerView
         android:id="@+id/pokemon_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

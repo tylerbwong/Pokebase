@@ -40,7 +40,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <com.app.main.pokebase.utilities.AnimatedRecyclerView
+    <com.app.main.pokebase.views.AnimatedRecyclerView
         android:id="@+id/team_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -79,7 +79,7 @@
         app:layout_anchorGravity="bottom|right|end"
         app:backgroundTint="@color/colorPrimary"
         android:src="@drawable/ic_add_white_24dp"
-        app:layout_behavior="com.app.pokebase.pokebase.utilities.FABScrollBehavior"
+        app:layout_behavior="com.app.main.pokebase.utilities.FABScrollBehavior"
         app:rippleColor="@color/colorAccent"
         app:fabSize="normal"
         android:layout_margin="16dp"

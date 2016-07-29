@@ -88,5 +88,8 @@
     <string name="pokemon_name">#%1$s %2$s</string>
     <string name="no_evolutions">No Evolutions</string>
     <string name="hashtag_format">#%1$s</string>
-    <string name="starter">My Starter</string>
+    <string name="damage_class">Damage Class</string>
+    <string name="power">Power</string>
+    <string name="pp">PP</string>
+    <string name="accuracy">Accuracy</string>
 </resources>

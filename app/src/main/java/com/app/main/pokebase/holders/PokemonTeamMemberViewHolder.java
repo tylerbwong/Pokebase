@@ -17,7 +17,7 @@ import com.app.main.pokebase.components.PokemonTeamMember;
  * @author Tyler Wong
  */
 public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
-   public View view;
+   public View mView;
    public ImageView mPokemon;
    public TextView mName;
    public TextView mLevel;
@@ -30,9 +30,9 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
 
    public PokemonTeamMemberViewHolder(View itemView) {
       super(itemView);
-      this.view = itemView;
+      this.mView = itemView;
 
-      this.view.setOnClickListener(new View.OnClickListener() {
+      this.mView.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View view) {
             Context cardContext = view.getContext();
