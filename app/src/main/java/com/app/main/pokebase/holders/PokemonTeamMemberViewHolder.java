@@ -17,12 +17,13 @@ import com.app.main.pokebase.components.PokemonTeamMember;
  * @author Tyler Wong
  */
 public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
-   public View mView;
-   public ImageView mPokemon;
-   public TextView mName;
-   public TextView mLevel;
-   public TextView mLastUpdated;
-   public TextView mMoveset;
+   public final View mView;
+   public final ImageView mPokemon;
+   public final TextView mName;
+   public final TextView mLevel;
+   public final TextView mLastUpdated;
+   public final TextView mMoveset;
+
    private PokemonTeamMember mPokemonData;
    private String mTitle;
    private String mDescription;

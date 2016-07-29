@@ -92,4 +92,5 @@
     <string name="power">Power</string>
     <string name="pp">PP</string>
     <string name="accuracy">Accuracy</string>
+    <string name="cost">Cost</string>
 </resources>

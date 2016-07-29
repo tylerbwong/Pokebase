@@ -14,11 +14,11 @@ import com.app.main.pokebase.holders.MoveListItemViewHolder;
  */
 public class MoveListAdapter extends RecyclerView.Adapter {
    private Context mContext;
-   private String[] mItems;
+   private String[] mMoves;
 
    public MoveListAdapter(Context context, String[] items) {
       this.mContext = context;
-      this.mItems = items;
+      this.mMoves = items;
    }
 
    @Override
@@ -30,11 +30,11 @@ public class MoveListAdapter extends RecyclerView.Adapter {
    @Override
    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
       MoveListItemViewHolder holder = (MoveListItemViewHolder) viewHolder;
-      holder.mNameView.setText(mItems[position]);
+      holder.mNameView.setText(mMoves[position]);
    }
 
    @Override
    public int getItemCount() {
-      return mItems.length;
+      return mMoves.length;
    }
 }

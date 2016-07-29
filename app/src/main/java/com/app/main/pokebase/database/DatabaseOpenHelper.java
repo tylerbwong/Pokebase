@@ -12,6 +12,7 @@ import com.app.main.pokebase.components.PokemonProfile;
 import com.app.main.pokebase.components.PokemonTeamItem;
 import com.app.main.pokebase.components.PokemonTeamMember;
 import com.app.main.pokebase.components.Team;
+import com.app.main.pokebase.components.Item;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.text.DateFormat;
@@ -46,6 +47,8 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
    private final static String MOVE_FOUR_COL = "moveFour";
    private final static String ROW_ID_COL = "_id";
    private final static String ID_COL = "id";
+   private final static String IDENT_COL = "identifier";
+   private final static String COST_COL = "cost";
    private final static String NAME_COL = "name";
    private final static String HEIGHT_COL = "height";
    private final static String WEIGHT_COL = "weight";
@@ -170,6 +173,8 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
          "SELECT M.name FROM Moves AS M JOIN MovesInfo I ON M.id = I.moveId JOIN DamageClasses C ON " +
                "C.id = I.classId JOIN Types T ON T.id = I.typeId WHERE T.name = ? AND C.name = ? " +
                "ORDER BY M.name";
+   private final static String ALL_ITEMS =
+         "SELECT * FROM Items AS I ORDER BY I.name";
 
    private DatabaseOpenHelper(Context context) {
       super(context, DB_NAME, null, DB_VERSION);
@@ -772,6 +777,24 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       result = cursor.getString(0);
       cursor.close();
       return result;
+   }
+
+   public Item[] queryAllItems() {
+      Cursor cursor = mDatabase.rawQuery(ALL_ITEMS, null);
+      Item[] items = new Item[cursor.getCount()];
+      int index = 0;
+      cursor.moveToFirst();
+
+      while (!cursor.isAfterLast()) {
+         items[index] = new Item(cursor.getInt(cursor.getColumnIndex(ID_COL)),
+               cursor.getString(cursor.getColumnIndex(IDENT_COL)),
+               cursor.getString(cursor.getColumnIndex(NAME_COL)),
+               cursor.getInt(cursor.getColumnIndex(COST_COL)));
+         index++;
+         cursor.moveToNext();
+      }
+      cursor.close();
+      return items;
    }
 
    private String getDate() {

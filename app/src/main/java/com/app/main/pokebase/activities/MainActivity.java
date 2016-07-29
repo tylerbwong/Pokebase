@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.app.main.pokebase.R;
 import com.app.main.pokebase.database.DatabaseOpenHelper;
+import com.app.main.pokebase.fragments.ItemsFragment;
 import com.app.main.pokebase.fragments.MovesFragment;
 import com.app.main.pokebase.fragments.PokebaseFragment;
 import com.app.main.pokebase.fragments.TeamsFragment;
@@ -119,6 +120,14 @@ public class MainActivity extends AppCompatActivity {
                   mCurrentFragment = movesFragment;
                   fragmentTransaction = getSupportFragmentManager().beginTransaction();
                   fragmentTransaction.replace(R.id.frame, movesFragment);
+                  fragmentTransaction.commit();
+                  return true;
+
+               case R.id.items:
+                  ItemsFragment itemsFragment = new ItemsFragment();
+                  mCurrentFragment = itemsFragment;
+                  fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                  fragmentTransaction.replace(R.id.frame, itemsFragment);
                   fragmentTransaction.commit();
                   return true;
 
