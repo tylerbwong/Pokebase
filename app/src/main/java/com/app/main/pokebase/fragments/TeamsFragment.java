@@ -1,16 +1,20 @@
 package com.app.main.pokebase.fragments;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.app.main.pokebase.R;
@@ -41,6 +45,7 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       View view = inflater.inflate(R.layout.teams_fragment, container, false);
+      new LoadEmptyView().execute();
 
       mSheetLayout = (SheetLayout) view.findViewById(R.id.bottom_sheet);
       mTeamList = (AnimatedRecyclerView) view.findViewById(R.id.team_list);
@@ -117,6 +122,29 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
       super.onActivityResult(requestCode, resultCode, data);
       if (requestCode == REQUEST_CODE) {
          mSheetLayout.contractFab();
+      }
+   }
+
+   private class LoadEmptyView extends AsyncTask<Drawable, Void, Drawable> {
+      @Override
+      protected Drawable doInBackground(Drawable... params) {
+         return ContextCompat.getDrawable(getContext(), R.drawable.no_teams);
+      }
+
+      @Override
+      protected void onPostExecute(Drawable loaded) {
+         ImageView emptyImage = (ImageView) getActivity().findViewById(R.id.no_team);
+         emptyImage.setImageDrawable(loaded);
+      }
+
+      @Override
+      protected void onPreExecute() {
+
+      }
+
+      @Override
+      protected void onProgressUpdate(Void... values) {
+
       }
    }
 }

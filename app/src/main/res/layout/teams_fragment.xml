@@ -37,8 +37,7 @@
             android:id="@+id/no_team"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:src="@drawable/no_teams"/>
+            android:layout_gravity="center"/>
 
         <TextView
             android:layout_width="wrap_content"
