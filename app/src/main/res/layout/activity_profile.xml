@@ -465,7 +465,7 @@
         android:scaleType="center"
         app:finalHeight="@dimen/image_final_width"
         app:finalYPosition="2dp"
-        app:layout_behavior="com.app.main.pokebase.utilities.ImageBehavior"
+        app:layout_behavior="com.app.main.pokebase.gui.animations.ImageBehavior"
         app:startHeight="2dp"
         app:startToolbarPosition="2dp"
         app:startXPosition="2dp"/>

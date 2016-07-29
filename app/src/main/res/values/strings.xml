@@ -14,12 +14,13 @@
     <string name="submit">Submit</string>
     <string name="add_pokemon">Add Pokémon</string>
     <string name="login_title">What was your\nname again?</string>
-    <string name="add_team_title">Choose a team to add to!</string>
+    <string name="add_team_title">Choose a team to add %1$s to!</string>
     <string name="logout_question">Are you sure you want to logout?</string>
     <string name="delete_team">Delete Team</string>
     <string name="delete_pokemon">Delete Pokémon</string>
     <string name="close_title">Exit the Application</string>
     <string name="close_prompt">Are you sure you want to exit?</string>
+    <string name="no_teams_title">No Teams</string>
 
     <!-- VALUES -->
     <string name="close_drawer">Navigation View</string>
@@ -68,9 +69,9 @@
     <string name="try_again">Please try again.</string>
     <string name="logout">Logout</string>
     <string name="delete">Delete</string>
-    <string name="no_teams">"No teams to add to.\nPlease add a team first."</string>
+    <string name="no_teams">"No teams to add to. Please add a team first."</string>
     <string name="hashtag">#</string>
-    <string name="delete_team_prompt">Are you sure you want to delete</string>
+    <string name="delete_team_prompt">Are you sure you want to delete %1$s?</string>
     <string name="delete_pokemon_prompt">Are you sure you want to delete</string>
     <string name="clear_all_teams">Clear All Teams</string>
     <string name="clear_all_teams_prompt">Are you sure you want to clear all teams?</string>
@@ -78,7 +79,7 @@
     <string name="by_number">Sort By Number</string>
     <string name="by_name">Sort By Name</string>
     <string name="used_name">Invalid Team Name</string>
-    <string name="used_name_info">has already been taken!\nPlease choose a different name.</string>
+    <string name="used_name_info">%1$s has already been taken!\nPlease choose a different name.</string>
     <string name="audio">Audio</string>
     <string name="sound_played">Played sound!</string>
     <string name="settings">Settings</string>
@@ -93,4 +94,8 @@
     <string name="pp">PP</string>
     <string name="accuracy">Accuracy</string>
     <string name="cost">Cost</string>
+    <string name="add_success">Added %1$s to %2$s!</string>
+    <string name="team_add">Added new team %1$s!</string>
+    <string name="team_update">Updated %1$s!</string>
+    <string name="team_deleted">Deleted %1$s</string>
 </resources>
