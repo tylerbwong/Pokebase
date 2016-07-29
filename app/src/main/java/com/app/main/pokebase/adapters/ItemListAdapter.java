@@ -36,6 +36,10 @@ public class ItemListAdapter extends RecyclerView.Adapter {
       int imageResourceId = mContext.getResources().getIdentifier(curItem.getIdentifier(),
             "drawable", mContext.getPackageName());
       holder.mItemView.setImageResource(imageResourceId);
+
+      if (holder.mItemView.getDrawable() == null) {
+         holder.mItemView.setImageResource(R.drawable.tm_normal);
+      }
       holder.mItem = curItem;
    }
 

@@ -47,5 +47,9 @@ public class ItemInfoView extends RelativeLayout {
    public void setFields(String cost, int identifier) {
       mCost.setText(cost);
       mItem.setImageResource(identifier);
+
+      if (mItem.getDrawable() == null) {
+         mItem.setImageResource(R.drawable.tm_normal);
+      }
    }
 }
