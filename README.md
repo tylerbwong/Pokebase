@@ -19,6 +19,12 @@ Pokébase is simple Pokémon application to view information and save informatio
 * Play Pokémon cries
 * Add to your teams
 
+### View Quick Information About Moves
+
+* View basic information about all 621 Moves
+* Short descriptions, types and more
+* Query by type and/or damage class
+
 ### Create Custom Teams
 
 * Give your team a name and description
