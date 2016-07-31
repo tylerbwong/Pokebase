@@ -3,6 +3,8 @@ package com.app.main.pokebase.gui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -22,11 +24,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.main.pokebase.R;
-import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 import com.app.main.pokebase.gui.fragments.ItemsFragment;
 import com.app.main.pokebase.gui.fragments.MovesFragment;
 import com.app.main.pokebase.gui.fragments.PokebaseFragment;
 import com.app.main.pokebase.gui.fragments.TeamsFragment;
+import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 /**
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
    private Toolbar mToolbar;
    private ImageView mProfilePicture;
    private TextView mUsernameView;
-   private FragmentTransaction fragmentTransaction;
+   private FragmentTransaction mFragmentTransaction;
    private Fragment mCurrentFragment;
    private DatabaseOpenHelper mDatabaseHelper;
 
@@ -62,12 +64,7 @@ public class MainActivity extends AppCompatActivity {
       mUsernameView.setText(String.format(getString(R.string.trainer),
             pref.getString(SignUpActivity.USERNAME, "")));
 
-      if (pref.getString(GenderActivity.GENDER, GenderActivity.MALE).equals(GenderActivity.MALE)) {
-         mProfilePicture.setImageDrawable(getDrawable(R.drawable.boy));
-      }
-      else {
-         mProfilePicture.setImageDrawable(getDrawable(R.drawable.girl));
-      }
+      new LoadGenderImage().execute((pref.getString(GenderActivity.GENDER, GenderActivity.MALE)));
 
       mToolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(mToolbar);
@@ -77,63 +74,45 @@ public class MainActivity extends AppCompatActivity {
 
       if (mPokemonAdd) {
          mNavigationView.getMenu().getItem(1).setChecked(true);
-         PokebaseFragment pokebaseFragment = new PokebaseFragment();
-         mCurrentFragment = pokebaseFragment;
-         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-         fragmentTransaction.replace(R.id.frame, pokebaseFragment);
-         fragmentTransaction.commit();
+         mCurrentFragment = new PokebaseFragment();
       }
       else {
          mNavigationView.getMenu().getItem(0).setChecked(true);
-         TeamsFragment teamsFragment = new TeamsFragment();
-         mCurrentFragment = teamsFragment;
-         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-         fragmentTransaction.replace(R.id.frame, teamsFragment);
-         fragmentTransaction.commit();
+         mCurrentFragment = new TeamsFragment();
       }
+
+      mFragmentTransaction = getSupportFragmentManager().beginTransaction();
+      mFragmentTransaction.replace(R.id.frame, mCurrentFragment);
+      mFragmentTransaction.commit();
 
       mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
          @Override
          public boolean onNavigationItemSelected(MenuItem menuItem) {
             mDrawerLayout.closeDrawers();
+            mFragmentTransaction = getSupportFragmentManager().beginTransaction();
 
             switch (menuItem.getItemId()) {
                case R.id.teams:
-                  TeamsFragment teamsFragment = new TeamsFragment();
-                  mCurrentFragment = teamsFragment;
-                  fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                  fragmentTransaction.replace(R.id.frame, teamsFragment);
-                  fragmentTransaction.commit();
-                  return true;
+                  mCurrentFragment = new TeamsFragment();
+                  break;
 
                case R.id.pokebase:
-                  PokebaseFragment pokeFragment = new PokebaseFragment();
-                  mCurrentFragment = pokeFragment;
-                  fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                  fragmentTransaction.replace(R.id.frame, pokeFragment);
-                  fragmentTransaction.commit();
-                  return true;
+                  mCurrentFragment = new PokebaseFragment();
+                  break;
 
                case R.id.moves:
-                  MovesFragment movesFragment = new MovesFragment();
-                  mCurrentFragment = movesFragment;
-                  fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                  fragmentTransaction.replace(R.id.frame, movesFragment);
-                  fragmentTransaction.commit();
-                  return true;
+                  mCurrentFragment = new MovesFragment();
+                  break;
 
                case R.id.items:
-                  ItemsFragment itemsFragment = new ItemsFragment();
-                  mCurrentFragment = itemsFragment;
-                  fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                  fragmentTransaction.replace(R.id.frame, itemsFragment);
-                  fragmentTransaction.commit();
-                  return true;
-
-               default:
-                  return false;
+                  mCurrentFragment = new ItemsFragment();
+                  break;
             }
+
+            mFragmentTransaction.replace(R.id.frame, mCurrentFragment);
+            mFragmentTransaction.commit();
+            return true;
          }
       });
 
@@ -245,6 +224,25 @@ public class MainActivity extends AppCompatActivity {
       }
       else {
          showExitDialog();
+      }
+   }
+
+   private class LoadGenderImage extends AsyncTask<String, Void, Drawable> {
+      @Override
+      protected Drawable doInBackground(String... params) {
+         Drawable image;
+         if (params[0].equals(GenderActivity.MALE)) {
+            image = getDrawable(R.drawable.boy);
+         }
+         else {
+            image = getDrawable(R.drawable.girl);
+         }
+         return image;
+      }
+
+      @Override
+      protected void onPostExecute(Drawable loaded) {
+         mProfilePicture.setImageDrawable(loaded);
       }
    }
 }

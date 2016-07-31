@@ -8,6 +8,7 @@ public class Item {
    private String mIdentifier;
    private String mName;
    private int mCost;
+   private String mDescription;
 
    public Item(int id, String identifier, String name, int cost) {
       this.mId = id;
@@ -30,5 +31,13 @@ public class Item {
 
    public int getCost() {
       return mCost;
+   }
+
+   public String getDescription() {
+      return mDescription;
+   }
+
+   public void setDescription(String description) {
+      this.mDescription = description;
    }
 }

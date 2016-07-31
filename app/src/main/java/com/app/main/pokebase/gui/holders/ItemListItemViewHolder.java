@@ -50,7 +50,15 @@ public class ItemListItemViewHolder extends RecyclerView.ViewHolder {
             DRAWABLE, context.getPackageName());
 
       String cost = String.valueOf(mItem.getCost());
-      String description = mDatabaseHelper.queryItemDescription(mItem.getId());
+      String description;
+
+      if (mItem.getDescription() == null) {
+         description = mDatabaseHelper.queryItemDescription(mItem.getId());
+         mItem.setDescription(description);
+      }
+      else {
+         description = mItem.getDescription();
+      }
 
       if (cost.equals(NONE)) {
          cost = NA;
