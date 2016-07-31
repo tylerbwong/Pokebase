@@ -133,6 +133,7 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
 
       @Override
       protected void onPostExecute(Drawable loaded) {
+         super.onPostExecute(loaded);
          ImageView emptyImage = (ImageView) getActivity().findViewById(R.id.no_team);
          emptyImage.setImageDrawable(loaded);
       }

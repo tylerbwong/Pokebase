@@ -242,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
 
       @Override
       protected void onPostExecute(Drawable loaded) {
+         super.onPostExecute(loaded);
          mProfilePicture.setImageDrawable(loaded);
       }
    }

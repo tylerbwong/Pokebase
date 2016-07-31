@@ -48,6 +48,7 @@ public class IntroPokebaseFragment extends Fragment {
 
       @Override
       protected void onPostExecute(Drawable[] loaded) {
+         super.onPostExecute(loaded);
          ImageView startersImage = (ImageView) getActivity().findViewById(R.id.big_img);
          ImageView charizardImage = (ImageView) getActivity().findViewById(R.id.med_img);
          ImageView pokeDexImage = (ImageView) getActivity().findViewById(R.id.small_img);

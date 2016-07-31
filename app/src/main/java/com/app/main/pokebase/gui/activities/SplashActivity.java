@@ -49,6 +49,7 @@ public class SplashActivity extends AppCompatActivity {
 
       @Override
       protected void onPostExecute(Drawable loaded) {
+         super.onPostExecute(loaded);
          ImageView logoImage = (ImageView) findViewById(R.id.logo_image);
          logoImage.setImageDrawable(loaded);
 

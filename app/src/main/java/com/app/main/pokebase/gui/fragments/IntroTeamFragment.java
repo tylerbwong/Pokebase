@@ -47,6 +47,7 @@ public class IntroTeamFragment extends Fragment {
 
       @Override
       protected void onPostExecute(Drawable loaded) {
+         super.onPostExecute(loaded);
          ImageView trainerImage = (ImageView) getActivity().findViewById(R.id.trainer);
          trainerImage.setImageDrawable(loaded);
       }

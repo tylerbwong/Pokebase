@@ -1,7 +1,9 @@
 package com.app.main.pokebase.gui.fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,9 +19,9 @@ import android.widget.Spinner;
 import com.app.main.pokebase.R;
 import com.app.main.pokebase.gui.adapters.PokemonListAdapter;
 import com.app.main.pokebase.gui.adapters.TextViewSpinnerAdapter;
+import com.app.main.pokebase.gui.views.AnimatedRecyclerView;
 import com.app.main.pokebase.model.components.PokemonListItem;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
-import com.app.main.pokebase.gui.views.AnimatedRecyclerView;
 
 /**
  * @author Tyler Wong
@@ -99,12 +101,7 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
       mPokemonList.setLayoutManager(new LinearLayoutManager(getContext()));
       mPokemonList.setHasFixedSize(true);
 
-      mTypeSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(),
-            mDatabaseHelper.queryAllTypes()));
-      mRegionSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(),
-            mDatabaseHelper.queryAllRegions()));
-      mPokemonList.setAdapter(new PokemonListAdapter(getContext(),
-            mDatabaseHelper.queryAll(mIsAlphabetical), false));
+      new LoadPokemonList().execute();
    }
 
    @Override
@@ -120,20 +117,54 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
    private void refreshData() {
       String type = (String) mTypeSpinner.getSelectedItem();
       String region = (String) mRegionSpinner.getSelectedItem();
+      new RefreshPokemon().execute(type, region);
+   }
 
-      if (type.equals(TYPES) && !region.equals(REGIONS)) {
-         mPokemon = mDatabaseHelper.queryByRegion(region, mIsAlphabetical);
-      }
-      else if (!type.equals(TYPES) && region.equals(REGIONS)) {
-         mPokemon = mDatabaseHelper.queryByType(type, mIsAlphabetical);
-      }
-      else if (!type.equals(TYPES) && !region.equals(REGIONS)) {
-         mPokemon = mDatabaseHelper.queryByTypeAndRegion(type, region, mIsAlphabetical);
-      }
-      else {
-         mPokemon = mDatabaseHelper.queryAll(mIsAlphabetical);
+   private class RefreshPokemon extends AsyncTask<String, Void, PokemonListItem[]> {
+      @Override
+      protected PokemonListItem[] doInBackground(String... params) {
+         String type = params[0];
+         String region = params[1];
+
+         if (type.equals(TYPES) && !region.equals(REGIONS)) {
+            mPokemon = mDatabaseHelper.queryByRegion(region, mIsAlphabetical);
+         }
+         else if (!type.equals(TYPES) && region.equals(REGIONS)) {
+            mPokemon = mDatabaseHelper.queryByType(type, mIsAlphabetical);
+         }
+         else if (!type.equals(TYPES) && !region.equals(REGIONS)) {
+            mPokemon = mDatabaseHelper.queryByTypeAndRegion(type, region, mIsAlphabetical);
+         }
+         else {
+            mPokemon = mDatabaseHelper.queryAll(mIsAlphabetical);
+         }
+
+         return mPokemon;
       }
 
-      mPokemonList.setAdapter(new PokemonListAdapter(getContext(), mPokemon, false));
+      @Override
+      protected void onPostExecute(PokemonListItem[] result) {
+         super.onPostExecute(result);
+         mPokemonList.setAdapter(new PokemonListAdapter(getContext(), result, false));
+      }
+   }
+
+   private class LoadPokemonList extends AsyncTask<Void, Void, Pair<Pair<String[], String[]>, PokemonListItem[]>> {
+      @Override
+      protected Pair<Pair<String[], String[]>, PokemonListItem[]> doInBackground(Void... params) {
+         String[] types = mDatabaseHelper.queryAllTypes();
+         String[] regions = mDatabaseHelper.queryAllRegions();
+         PokemonListItem[] pokemon = mDatabaseHelper.queryAll(mIsAlphabetical);
+
+         return new Pair<> (new Pair<> (types, regions), pokemon);
+      }
+
+      @Override
+      protected void onPostExecute(Pair<Pair<String[], String[]>, PokemonListItem[]> result) {
+         super.onPostExecute(result);
+         mTypeSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(), result.first.first));
+         mRegionSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(), result.first.second));
+         mPokemonList.setAdapter(new PokemonListAdapter(getContext(), result.second, false));
+      }
    }
 }
