@@ -83,9 +83,11 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    public final static String POKEMON_ID_KEY = "pokemon_id";
    private final static String ICON = "icon_";
    private final static String SPRITE = "sprites_";
+   private final static String AUDIO = "audio_";
    private final static String TYPE = "type";
    private final static String COLOR = "color";
    private final static String DRAWABLE = "drawable";
+   private final static String RAW = "raw";
    private final static double FT_PER_DM = 0.32808399;
    private final static double LB_PER_HG = 0.22046226218;
    private final static int KG_PER_HG = 10;
@@ -358,7 +360,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
 
    private void playAudio() {
       final MediaPlayer player = MediaPlayer.create(this, getResources().getIdentifier(
-            "audio_" + mPokemonId, "raw", getPackageName()));
+            AUDIO + mPokemonId, RAW, getPackageName()));
       player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
          @Override
          public void onCompletion(MediaPlayer mediaPlayer) {
