@@ -18,6 +18,7 @@ public class ItemInfoView extends RelativeLayout {
 
    private TextView mCost;
    private ImageView mItem;
+   private TextView mDescription;
 
    public ItemInfoView(Context context) {
       super(context, null);
@@ -42,11 +43,13 @@ public class ItemInfoView extends RelativeLayout {
 
       mCost = (TextView) view.findViewById(R.id.cost);
       mItem = (ImageView) view.findViewById(R.id.item);
+      mDescription = (TextView) view.findViewById(R.id.description);
    }
 
-   public void setFields(String cost, int identifier) {
+   public void setFields(String cost, int identifier, String description) {
       mCost.setText(cost);
       mItem.setImageResource(identifier);
+      mDescription.setText(description);
 
       if (mItem.getDrawable() == null) {
          mItem.setImageResource(R.drawable.tm_normal);

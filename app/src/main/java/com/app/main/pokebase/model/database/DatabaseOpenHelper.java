@@ -175,6 +175,8 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
                "ORDER BY M.name";
    private final static String ALL_ITEMS =
          "SELECT * FROM Items AS I ORDER BY I.name";
+   private final static String ITEM_DESCRIPTION_BY_ID =
+         "SELECT I.description FROM ItemDescriptions I WHERE I.itemId = ?";
 
    private DatabaseOpenHelper(Context context) {
       super(context, DB_NAME, null, DB_VERSION);
@@ -795,6 +797,15 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       }
       cursor.close();
       return items;
+   }
+
+   public String queryItemDescription(int itemId) {
+      String result;
+      Cursor cursor = mDatabase.rawQuery(ITEM_DESCRIPTION_BY_ID, new String[]{String.valueOf(itemId)});
+      cursor.moveToFirst();
+      result = cursor.getString(0);
+      cursor.close();
+      return result;
    }
 
    private String getDate() {

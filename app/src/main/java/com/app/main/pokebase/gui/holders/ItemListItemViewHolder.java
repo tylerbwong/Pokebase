@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.app.main.pokebase.R;
 import com.app.main.pokebase.model.components.Item;
 import com.app.main.pokebase.gui.views.ItemInfoView;
+import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 
 /**
@@ -20,6 +21,8 @@ public class ItemListItemViewHolder extends RecyclerView.ViewHolder {
    public final ImageView mItemView;
 
    public Item mItem;
+
+   private DatabaseOpenHelper mDatabaseHelper;
 
    private final static String DRAWABLE = "drawable";
    private final static String NONE = "0";
@@ -41,17 +44,20 @@ public class ItemListItemViewHolder extends RecyclerView.ViewHolder {
 
    private void showItemDialog() {
       Context context = mView.getContext();
+      mDatabaseHelper = DatabaseOpenHelper.getInstance(context);
+
       int imageResourceId = context.getResources().getIdentifier(mItem.getIdentifier(),
             DRAWABLE, context.getPackageName());
 
       String cost = String.valueOf(mItem.getCost());
+      String description = mDatabaseHelper.queryItemDescription(mItem.getId());
 
       if (cost.equals(NONE)) {
          cost = NA;
       }
 
       ItemInfoView infoView = new ItemInfoView(context);
-      infoView.setFields(cost, imageResourceId);
+      infoView.setFields(cost, imageResourceId, description);
 
       new LovelyCustomDialog(mView.getContext())
             .setCancelable(true)
