@@ -59,14 +59,13 @@
             android:id="@+id/no_team"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:src="@drawable/no_teams"/>
+            android:layout_gravity="center"/>
 
         <TextView
+            android:id="@+id/no_team_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
-            android:text="@string/no_pokemon"
             android:textColor="@color/gray"
             android:textSize="20sp"/>
     </LinearLayout>

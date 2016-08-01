@@ -37,14 +37,20 @@ public class SplashActivity extends AppCompatActivity {
       mTitleLabel = (TextView) findViewById(R.id.title_label);
       mTitleLabel.setTypeface(mRobotoLight);
 
-      new BackgroundTask().execute();
+      new BackgroundTask(this).execute();
    }
 
    private class BackgroundTask extends AsyncTask<Void, Void, Drawable> {
+      private Context mContext;
+
+      public BackgroundTask(Context context) {
+         this.mContext = context;
+      }
+
       @Override
       protected Drawable doInBackground(Void... voids) {
          DatabaseOpenHelper.getInstance(SplashActivity.this);
-         return ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_material_pokeball);
+         return ContextCompat.getDrawable(mContext, R.drawable.ic_material_pokeball);
       }
 
       @Override

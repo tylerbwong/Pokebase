@@ -36,7 +36,6 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
    private LinearLayout mEmptyView;
 
    private TeamAdapter mTeamAdapter;
-   private Team[] mTeams;
    private DatabaseOpenHelper mDatabaseHelper;
 
    private final static int REQUEST_CODE = 1;
@@ -70,30 +69,17 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
       }
 
       mDatabaseHelper = DatabaseOpenHelper.getInstance(getContext());
-
-      mTeams = mDatabaseHelper.queryAllTeams();
-
-      LinearLayoutManager llm = new LinearLayoutManager(getContext());
-      llm.setOrientation(LinearLayoutManager.VERTICAL);
-      mTeamList.setLayoutManager(llm);
-      mTeamAdapter = new TeamAdapter(getContext(), mTeams);
-      mTeamList.setAdapter(mTeamAdapter);
-
-      checkEmpty();
+      new LoadTeams().execute();
 
       return view;
    }
 
    public void refreshAdapter() {
-      mTeams = mDatabaseHelper.queryAllTeams();
-      mTeamAdapter = new TeamAdapter(getContext(), mTeams);
-      mTeamList.setAdapter(mTeamAdapter);
-
-      checkEmpty();
+      new LoadTeams().execute();
    }
 
-   private void checkEmpty() {
-      if (mTeams.length == 0) {
+   private void checkEmpty(Team[] teams) {
+      if (teams.length == 0) {
          mTeamList.setVisibility(View.GONE);
          mEmptyView.setVisibility(View.VISIBLE);
       }
@@ -137,15 +123,25 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
          ImageView emptyImage = (ImageView) getActivity().findViewById(R.id.no_team);
          emptyImage.setImageDrawable(loaded);
       }
+   }
 
+   private class LoadTeams extends AsyncTask<Void, Void, Team[]> {
       @Override
-      protected void onPreExecute() {
-
+      protected Team[] doInBackground(Void... params) {
+         return mDatabaseHelper.queryAllTeams();
       }
 
       @Override
-      protected void onProgressUpdate(Void... values) {
+      protected void onPostExecute(Team[] loaded) {
+         super.onPostExecute(loaded);
 
+         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+         mTeamList.setLayoutManager(layoutManager);
+         mTeamAdapter = new TeamAdapter(getContext(), loaded);
+         mTeamList.setAdapter(mTeamAdapter);
+
+         checkEmpty(loaded);
       }
    }
 }

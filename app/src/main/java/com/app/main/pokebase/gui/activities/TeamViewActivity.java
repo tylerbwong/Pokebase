@@ -1,6 +1,9 @@
 package com.app.main.pokebase.gui.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
@@ -16,14 +19,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.main.pokebase.R;
 import com.app.main.pokebase.gui.adapters.PokemonTeamMemberAdapter;
+import com.app.main.pokebase.gui.views.AnimatedRecyclerView;
 import com.app.main.pokebase.model.components.PokemonTeamMember;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
-import com.app.main.pokebase.gui.views.AnimatedRecyclerView;
 import com.github.fabtransitionactivity.SheetLayout;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
@@ -31,13 +36,13 @@ import com.yarolegovich.lovelydialog.LovelyStandardDialog;
  * @author Tyler Wong
  */
 public class TeamViewActivity extends AppCompatActivity implements SheetLayout.OnFabAnimationEndListener {
-   public static final String TEAM_ID_KEY = "team_id_key";
-   public static final String UPDATE_KEY = "update_key";
    private Toolbar mToolbar;
    private FloatingActionButton mFab;
    private SheetLayout mSheetLayout;
    private AnimatedRecyclerView mPokemonList;
    private LinearLayout mEmptyView;
+   private ImageView mNoTeam;
+   private TextView mNoTeamLabel;
    private TextInputEditText mNameInput;
    private TextInputEditText mDescriptionInput;
 
@@ -50,9 +55,12 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
 
    private final static String DEFAULT_NAME = "Team ";
    private final static String DEFAULT_DESCRIPTION = "None";
+   public static final String TEAM_ID_KEY = "team_id_key";
+   public static final String UPDATE_KEY = "update_key";
    public final static String TEAM_NAME = "teamName";
    public final static String DESCRIPTION = "description";
    public final static String POKEMON_ADD = "pokemonAdd";
+   private final static int MAX_TEAM_SIZE = 6;
    private final static int REQUEST_CODE = 1;
 
    @Override
@@ -65,8 +73,12 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       mSheetLayout = (SheetLayout) findViewById(R.id.bottom_sheet);
       mPokemonList = (AnimatedRecyclerView) findViewById(R.id.team_list);
       mEmptyView = (LinearLayout) findViewById(R.id.empty_layout);
+      mNoTeam = (ImageView) findViewById(R.id.no_team);
+      mNoTeamLabel = (TextView) findViewById(R.id.no_team_label);
       mNameInput = (TextInputEditText) findViewById(R.id.name_input);
       mDescriptionInput = (TextInputEditText) findViewById(R.id.description_input);
+
+      new LoadNoTeamMembersDrawable(this).execute();
 
       mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
       mPokemonList.setHasFixedSize(true);
@@ -124,34 +136,12 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       mDescriptionInput.setText(description);
 
       if (mUpdateKey) {
-         mPokemon = mDatabaseHelper.queryPokemonTeamMembers(mTeamId);
-         mPokemonAdapter = new PokemonTeamMemberAdapter(this, mPokemon, mTeamId,
-               mNameInput.getText().toString().trim(),
-               mDescriptionInput.getText().toString().trim());
-         mPokemonList.setAdapter(mPokemonAdapter);
-
-         if (mPokemon.length == 6) {
-            ViewGroup viewGroup = (ViewGroup) mFab.getParent();
-            viewGroup.removeView(mFab);
-         }
+         new LoadTeamMembers(this).execute();
       }
       else {
          if (actionBar != null) {
             actionBar.setTitle(R.string.new_team);
          }
-      }
-
-      LinearLayoutManager llm = new LinearLayoutManager(this);
-      llm.setOrientation(LinearLayoutManager.VERTICAL);
-      mPokemonList.setLayoutManager(llm);
-
-      if (mPokemon == null || mPokemon.length == 0) {
-         mPokemonList.setVisibility(View.GONE);
-         mEmptyView.setVisibility(View.VISIBLE);
-      }
-      else {
-         mPokemonList.setVisibility(View.VISIBLE);
-         mEmptyView.setVisibility(View.GONE);
       }
    }
 
@@ -308,5 +298,67 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
    @Override
    public void onBackPressed() {
       showBackDialog();
+   }
+
+   private class LoadNoTeamMembersDrawable extends AsyncTask<Void, Void, Drawable> {
+      private Context mContext;
+
+      public LoadNoTeamMembersDrawable(Context context) {
+         this.mContext = context;
+      }
+
+      @Override
+      protected Drawable doInBackground(Void... params) {
+         return ContextCompat.getDrawable(mContext, R.drawable.no_teams);
+      }
+
+      @Override
+      protected void onPostExecute(Drawable loaded) {
+         super.onPostExecute(loaded);
+
+         mNoTeam.setImageDrawable(loaded);
+         mNoTeamLabel.setText(getString(R.string.no_pokemon));
+      }
+   }
+
+   private class LoadTeamMembers extends AsyncTask<Void, Void, PokemonTeamMember[]> {
+      private Context mContext;
+
+      public LoadTeamMembers(Context context) {
+         this.mContext = context;
+      }
+
+      @Override
+      protected PokemonTeamMember[] doInBackground(Void... params) {
+         return mPokemon = mDatabaseHelper.queryPokemonTeamMembers(mTeamId);
+      }
+
+      @Override
+      protected void onPostExecute(PokemonTeamMember[] loaded) {
+         super.onPostExecute(loaded);
+
+         mPokemonAdapter = new PokemonTeamMemberAdapter(mContext, loaded, mTeamId,
+               mNameInput.getText().toString().trim(),
+               mDescriptionInput.getText().toString().trim());
+         mPokemonList.setAdapter(mPokemonAdapter);
+
+         if (loaded.length == MAX_TEAM_SIZE) {
+            ViewGroup viewGroup = (ViewGroup) mFab.getParent();
+            viewGroup.removeView(mFab);
+         }
+
+         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+         mPokemonList.setLayoutManager(layoutManager);
+
+         if (mPokemon == null || mPokemon.length == 0) {
+            mPokemonList.setVisibility(View.GONE);
+            mEmptyView.setVisibility(View.VISIBLE);
+         }
+         else {
+            mPokemonList.setVisibility(View.VISIBLE);
+            mEmptyView.setVisibility(View.GONE);
+         }
+      }
    }
 }

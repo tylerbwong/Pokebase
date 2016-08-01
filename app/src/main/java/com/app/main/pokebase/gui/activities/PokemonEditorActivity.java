@@ -1,6 +1,8 @@
 package com.app.main.pokebase.gui.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
@@ -27,10 +29,6 @@ import com.yarolegovich.lovelydialog.LovelyStandardDialog;
  * @author Brittany Berlanga
  */
 public class PokemonEditorActivity extends AppCompatActivity {
-   private static final int PROFILE_IMG_ELEVATION = 40;
-   private static final int NUM_SPINNERS = 4;
-   private static final int MIN_LEVEL = 1;
-   private static final int MAX_LEVEL = 100;
    private Toolbar mToolbar;
    private ImageView mProfileImg;
    private TextInputEditText mNicknameInput;
@@ -49,6 +47,24 @@ public class PokemonEditorActivity extends AppCompatActivity {
    private String mDescription;
    private DatabaseOpenHelper mDatabaseHelper;
 
+   private final static int PROFILE_IMG_ELEVATION = 40;
+   private final static int NUM_SPINNERS = 4;
+   private final static int MIN_LEVEL = 1;
+   private final static int MAX_LEVEL = 100;
+   public final static String TEAM_ID = "teamId";
+   public final static String TITLE = "title";
+   public final static String DESCRIPTION = "description";
+   public final static String MEMBER_ID = "memberId";
+   public final static String POKEMON_ID = "pokemonId";
+   public final static String LEVEL = "level";
+   public final static String NICKNAME = "nickname";
+   public final static String MOVE_ONE = "moveOne";
+   public final static String MOVE_TWO = "moveTwo";
+   public final static String MOVE_THREE = "moveThree";
+   public final static String MOVE_FOUR = "moveFour";
+   private final static String SPRITE = "sprites_";
+   private final static String DRAWABLE = "drawable";
+
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -56,82 +72,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
 
       mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
 
-      mToolbar = (Toolbar) findViewById(R.id.toolbar);
-      setSupportActionBar(mToolbar);
-      final ActionBar actionBar = getSupportActionBar();
-      if (actionBar != null) {
-         actionBar.setDisplayHomeAsUpEnabled(true);
-      }
-
-      mProfileImg = (ImageView) findViewById(R.id.profile_image);
-      mProfileImg.setClipToOutline(true);
-      mProfileImg.setElevation(PROFILE_IMG_ELEVATION);
-
-      Intent intent = getIntent();
-      mTeamId = intent.getIntExtra("teamId", 0);
-      mTitle = intent.getStringExtra("title");
-      mDescription = intent.getStringExtra("description");
-      mMemberId = intent.getIntExtra("memberId", 0);
-      mPokemonId = intent.getIntExtra("pokemonId", 0);
-      mLevel = intent.getIntExtra("level", 0);
-      mNickname = intent.getStringExtra("nickname");
-      mMoveOne = intent.getStringExtra("moveOne");
-      mMoveTwo = intent.getStringExtra("moveTwo");
-      mMoveThree = intent.getStringExtra("moveThree");
-      mMoveFour = intent.getStringExtra("moveFour");
-      if (actionBar != null) {
-         actionBar.setTitle(mNickname);
-      }
-
-      int imageResourceId = getResources().getIdentifier("sprites_" + mPokemonId, "drawable", getPackageName());
-      mProfileImg.setImageResource(imageResourceId);
-      mNicknameInput = (TextInputEditText) findViewById(R.id.nickname_input);
-      mNicknameInput.setText(mNickname);
-
-      mNicknameInput.addTextChangedListener(new TextWatcher() {
-
-         @Override
-         public void onTextChanged(CharSequence sequence, int start, int before, int count) {
-            if (actionBar != null) {
-               actionBar.setTitle(sequence.toString());
-            }
-         }
-
-         @Override
-         public void beforeTextChanged(CharSequence sequence, int start, int count, int after) {
-
-         }
-
-         @Override
-         public void afterTextChanged(Editable editable) {
-         }
-      });
-
-      mLevelSpinner = (Spinner) findViewById(R.id.level_spinner);
-      mMoveSpinners = new Spinner[NUM_SPINNERS];
-      mMoveSpinners[0] = (Spinner) findViewById(R.id.move_one_spinner);
-      mMoveSpinners[1] = (Spinner) findViewById(R.id.move_two_spinner);
-      mMoveSpinners[2] = (Spinner) findViewById(R.id.move_three_spinner);
-      mMoveSpinners[3] = (Spinner) findViewById(R.id.move_four_spinner);
-
-      String[] moves = mDatabaseHelper.queryPokemonMoves(mPokemonId);
-
-      String[] levels = new String[MAX_LEVEL];
-      for (int lvl = MIN_LEVEL; lvl <= levels.length; lvl++) {
-         levels[lvl - MIN_LEVEL] = String.valueOf(lvl);
-      }
-
-      mLevelSpinner.setAdapter(new TextViewSpinnerAdapter(this, levels, 18));
-      mLevelSpinner.setSelection(mLevel - 1);
-
-      mMoveSpinners[0].setAdapter(new TextViewSpinnerAdapter(this, moves));
-      mMoveSpinners[0].setSelection(ArrayUtils.indexOf(moves, mMoveOne));
-      mMoveSpinners[1].setAdapter(new TextViewSpinnerAdapter(this, moves));
-      mMoveSpinners[1].setSelection(ArrayUtils.indexOf(moves, mMoveTwo));
-      mMoveSpinners[2].setAdapter(new TextViewSpinnerAdapter(this, moves));
-      mMoveSpinners[2].setSelection(ArrayUtils.indexOf(moves, mMoveThree));
-      mMoveSpinners[3].setAdapter(new TextViewSpinnerAdapter(this, moves));
-      mMoveSpinners[3].setSelection(ArrayUtils.indexOf(moves, mMoveFour));
+      new LoadPokemonTeamMember(this).execute();
    }
 
    @Override
@@ -164,8 +105,8 @@ public class PokemonEditorActivity extends AppCompatActivity {
       new LovelyStandardDialog(this)
             .setIcon(R.drawable.ic_info_white_24dp)
             .setTitle(R.string.delete_pokemon)
-            .setMessage(getResources().getString(R.string.delete_pokemon_prompt) + " "
-                  + mNicknameInput.getText().toString() + "?")
+            .setMessage(String.format(getString(R.string.delete_team_prompt),
+                  mNicknameInput.getText().toString()))
             .setCancelable(true)
             .setPositiveButton(R.string.yes, new View.OnClickListener() {
                @Override
@@ -180,8 +121,8 @@ public class PokemonEditorActivity extends AppCompatActivity {
    private void deletePokemon() {
       mDatabaseHelper.deleteTeamPokemonSingle(mMemberId);
 
-      Toast.makeText(this, "Deleted " + mNicknameInput.getText().toString(),
-            Toast.LENGTH_SHORT).show();
+      Toast.makeText(this, String.format(getString(R.string.team_deleted),
+            mNicknameInput.getText().toString()), Toast.LENGTH_SHORT).show();
       backToTeamView();
    }
 
@@ -193,8 +134,8 @@ public class PokemonEditorActivity extends AppCompatActivity {
             String.valueOf(mMoveSpinners[2].getSelectedItem()),
             String.valueOf(mMoveSpinners[3].getSelectedItem()));
 
-      Toast.makeText(this, "Updated " + mNicknameInput.getText().toString() + "!",
-            Toast.LENGTH_SHORT).show();
+      Toast.makeText(this, String.format(getString(R.string.team_update),
+            mNicknameInput.getText().toString()), Toast.LENGTH_SHORT).show();
       backToTeamView();
    }
 
@@ -203,8 +144,8 @@ public class PokemonEditorActivity extends AppCompatActivity {
       Bundle extras = new Bundle();
       extras.putInt(TeamViewActivity.TEAM_ID_KEY, mTeamId);
       extras.putBoolean(TeamViewActivity.UPDATE_KEY, true);
-      extras.putString("teamName", mTitle);
-      extras.putString("description", mDescription);
+      extras.putString(TeamViewActivity.TEAM_NAME, mTitle);
+      extras.putString(TeamViewActivity.DESCRIPTION, mDescription);
       teamIntent.putExtras(extras);
       startActivity(teamIntent);
    }
@@ -229,5 +170,99 @@ public class PokemonEditorActivity extends AppCompatActivity {
    @Override
    public void onBackPressed() {
       showBackDialog();
+   }
+
+   private class LoadPokemonTeamMember extends AsyncTask<Void, Void, String[]> {
+      private Context mContext;
+
+      public LoadPokemonTeamMember(Context context) {
+         this.mContext = context;
+      }
+
+      @Override
+      protected String[] doInBackground(Void... params) {
+         Intent intent = getIntent();
+         mTeamId = intent.getIntExtra(TEAM_ID, 0);
+         mTitle = intent.getStringExtra(TITLE);
+         mDescription = intent.getStringExtra(DESCRIPTION);
+         mMemberId = intent.getIntExtra(MEMBER_ID, 0);
+         mPokemonId = intent.getIntExtra(POKEMON_ID, 0);
+         mLevel = intent.getIntExtra(LEVEL, 0);
+         mNickname = intent.getStringExtra(NICKNAME);
+         mMoveOne = intent.getStringExtra(MOVE_ONE);
+         mMoveTwo = intent.getStringExtra(MOVE_TWO);
+         mMoveThree = intent.getStringExtra(MOVE_THREE);
+         mMoveFour = intent.getStringExtra(MOVE_FOUR);
+
+         return mDatabaseHelper.queryPokemonMoves(mPokemonId);
+      }
+
+      @Override
+      protected void onPostExecute(String[] result) {
+         super.onPostExecute(result);
+
+         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+         setSupportActionBar(mToolbar);
+         final ActionBar actionBar = getSupportActionBar();
+         if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+         }
+
+         mProfileImg = (ImageView) findViewById(R.id.profile_image);
+         mProfileImg.setClipToOutline(true);
+         mProfileImg.setElevation(PROFILE_IMG_ELEVATION);
+
+         if (actionBar != null) {
+            actionBar.setTitle(mNickname);
+         }
+
+         int imageResourceId = getResources().getIdentifier(SPRITE + mPokemonId, DRAWABLE, getPackageName());
+         mProfileImg.setImageResource(imageResourceId);
+         mNicknameInput = (TextInputEditText) findViewById(R.id.nickname_input);
+         mNicknameInput.setText(mNickname);
+
+         mNicknameInput.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence sequence, int start, int before, int count) {
+               if (actionBar != null) {
+                  actionBar.setTitle(sequence.toString());
+               }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence sequence, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+         });
+
+         mLevelSpinner = (Spinner) findViewById(R.id.level_spinner);
+         mMoveSpinners = new Spinner[NUM_SPINNERS];
+         mMoveSpinners[0] = (Spinner) findViewById(R.id.move_one_spinner);
+         mMoveSpinners[1] = (Spinner) findViewById(R.id.move_two_spinner);
+         mMoveSpinners[2] = (Spinner) findViewById(R.id.move_three_spinner);
+         mMoveSpinners[3] = (Spinner) findViewById(R.id.move_four_spinner);
+
+         String[] levels = new String[MAX_LEVEL];
+         for (int lvl = MIN_LEVEL; lvl <= levels.length; lvl++) {
+            levels[lvl - MIN_LEVEL] = String.valueOf(lvl);
+         }
+
+         mLevelSpinner.setAdapter(new TextViewSpinnerAdapter(mContext, levels, 18));
+         mLevelSpinner.setSelection(mLevel - 1);
+
+         mMoveSpinners[0].setAdapter(new TextViewSpinnerAdapter(mContext, result));
+         mMoveSpinners[0].setSelection(ArrayUtils.indexOf(result, mMoveOne));
+         mMoveSpinners[1].setAdapter(new TextViewSpinnerAdapter(mContext, result));
+         mMoveSpinners[1].setSelection(ArrayUtils.indexOf(result, mMoveTwo));
+         mMoveSpinners[2].setAdapter(new TextViewSpinnerAdapter(mContext, result));
+         mMoveSpinners[2].setSelection(ArrayUtils.indexOf(result, mMoveThree));
+         mMoveSpinners[3].setAdapter(new TextViewSpinnerAdapter(mContext, result));
+         mMoveSpinners[3].setSelection(ArrayUtils.indexOf(result, mMoveFour));
+      }
    }
 }

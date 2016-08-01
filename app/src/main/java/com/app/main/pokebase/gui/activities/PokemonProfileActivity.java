@@ -211,6 +211,8 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
 
       @Override
       protected void onPostExecute(PokemonProfile result) {
+         super.onPostExecute(result);
+
          mPokemonId = result.getId();
 
          AnimatedRecyclerView movesList = new AnimatedRecyclerView(mContext);
@@ -450,7 +452,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
          new LovelyChoiceDialog(this)
                .setTopColorRes(R.color.colorPrimary)
                .setTitle(getString(R.string.no_teams_title))
-               .setMessage(getString(R.string.no_teams))
+               .setMessage(String.format(getString(R.string.no_teams), mPokemonName))
                .setIcon(R.drawable.ic_add_circle_outline_white_24dp)
                .show();
       }
