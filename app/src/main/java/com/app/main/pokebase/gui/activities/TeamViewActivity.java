@@ -295,6 +295,17 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       startActivity(mainIntent);
    }
 
+   private void checkPokemon() {
+      if (mPokemon == null || mPokemon.length == 0) {
+         mPokemonList.setVisibility(View.GONE);
+         mEmptyView.setVisibility(View.VISIBLE);
+      }
+      else {
+         mPokemonList.setVisibility(View.VISIBLE);
+         mEmptyView.setVisibility(View.GONE);
+      }
+   }
+
    @Override
    public void onBackPressed() {
       showBackDialog();
@@ -318,6 +329,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
 
          mNoTeam.setImageDrawable(loaded);
          mNoTeamLabel.setText(getString(R.string.no_pokemon));
+         checkPokemon();
       }
    }
 
@@ -351,14 +363,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
          layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
          mPokemonList.setLayoutManager(layoutManager);
 
-         if (mPokemon == null || mPokemon.length == 0) {
-            mPokemonList.setVisibility(View.GONE);
-            mEmptyView.setVisibility(View.VISIBLE);
-         }
-         else {
-            mPokemonList.setVisibility(View.VISIBLE);
-            mEmptyView.setVisibility(View.GONE);
-         }
+         checkPokemon();
       }
    }
 }
