@@ -11,6 +11,8 @@ public class Move {
    private int mPp;
    private int mAccuracy;
    private String mClassName;
+   private String mDescription;
+   private String mTypeName;
 
    public Move(int moveId, String name, int typeId, int power, int pp, int accuracy, String className) {
       this.mMoveId = moveId;
@@ -48,5 +50,21 @@ public class Move {
 
    public String getClassName() {
       return mClassName;
+   }
+
+   public String getDescription() {
+      return mDescription;
+   }
+
+   public String getTypeName() {
+      return mTypeName;
+   }
+
+   public void setDescription(String description) {
+      this.mDescription = description;
+   }
+
+   public void setTypeName(String typeName) {
+      this.mTypeName = typeName;
    }
 }

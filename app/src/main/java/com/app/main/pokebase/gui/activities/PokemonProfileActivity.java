@@ -1,8 +1,10 @@
 package com.app.main.pokebase.gui.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -26,10 +28,11 @@ import android.widget.Toast;
 import com.app.main.pokebase.R;
 import com.app.main.pokebase.gui.adapters.MoveListAdapter;
 import com.app.main.pokebase.gui.adapters.PokemonListAdapter;
+import com.app.main.pokebase.gui.views.AnimatedRecyclerView;
 import com.app.main.pokebase.model.components.PokemonListItem;
 import com.app.main.pokebase.model.components.PokemonProfile;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
-import com.app.main.pokebase.gui.views.AnimatedRecyclerView;
+import com.app.main.pokebase.model.utilities.PokebaseCache;
 import com.db.chart.model.BarSet;
 import com.db.chart.view.AxisController;
 import com.db.chart.view.BarChartView;
@@ -69,6 +72,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private TextView mDescription;
    private CoordinatorLayout mLayout;
    private LovelyCustomDialog mMovesDialog;
+   private LovelyCustomDialog mEvolutionsDialog;
    private LinearLayout mTitleContainer;
    private BarChartView mBarChart;
    private AppBarLayout mAppBar;
@@ -176,8 +180,6 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       mAppBar.addOnOffsetChangedListener(this);
       startAlphaAnimation(mTitle, 0, View.INVISIBLE);
 
-      loadPokemonProfile();
-
       SlidrConfig config = new SlidrConfig.Builder()
             .sensitivity(1f)
             .scrimColor(Color.BLACK)
@@ -190,6 +192,84 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
             .build();
 
       Slidr.attach(this, config);
+
+      new LoadPokemonProfile(this).execute();
+   }
+
+   private class LoadPokemonProfile extends AsyncTask<Void, Void, PokemonProfile> {
+      private Context mContext;
+
+      public LoadPokemonProfile(Context context) {
+         this.mContext = context;
+      }
+
+      @Override
+      protected PokemonProfile doInBackground(Void... params) {
+         Bundle extras = getIntent().getExtras();
+         return PokebaseCache.getPokemonProfile(mDatabaseHelper, extras.getInt(POKEMON_ID_KEY));
+      }
+
+      @Override
+      protected void onPostExecute(PokemonProfile result) {
+         mPokemonId = result.getId();
+
+         AnimatedRecyclerView movesList = new AnimatedRecyclerView(mContext);
+         movesList.setLayoutManager(new LinearLayoutManager(mContext));
+         movesList.setHasFixedSize(true);
+         movesList.setAdapter(new MoveListAdapter(mContext, result.getMoves()));
+
+         mMovesDialog = new LovelyCustomDialog(mContext)
+               .setTopColorRes(R.color.colorPrimary)
+               .setTitle(R.string.moveset)
+               .setIcon(R.drawable.ic_book_white_24dp)
+               .setView(movesList)
+               .setCancelable(true);
+
+         String evolutionsTitle;
+         PokemonListItem[] evolutions = result.getEvolutions();
+
+         if (evolutions.length == 0) {
+            evolutionsTitle = getString(R.string.no_evolutions);
+         }
+         else {
+            evolutionsTitle = getString(R.string.evolutions);
+         }
+
+         mEvolutionsList = new AnimatedRecyclerView(mContext);
+         mEvolutionsList.setLayoutManager(new LinearLayoutManager(mContext));
+         mEvolutionsList.setHasFixedSize(true);
+         mEvolutionsList.setAdapter(new PokemonListAdapter(mContext, evolutions, true));
+
+         mEvolutionsDialog = new LovelyCustomDialog(mContext)
+               .setTopColorRes(R.color.colorPrimary)
+               .setView(mEvolutionsList)
+               .setIcon(R.drawable.ic_group_work_white_24dp)
+               .setTitle(evolutionsTitle)
+               .setCancelable(true);
+
+         loadNextPrevious();
+
+         mDescription.setText(result.getDescription());
+
+         loadChart(result.getBaseStats());
+
+         int imageResourceId = getResources().getIdentifier(SPRITE + mPokemonId,
+               DRAWABLE, getPackageName());
+         mProfileImg.setImageResource(imageResourceId);
+
+         setHeightViewText(result.getHeight());
+         setWeightViewText(result.getWeight());
+
+         mExpView.setText(String.valueOf(result.getBaseExp()));
+
+         mPokemonName = result.getName();
+         String formattedName = String.format(getString(R.string.pokemon_name), mPokemonId, mPokemonName);
+         mTitle.setText(formattedName);
+         mMainTitle.setText(formattedName);
+         mRegionView.setText(result.getRegion());
+
+         loadTypes(result.getTypes());
+      }
    }
 
    private void switchPokemon(int pokemonId) {
@@ -201,67 +281,23 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       finish();
    }
 
-   private void loadPokemonProfile() {
-      Intent intent = getIntent();
-      Bundle extras = intent.getExtras();
-      int pokemonId = extras.getInt(POKEMON_ID_KEY);
-      PokemonProfile pokemon = mDatabaseHelper.querySelectedPokemonProfile(pokemonId);
-
-      AnimatedRecyclerView movesList = new AnimatedRecyclerView(this);
-      movesList.setLayoutManager(new LinearLayoutManager(this));
-      movesList.setHasFixedSize(true);
-      movesList.setAdapter(new MoveListAdapter(this, pokemon.getMoves()));
-
-      mMovesDialog = new LovelyCustomDialog(this)
-            .setTopColorRes(R.color.colorPrimary)
-            .setTitle(R.string.moveset)
-            .setIcon(R.drawable.ic_book_white_24dp)
-            .setView(movesList)
-            .setCancelable(true);
-
-      mEvolutions = mDatabaseHelper.queryPokemonEvolutions(pokemonId);
-      mPokemonId = pokemon.getId();
-
-      loadNextPrevious();
-
-      mDescription.setText(mDatabaseHelper.queryPokemonDescription(mPokemonId));
-
-      loadChart();
-
-      int imageResourceId = this.getResources().getIdentifier(SPRITE + mPokemonId,
-            DRAWABLE, this.getPackageName());
-      mProfileImg.setImageResource(imageResourceId);
-
-      setHeightViewText(pokemon.getHeight());
-      setWeightViewText(pokemon.getWeight());
-      mExpView.setText(String.valueOf(pokemon.getBaseExp()));
-
-      mPokemonName = pokemon.getName();
-      String formattedName = String.format(getString(R.string.pokemon_name), mPokemonId, mPokemonName);
-      mTitle.setText(formattedName);
-      mMainTitle.setText(formattedName);
-      mRegionView.setText(pokemon.getRegion());
-
-      String[] types = pokemon.getTypes();
-
-      loadTypes(types);
-   }
-
    private void loadTypes(String[] types) {
       if (types.length == 1) {
          String type = types[0];
-         mTypeTwoView.setVisibility(View.GONE);
-         mTypeOneView.setText(type);
          String colorName = TYPE + type;
          int colorResId = getResources().getIdentifier(colorName, COLOR, getPackageName());
+
+         mTypeTwoView.setVisibility(View.GONE);
+         mTypeOneView.setText(type);
          mTypeOneView.setBackgroundColor(ContextCompat.getColor(this, colorResId));
       }
       else {
          String typeOne = types[0];
          String typeTwo = types[1];
-         mTypeOneView.setText(typeOne);
          String colorName = TYPE + typeOne;
          int colorResId = getResources().getIdentifier(colorName, COLOR, getPackageName());
+
+         mTypeOneView.setText(typeOne);
          mTypeOneView.setBackgroundColor(ContextCompat.getColor(this, colorResId));
          mTypeTwoView.setVisibility(View.VISIBLE);
          mTypeTwoView.setText(typeTwo);
@@ -271,8 +307,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       }
    }
 
-   private void loadChart() {
-      float[] data = mDatabaseHelper.querySelectedPokemonStats(mPokemonId);
+   private void loadChart(float[] data) {
       BarSet dataSet = new BarSet();
       float tempVal;
       for (int index = 0; index < data.length; index++) {
@@ -376,26 +411,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    }
 
    public void showEvolutions(View view) {
-      String evolutionsTitle;
-      if (mEvolutions.length == 0) {
-         evolutionsTitle = getString(R.string.no_evolutions);
-      }
-      else {
-         evolutionsTitle = getString(R.string.evolutions);
-      }
-
-      mEvolutionsList = new AnimatedRecyclerView(this);
-      mEvolutionsList.setLayoutManager(new LinearLayoutManager(this));
-      mEvolutionsList.setHasFixedSize(true);
-      mEvolutionsList.setAdapter(new PokemonListAdapter(this, mEvolutions, true));
-
-      new LovelyCustomDialog(this)
-            .setTopColorRes(R.color.colorPrimary)
-            .setView(mEvolutionsList)
-            .setIcon(R.drawable.ic_group_work_white_24dp)
-            .setTitle(evolutionsTitle)
-            .setCancelable(true)
-            .show();
+      mEvolutionsDialog.show();
    }
 
    @Override
@@ -451,7 +467,6 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
 
    private void handleToolbarTitleVisibility(float percentage) {
       if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
-
          if (!mIsTheTitleVisible) {
             startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
             mIsTheTitleVisible = true;
@@ -459,7 +474,6 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
 
       }
       else {
-
          if (mIsTheTitleVisible) {
             startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
             mIsTheTitleVisible = false;
@@ -476,7 +490,6 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
 
       }
       else {
-
          if (!mIsTheTitleContainerVisible) {
             startAlphaAnimation(mTitleContainer, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
             mIsTheTitleContainerVisible = true;

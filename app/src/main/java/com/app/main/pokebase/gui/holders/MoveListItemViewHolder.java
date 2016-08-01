@@ -9,6 +9,7 @@ import com.app.main.pokebase.R;
 import com.app.main.pokebase.model.components.Move;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 import com.app.main.pokebase.gui.views.MoveInfoView;
+import com.app.main.pokebase.model.utilities.PokebaseCache;
 import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 
 /**
@@ -36,8 +37,16 @@ public class MoveListItemViewHolder extends RecyclerView.ViewHolder {
       mView.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View view) {
-            mMove = mDatabaseHelper.queryMoveInfoByName(mNameView.getText().toString());
-            mType = mDatabaseHelper.queryTypeById(mMove.getTypeId());
+            mMove = PokebaseCache.getMove(mDatabaseHelper, mNameView.getText().toString());
+
+            if (mMove.getTypeName() == null) {
+               mType = mDatabaseHelper.queryTypeById(mMove.getTypeId());
+               mMove.setTypeName(mType);
+            }
+            else {
+               mType = mMove.getTypeName();
+            }
+
             showMoveInfoDialog();
          }
       });
@@ -52,7 +61,15 @@ public class MoveListItemViewHolder extends RecyclerView.ViewHolder {
       String pp = String.valueOf(mMove.getPp());
       String accuracy = String.valueOf(mMove.getAccuracy());
       String className = mMove.getClassName();
-      String description = mDatabaseHelper.queryMoveDescriptionById(mMove.getMoveId());
+      String description;
+
+      if (mMove.getDescription() == null) {
+         description = mDatabaseHelper.queryMoveDescriptionById(mMove.getMoveId());
+         mMove.setDescription(description);
+      }
+      else {
+         description = mMove.getDescription();
+      }
 
       if (power.equals(NONE)) {
          power = NA;

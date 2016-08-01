@@ -114,7 +114,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
       mMoveSpinners[2] = (Spinner) findViewById(R.id.move_three_spinner);
       mMoveSpinners[3] = (Spinner) findViewById(R.id.move_four_spinner);
 
-      String[] moves = mDatabaseHelper.querySelectedPokemonMoves(mPokemonId);
+      String[] moves = mDatabaseHelper.queryPokemonMoves(mPokemonId);
 
       String[] levels = new String[MAX_LEVEL];
       for (int lvl = MIN_LEVEL; lvl <= levels.length; lvl++) {

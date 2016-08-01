@@ -12,9 +12,13 @@ public class PokemonProfile {
    private String mRegion;
    private String[] mTypes;
    private String[] mMoves;
+   private PokemonListItem[] mEvolutions;
+   private String mDescription;
+   private float[] mBaseStats;
 
    public PokemonProfile(int id, String name, int height, int weight, int baseExp, String region,
-                         String[] types, String[] moves) {
+                         String[] types, String[] moves, PokemonListItem[] evolutions,
+                         String description, float[] baseStats) {
       this.mId = id;
       this.mName = name;
       this.mHeight = height;
@@ -23,6 +27,9 @@ public class PokemonProfile {
       this.mRegion = region;
       this.mTypes = types;
       this.mMoves = moves;
+      this.mEvolutions = evolutions;
+      this.mDescription = description;
+      this.mBaseStats = baseStats;
    }
 
    public int getWeight() {
@@ -55,5 +62,17 @@ public class PokemonProfile {
 
    public String[] getMoves() {
       return mMoves;
+   }
+
+   public PokemonListItem[] getEvolutions() {
+      return mEvolutions;
+   }
+
+   public String getDescription() {
+      return mDescription;
+   }
+
+   public float[] getBaseStats() {
+      return mBaseStats;
    }
 }

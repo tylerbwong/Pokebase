@@ -14,6 +14,7 @@ public class Typefaces {
    private static final Hashtable<String, Typeface> cache = new Hashtable<>();
 
    private static final String TAG = "Typefaces";
+   private final static String ERROR = "Could not getPokemonProfile typeface.";
    public final static String ROBOTO_PATH = "fonts/roboto-light.ttf";
 
    @Nullable
@@ -21,11 +22,11 @@ public class Typefaces {
       synchronized (cache) {
          if (!cache.containsKey(assetPath)) {
             try {
-               Typeface t = Typeface.createFromAsset(context.getAssets(), assetPath);
-               cache.put(assetPath, t);
+               Typeface typeface = Typeface.createFromAsset(context.getAssets(), assetPath);
+               cache.put(assetPath, typeface);
             }
             catch (Exception e) {
-               Log.e(TAG, "Could not get typeface '" + assetPath + "' because " + e.getMessage());
+               Log.e(TAG, ERROR);
                return null;
             }
          }

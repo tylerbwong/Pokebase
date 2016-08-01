@@ -93,25 +93,25 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
                "JOIN Regions AS R ON R.id = P.region " +
                "WHERE Y.name = ? " +
                "AND R.name = ?";
-   private final static String SELECTED_INFO_QUERY =
+   private final static String POKEMON_PROFILE_QUERY =
          "SELECT P.id, P.name, P.height, P.weight, P.baseExp, R.name AS region " +
                "FROM Pokemon AS P " +
                "JOIN Regions AS R ON P.region = R.id " +
                "WHERE P.id = ?";
-   private final static String SELECTED_TYPES_QUERY =
+   private final static String POKEMON_TYPES_QUERY =
          "SELECT T.name " +
                "FROM Pokemon AS P " +
                "JOIN PokemonTypes AS Y ON Y.pokemonId = P.id " +
                "JOIN Types AS T ON Y.typeId = T.id " +
                "WHERE P.id = ?";
-   private final static String SELECTED_MOVES_QUERY =
+   private final static String POKEMON_MOVES_QUERY =
          "SELECT DISTINCT M.name " +
                "FROM Pokemon AS P " +
                "JOIN PokemonMoves AS O ON P.id = O.pokemonId " +
                "JOIN Moves AS M ON O.moveId = M.id " +
                "WHERE P.id = ? " +
                "ORDER BY M.name";
-   private final static String SELECTED_EVOLUTIONS_QUERY =
+   private final static String POKEMON_EVOLUTIONS_QUERY =
          "SELECT K.id, K.name " +
                "FROM Pokemon AS P " +
                "JOIN PokemonEvolutions AS E ON E.evolvesFrom = P.id " +
@@ -342,8 +342,8 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return pokemon;
    }
 
-   public String[] querySelectedPokemonTypes(int id) {
-      Cursor cursor = mDatabase.rawQuery(SELECTED_TYPES_QUERY, new String[]{String.valueOf(id)});
+   public String[] queryPokemonTypes(int id) {
+      Cursor cursor = mDatabase.rawQuery(POKEMON_TYPES_QUERY, new String[]{String.valueOf(id)});
       String[] pokemonTypes = new String[cursor.getCount()];
       int index = 0;
       cursor.moveToFirst();
@@ -357,8 +357,8 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return pokemonTypes;
    }
 
-   public String[] querySelectedPokemonMoves(int id) {
-      Cursor cursor = mDatabase.rawQuery(SELECTED_MOVES_QUERY, new String[]{String.valueOf(id)});
+   public String[] queryPokemonMoves(int id) {
+      Cursor cursor = mDatabase.rawQuery(POKEMON_MOVES_QUERY, new String[]{String.valueOf(id)});
       String[] pokemonMoves = new String[cursor.getCount()];
       int index = 0;
       cursor.moveToFirst();
@@ -372,9 +372,9 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return pokemonMoves;
    }
 
-   public PokemonProfile querySelectedPokemonProfile(int id) {
+   public PokemonProfile queryPokemonProfile(int id) {
       PokemonProfile pokemon;
-      Cursor cursor = mDatabase.rawQuery(SELECTED_INFO_QUERY, new String[]{String.valueOf(id)});
+      Cursor cursor = mDatabase.rawQuery(POKEMON_PROFILE_QUERY, new String[]{String.valueOf(id)});
       cursor.moveToFirst();
 
       pokemon = new PokemonProfile(cursor.getInt(cursor.getColumnIndex(ID_COL)),
@@ -383,14 +383,15 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
             cursor.getInt(cursor.getColumnIndex(WEIGHT_COL)),
             cursor.getInt(cursor.getColumnIndex(BASE_EXP_COL)),
             cursor.getString(cursor.getColumnIndex(REGION_COL)),
-            querySelectedPokemonTypes(id), querySelectedPokemonMoves(id));
+            queryPokemonTypes(id), queryPokemonMoves(id), queryPokemonEvolutions(id),
+            queryPokemonDescription(id), queryPokemonStats(id));
 
       cursor.close();
       return pokemon;
    }
 
    public PokemonListItem[] queryPokemonEvolutions(int id) {
-      Cursor cursor = mDatabase.rawQuery(SELECTED_EVOLUTIONS_QUERY, new String[]{String.valueOf(id)});
+      Cursor cursor = mDatabase.rawQuery(POKEMON_EVOLUTIONS_QUERY, new String[]{String.valueOf(id)});
       PokemonListItem[] pokemonEvolutions = new PokemonListItem[cursor.getCount()];
       int index = 0;
       cursor.moveToFirst();
@@ -732,7 +733,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return true;
    }
 
-   public float[] querySelectedPokemonStats(int pokemonId) {
+   public float[] queryPokemonStats(int pokemonId) {
       Cursor cursor = mDatabase.rawQuery(SELECTED_POKEMON_STATS,
             new String[]{String.valueOf(pokemonId)});
       int index = 0;
