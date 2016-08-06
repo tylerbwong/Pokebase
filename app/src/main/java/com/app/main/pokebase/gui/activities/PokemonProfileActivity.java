@@ -80,7 +80,6 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private DatabaseOpenHelper mDatabaseHelper;
    private AnimatedRecyclerView mEvolutionsList;
 
-   private PokemonListItem[] mEvolutions;
    private boolean mIsTheTitleVisible = false;
    private boolean mIsTheTitleContainerVisible = true;
 
@@ -102,6 +101,10 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private final static int DEFAULT_MOVE = 0;
    private final static int FIRST_POKEMON = 1;
    private final static int LAST_POKEMON = 721;
+   private final static int TEN = 10;
+   private final static int HUNDRED = 100;
+   private final static String DOUBLE_ZERO = "00";
+   private final static String ZERO = "0";
    private final static String[] STATS =
          {"HP", "Attack", "Defense", "Sp. Attack", "Sp. Defense", "Speed"};
 
@@ -214,6 +217,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
          super.onPostExecute(result);
 
          mPokemonId = result.getId();
+         mPokemonName = result.getName();
 
          AnimatedRecyclerView movesList = new AnimatedRecyclerView(mContext);
          movesList.setLayoutManager(new LinearLayoutManager(mContext));
@@ -227,15 +231,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
                .setView(movesList)
                .setCancelable(true);
 
-         String evolutionsTitle;
          PokemonListItem[] evolutions = result.getEvolutions();
-
-         if (evolutions.length == 0) {
-            evolutionsTitle = getString(R.string.no_evolutions);
-         }
-         else {
-            evolutionsTitle = getString(R.string.evolutions);
-         }
 
          mEvolutionsList = new AnimatedRecyclerView(mContext);
          mEvolutionsList.setLayoutManager(new LinearLayoutManager(mContext));
@@ -246,8 +242,16 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
                .setTopColorRes(R.color.colorPrimary)
                .setView(mEvolutionsList)
                .setIcon(R.drawable.ic_group_work_white_24dp)
-               .setTitle(evolutionsTitle)
                .setCancelable(true);
+
+         if (evolutions.length == 0) {
+            mEvolutionsDialog.setTitle(getString(R.string.no_evolutions));
+            mEvolutionsDialog.setMessage(String.format(getString(R.string.no_evolutions_message),
+                  mPokemonName));
+         }
+         else {
+            mEvolutionsDialog.setTitle(getString(R.string.evolutions));
+         }
 
          loadNextPrevious();
 
@@ -264,14 +268,33 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
 
          mExpView.setText(String.valueOf(result.getBaseExp()));
 
-         mPokemonName = result.getName();
-         String formattedName = String.format(getString(R.string.pokemon_name), mPokemonId, mPokemonName);
+         String formattedName = String.format(getString(R.string.pokemon_name), formatId(mPokemonId), mPokemonName);
          mTitle.setText(formattedName);
          mMainTitle.setText(formattedName);
          mRegionView.setText(result.getRegion());
 
          loadTypes(result.getTypes());
       }
+   }
+
+   public void closeEvolutionDialog() {
+      mEvolutionsDialog.dismiss();
+   }
+
+   public static String formatId(int id) {
+      String result;
+
+      if (id < TEN) {
+         result = DOUBLE_ZERO + String.valueOf(id);
+      }
+      else if (id > TEN && id < HUNDRED) {
+         result = ZERO + String.valueOf(id);
+      }
+      else {
+         result = String.valueOf(id);
+      }
+
+      return result;
    }
 
    private void switchPokemon(int pokemonId) {
@@ -330,29 +353,29 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    }
 
    private void loadNextPrevious() {
-      String nextPokemonId, previousPokemonId;
+      int nextPokemonId, previousPokemonId;
       int nextImageId, previousImageId;
 
       if (mPokemonId == FIRST_POKEMON) {
-         previousPokemonId = String.valueOf(LAST_POKEMON);
-         nextPokemonId = String.valueOf(mPokemonId + 1);
+         previousPokemonId = LAST_POKEMON;
+         nextPokemonId = mPokemonId + 1;
       }
       else if (mPokemonId == LAST_POKEMON) {
-         previousPokemonId = String.valueOf(mPokemonId - 1);
-         nextPokemonId = String.valueOf(FIRST_POKEMON);
+         previousPokemonId = mPokemonId - 1;
+         nextPokemonId = FIRST_POKEMON;
       }
       else {
-         previousPokemonId = String.valueOf(mPokemonId - 1);
-         nextPokemonId = String.valueOf(mPokemonId + 1);
+         previousPokemonId = mPokemonId - 1;
+         nextPokemonId = mPokemonId + 1;
       }
       previousImageId = getResources().getIdentifier(ICON + previousPokemonId,
             DRAWABLE, getPackageName());
       nextImageId = getResources().getIdentifier(ICON + nextPokemonId,
             DRAWABLE, getPackageName());
 
-      mPreviousLabel.setText(String.format(getString(R.string.hashtag_format), previousPokemonId));
+      mPreviousLabel.setText(String.format(getString(R.string.hashtag_format), formatId(previousPokemonId)));
       mPreviousImage.setImageResource(previousImageId);
-      mNextLabel.setText(String.format(getString(R.string.hashtag_format), nextPokemonId));
+      mNextLabel.setText(String.format(getString(R.string.hashtag_format), formatId(nextPokemonId)));
       mNextImage.setImageResource(nextImageId);
    }
 
@@ -364,7 +387,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
          inches = 0;
       }
       double millimeters = (double) decimeters / DM_PER_M;
-      String heightText = feet + "'" + inches + "'' ("
+      String heightText = feet + "' " + inches + "'' ("
             + String.format(Locale.US, "%.2f", millimeters) + " m)";
       mHeightView.setText(heightText);
    }

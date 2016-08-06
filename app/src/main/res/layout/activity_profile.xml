@@ -126,105 +126,113 @@
         app:behavior_overlapTop="50dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/detail_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/detail_view"
+            <android.support.v7.widget.CardView
+                android:id="@+id/more_info"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="7dp"
+                android:orientation="horizontal">
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/more_info"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:layout_marginBottom="7dp"
-                    android:layout_marginEnd="14dp"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginTop="7dp"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:padding="20dp">
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="30dp">
+                    <TextView
+                        android:id="@+id/description_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/description"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
 
-                        <TextView
-                            android:id="@+id/description"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:textSize="14sp"/>
+                    <TextView
+                        android:id="@+id/description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/description_label"
+                        android:textSize="14sp"/>
 
-                    </RelativeLayout>
+                </RelativeLayout>
 
-                </android.support.v7.widget.CardView>
+            </android.support.v7.widget.CardView>
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/basic_info"
+            <android.support.v7.widget.CardView
+                android:id="@+id/basic_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="7dp"
+                android:orientation="horizontal">
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:layout_marginBottom="7dp"
-                    android:layout_marginEnd="14dp"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginTop="7dp"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/info_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/basic_info"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/info_label"
                         android:layout_gravity="center"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
+                        android:orientation="horizontal">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginStart="10dp"
                             android:orientation="vertical">
 
                             <TextView
-                                style="@style/ProfileLeftText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="5dp"
-                                android:text="@string/type"
-                                android:textSize="16sp"/>
+                                android:text="@string/type"/>
 
                             <TextView
-                                style="@style/ProfileLeftText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="5dp"
-                                android:text="@string/region"
-                                android:textSize="16sp"/>
+                                android:text="@string/region"/>
 
                             <TextView
-                                style="@style/ProfileLeftText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="5dp"
-                                android:text="@string/height"
-                                android:textSize="16sp"/>
+                                android:text="@string/height"/>
 
                             <TextView
-                                style="@style/ProfileLeftText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="5dp"
-                                android:text="@string/weight"
-                                android:textSize="16sp"/>
+                                android:text="@string/weight"/>
 
                             <TextView
-                                style="@style/ProfileLeftText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="5dp"
-                                android:text="@string/baseExp"
-                                android:textSize="16sp"/>
+                                android:text="@string/baseExp"/>
                         </LinearLayout>
 
                         <View
@@ -239,192 +247,215 @@
                             android:orientation="vertical">
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="5dp"
+                                android:layout_gravity="end"
                                 android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/type_one"
-                                    android:layout_width="60dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="6dp"
-                                    android:gravity="center"
-                                    android:padding="2dp"
-                                    android:textAllCaps="true"
-                                    android:textColor="@color/colorAccent"
-                                    android:textSize="12sp"/>
-
-                                <TextView
-                                    android:id="@+id/type_two"
-                                    android:layout_width="60dp"
+                                    android:layout_width="70dp"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:padding="2dp"
+                                    android:padding="3dp"
+                                    android:textAlignment="center"
                                     android:textAllCaps="true"
                                     android:textColor="@color/colorAccent"
                                     android:textSize="12sp"
+                                    android:textStyle="bold"/>
+
+                                <TextView
+                                    android:id="@+id/type_two"
+                                    android:layout_width="70dp"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:layout_marginStart="6dp"
+                                    android:padding="3dp"
+                                    android:textAlignment="center"
+                                    android:textAllCaps="true"
+                                    android:textColor="@color/colorAccent"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"
                                     android:visibility="gone"/>
                             </LinearLayout>
 
                             <TextView
                                 android:id="@+id/region"
-                                style="@style/ProfileRightText"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="end"
                                 android:layout_marginBottom="5dp"
-                                android:textSize="16sp"/>
+                                android:textStyle="bold"/>
 
                             <TextView
                                 android:id="@+id/height"
-                                style="@style/ProfileRightText"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="end"
                                 android:layout_marginBottom="5dp"
-                                android:textSize="16sp"/>
+                                android:textStyle="bold"/>
 
                             <TextView
                                 android:id="@+id/weight"
-                                style="@style/ProfileRightText"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="end"
                                 android:layout_marginBottom="5dp"
-                                android:textSize="16sp"/>
+                                android:textStyle="bold"/>
 
                             <TextView
                                 android:id="@+id/exp"
-                                style="@style/ProfileRightText"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="end"
                                 android:layout_marginBottom="5dp"
-                                android:textSize="16sp"/>
+                                android:textStyle="bold"/>
                         </LinearLayout>
                     </LinearLayout>
+                </RelativeLayout>
 
-                </android.support.v7.widget.CardView>
+            </android.support.v7.widget.CardView>
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/other_info"
+            <android.support.v7.widget.CardView
+                android:id="@+id/base_stats"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="7dp"
+                android:orientation="horizontal">
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:layout_marginBottom="7dp"
-                    android:layout_marginEnd="14dp"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginTop="7dp"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:padding="20dp">
 
-                    <RelativeLayout
+                    <TextView
+                        android:id="@+id/stats_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/base_stats"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+                    <com.db.chart.view.BarChartView
+                        xmlns:chart="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/chart"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="10dp"
-                        android:paddingEnd="20dp"
-                        android:paddingStart="20dp">
+                        android:layout_height="130dp"
+                        android:layout_below="@id/stats_label"
+                        chart:chart_axisColor="@color/colorPrimary"
+                        chart:chart_labelColor="@android:color/tab_indicator_text"/>
 
-                        <com.db.chart.view.BarChartView
-                            xmlns:chart="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/chart"
-                            android:layout_width="match_parent"
-                            android:layout_height="130dp"
-                            chart:chart_axisColor="@color/colorPrimary"
-                            chart:chart_labelColor="@android:color/tab_indicator_text"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/chart"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="20dp"
+                        android:orientation="horizontal">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/hp"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/chart"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginStart="20dp"
-                            android:orientation="horizontal">
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
 
-                            <TextView
-                                android:id="@+id/hp"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:textAlignment="center"
-                                android:textSize="12sp"/>
+                        <TextView
+                            android:id="@+id/attack"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
 
-                            <TextView
-                                android:id="@+id/attack"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:textAlignment="center"
-                                android:textSize="12sp"/>
+                        <TextView
+                            android:id="@+id/defense"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
 
-                            <TextView
-                                android:id="@+id/defense"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:textAlignment="center"
-                                android:textSize="12sp"/>
+                        <TextView
+                            android:id="@+id/special_attack"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
 
-                            <TextView
-                                android:id="@+id/special_attack"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:textAlignment="center"
-                                android:textSize="12sp"/>
+                        <TextView
+                            android:id="@+id/special_defense"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
 
-                            <TextView
-                                android:id="@+id/special_defense"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:textAlignment="center"
-                                android:textSize="12sp"/>
+                        <TextView
+                            android:id="@+id/speed"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
 
-                            <TextView
-                                android:id="@+id/speed"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:textAlignment="center"
-                                android:textSize="12sp"/>
+                    </LinearLayout>
 
-                        </LinearLayout>
+                </RelativeLayout>
 
-                    </RelativeLayout>
+            </android.support.v7.widget.CardView>
 
-                </android.support.v7.widget.CardView>
+            <LinearLayout
+                android:id="@+id/buttons"
+                style="?android:attr/buttonBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/buttons"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                <Button
+                    android:id="@+id/moves"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginEnd="50dp"
+                    android:background="@drawable/rounded_corners"
+                    android:onClick="showMoves"
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp"
+                    android:text="@string/moveset"
+                    android:textColor="@color/colorAccent"/>
 
-                    <Button
-                        android:id="@+id/moves"
-                        android:layout_width="100dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginEnd="50dp"
-                        android:background="@drawable/rounded_corners"
-                        android:onClick="showMoves"
-                        android:paddingEnd="5dp"
-                        android:paddingStart="5dp"
-                        android:text="@string/moveset"
-                        android:textColor="@color/colorAccent"/>
+                <Button
+                    android:id="@+id/evolutions"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/rounded_corners"
+                    android:onClick="showEvolutions"
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp"
+                    android:text="@string/evolutions"
+                    android:textColor="@color/colorAccent"/>
 
-                    <Button
-                        android:id="@+id/evolutions"
-                        android:layout_width="100dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/rounded_corners"
-                        android:onClick="showEvolutions"
-                        android:paddingEnd="5dp"
-                        android:paddingStart="5dp"
-                        android:text="@string/evolutions"
-                        android:textColor="@color/colorAccent"/>
-
-                </LinearLayout>
             </LinearLayout>
-        </RelativeLayout>
+        </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.v7.widget.Toolbar

@@ -41,7 +41,7 @@ public class PokemonListAdapter extends RecyclerView.Adapter implements View.OnC
    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
       PokemonListItemViewHolder holder = (PokemonListItemViewHolder) viewHolder;
       PokemonListItem item = mItems[position];
-      holder.mIdView.setText(String.valueOf(item.mId));
+      holder.mIdView.setText(PokemonProfileActivity.formatId(item.mId));
       holder.mNameView.setText(item.mName);
       int imageResourceId = mContext.getResources().getIdentifier(ICON + item.mId,
             DRAWABLE, mContext.getPackageName());
@@ -65,6 +65,7 @@ public class PokemonListAdapter extends RecyclerView.Adapter implements View.OnC
 
       if (mIsEvolutions) {
          ((PokemonProfileActivity) mContext).finish();
+         ((PokemonProfileActivity) mContext).closeEvolutionDialog();
       }
    }
 }

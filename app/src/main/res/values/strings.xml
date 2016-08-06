@@ -21,6 +21,8 @@
     <string name="close_title">Exit the Application</string>
     <string name="close_prompt">Are you sure you want to exit?</string>
     <string name="no_teams_title">No Teams</string>
+    <string name="basic_info">Basic Info</string>
+    <string name="base_stats">Base Stats</string>
 
     <!-- VALUES -->
     <string name="close_drawer">Navigation View</string>
@@ -97,4 +99,5 @@
     <string name="team_add">Added new team %1$s!</string>
     <string name="team_update">Updated %1$s!</string>
     <string name="team_deleted">Deleted %1$s</string>
+    <string name="no_evolutions_message">%1$s does not evolve.</string>
 </resources>
