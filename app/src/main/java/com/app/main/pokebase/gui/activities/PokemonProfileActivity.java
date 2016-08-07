@@ -354,7 +354,6 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
 
    private void loadNextPrevious() {
       int nextPokemonId, previousPokemonId;
-      int nextImageId, previousImageId;
 
       if (mPokemonId == FIRST_POKEMON) {
          previousPokemonId = LAST_POKEMON;
@@ -368,15 +367,13 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
          previousPokemonId = mPokemonId - 1;
          nextPokemonId = mPokemonId + 1;
       }
-      previousImageId = getResources().getIdentifier(ICON + previousPokemonId,
-            DRAWABLE, getPackageName());
-      nextImageId = getResources().getIdentifier(ICON + nextPokemonId,
-            DRAWABLE, getPackageName());
 
       mPreviousLabel.setText(String.format(getString(R.string.hashtag_format), formatId(previousPokemonId)));
-      mPreviousImage.setImageResource(previousImageId);
+      mPreviousImage.setImageResource(getResources().getIdentifier(ICON + previousPokemonId,
+            DRAWABLE, getPackageName()));
       mNextLabel.setText(String.format(getString(R.string.hashtag_format), formatId(nextPokemonId)));
-      mNextImage.setImageResource(nextImageId);
+      mNextImage.setImageResource(getResources().getIdentifier(ICON + nextPokemonId,
+            DRAWABLE, getPackageName()));
    }
 
    private void setHeightViewText(int decimeters) {
