@@ -93,5 +93,6 @@ public class GenderActivity extends AppCompatActivity {
       ed.apply();
       Intent mainIntent = new Intent(this, MainActivity.class);
       startActivity(mainIntent);
+      finish();
    }
 }

@@ -40,6 +40,7 @@ public class IntroActivity extends AppIntro {
       ed.apply();
       Intent signUpIntent = new Intent(this, SignUpActivity.class);
       startActivity(signUpIntent);
+      finish();
    }
 
    @Override
