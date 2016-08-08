@@ -78,6 +78,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
    @Override
    public boolean onCreateOptionsMenu(Menu menu) {
       MenuInflater inflater = getMenuInflater();
+      inflater.inflate(R.menu.menu_profile, menu);
       inflater.inflate(R.menu.menu_trash, menu);
       inflater.inflate(R.menu.menu_submit, menu);
       return true;
@@ -88,6 +89,9 @@ public class PokemonEditorActivity extends AppCompatActivity {
       switch (item.getItemId()) {
          case android.R.id.home:
             onBackPressed();
+            break;
+         case R.id.profile_action:
+            goToPokemonProfile();
             break;
          case R.id.delete_action:
             showDeleteDialog();
@@ -160,6 +164,29 @@ public class PokemonEditorActivity extends AppCompatActivity {
                @Override
                public void onClick(View v) {
                   backToTeamView();
+               }
+            })
+            .setNegativeButton(R.string.no, null)
+            .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
+            .show();
+   }
+
+   private void goToPokemonProfile() {
+      new LovelyStandardDialog(this)
+            .setIcon(R.drawable.ic_info_white_24dp)
+            .setTitle(R.string.view_profile)
+            .setMessage(String.format(getString(R.string.profile_prompt),
+                  mNicknameInput.getText().toString()))
+            .setCancelable(true)
+            .setPositiveButton(R.string.yes, new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                  updatePokemon();
+                  Intent profileIntent = new Intent(PokemonEditorActivity.this, PokemonProfileActivity.class);
+                  Bundle extras = new Bundle();
+                  extras.putInt(PokemonProfileActivity.POKEMON_ID_KEY, mPokemonId);
+                  profileIntent.putExtras(extras);
+                  startActivity(profileIntent);
                }
             })
             .setNegativeButton(R.string.no, null)

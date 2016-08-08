@@ -23,6 +23,7 @@
     <string name="no_teams_title">No Teams</string>
     <string name="basic_info">Basic Info</string>
     <string name="base_stats">Base Stats</string>
+    <string name="view_profile">View Profile</string>
 
     <!-- VALUES -->
     <string name="close_drawer">Navigation View</string>
@@ -100,4 +101,6 @@
     <string name="team_update">Updated %1$s!</string>
     <string name="team_deleted">Deleted %1$s</string>
     <string name="no_evolutions_message">%1$s does not evolve.</string>
+    <string name="show_profile">Show Profile</string>
+    <string name="profile_prompt">Are you sure you want to view %1$s\'s profile? Your changes will be saved.</string>
 </resources>
