@@ -106,7 +106,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private final static String DOUBLE_ZERO = "00";
    private final static String ZERO = "0";
    private final static String[] STATS =
-         {"HP", "Attack", "Defense", "Sp. Attack", "Sp. Defense", "Speed"};
+         {"HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"};
 
    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.9f;
    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;

@@ -21,8 +21,10 @@ import android.widget.Toast;
 
 import com.app.main.pokebase.R;
 import com.app.main.pokebase.gui.adapters.TextViewSpinnerAdapter;
+import com.app.main.pokebase.gui.views.PokemonInfoView;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 import com.app.main.pokebase.model.utilities.ArrayUtils;
+import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 /**
@@ -91,7 +93,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
             onBackPressed();
             break;
          case R.id.profile_action:
-            goToPokemonProfile();
+            showProfile();
             break;
          case R.id.delete_action:
             showDeleteDialog();
@@ -171,25 +173,14 @@ public class PokemonEditorActivity extends AppCompatActivity {
             .show();
    }
 
-   private void goToPokemonProfile() {
-      new LovelyStandardDialog(this)
-            .setIcon(R.drawable.ic_info_white_24dp)
-            .setTitle(R.string.view_profile)
-            .setMessage(String.format(getString(R.string.profile_prompt),
-                  mNicknameInput.getText().toString()))
+   private void showProfile() {
+      PokemonInfoView infoView = new PokemonInfoView(this);
+      infoView.loadPokemonInfo(mPokemonId);
+      new LovelyCustomDialog(this)
+            .setView(infoView)
+            .setIcon(mProfileImg.getDrawable())
+            .setTitle(mNicknameInput.getText().toString())
             .setCancelable(true)
-            .setPositiveButton(R.string.yes, new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                  updatePokemon();
-                  Intent profileIntent = new Intent(PokemonEditorActivity.this, PokemonProfileActivity.class);
-                  Bundle extras = new Bundle();
-                  extras.putInt(PokemonProfileActivity.POKEMON_ID_KEY, mPokemonId);
-                  profileIntent.putExtras(extras);
-                  startActivity(profileIntent);
-               }
-            })
-            .setNegativeButton(R.string.no, null)
             .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
             .show();
    }
