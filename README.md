@@ -1,5 +1,7 @@
 # Pokébase
 
+![Pokébase](/screens/showcase.png)
+
 This Android application uses a SQLite database to store and query 
 information about all 721 Pokémon. You are able to view information about each Pokémon as well as
 create teams with Pokémon of various levels and movesets.
