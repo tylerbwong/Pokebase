@@ -4,6 +4,7 @@
     <group
         android:id="@+id/menu_top"
         android:checkableBehavior="single">
+
         <item
             android:id="@+id/teams"
             android:checked="false"
