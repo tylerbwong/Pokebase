@@ -3,12 +3,16 @@
 ![Pokébase](/screens/showcase.png)
 
 This Android application uses a SQLite database to store and query 
-information about all 721 Pokémon. You are able to view information about each Pokémon as well as
+information about the Pokémon world, including all 721 Pokémon. You are able to view information as well as
 create teams with Pokémon of various levels and movesets.
 
 ## Requirements
 
 Requires Android 5.0 (Lollipop) or higher.
+
+## Install
+
+Visit the [releases](https://github.com/tylerbwong/Pokebase-SQLite/releases) page to download and install the latest APK!
 
 ## Description
 
