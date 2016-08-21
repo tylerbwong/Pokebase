@@ -1,6 +1,6 @@
 # Pokébase
 
-![Pokébase](/screens/showcase.png)
+![Pokébase](/art/showcase.png)
 
 This Android application uses a SQLite database to store and query 
 information about the Pokémon world, including all 721 Pokémon. You are able to view information as well as
@@ -60,3 +60,4 @@ Databases provided by www.serebii.net and www.veekun.com/dex
 * readstatesoftware/SQLiteAssetHelper
 * diogobernardino/WilliamChart
 * r0adkll/SlidableActivity
+* mancj/MaterialSearchBar

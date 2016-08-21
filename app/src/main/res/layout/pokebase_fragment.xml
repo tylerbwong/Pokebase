@@ -1,29 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:paddingTop="10dp">
+              android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:orientation="horizontal">
+        android:background="@color/colorPrimary"
+        android:elevation="4dp">
 
-        <Spinner
-            android:id="@+id/type_spinner"
-            android:layout_width="0dp"
+        <com.mancj.materialsearchbar.MaterialSearchBar
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:layout_weight="1"/>
+            app:hint="@string/search_hint"
+            app:maxSuggestionsCount="0"
+            app:speechMode="true"/>
 
-        <Spinner
-            android:id="@+id/region_spinner"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-    </LinearLayout>
+            android:layout_below="@+id/search_bar"
+            android:layout_margin="20dp"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/type_spinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"/>
+
+            <Spinner
+                android:id="@+id/region_spinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <com.app.main.pokebase.gui.views.AnimatedRecyclerView
         android:id="@+id/pokemon_list"

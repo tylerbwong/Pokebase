@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -123,7 +124,10 @@ public class ImageBehavior extends CoordinatorLayout.Behavior<ImageView> {
          mStartXPosition = (int) (child.getX() + (child.getWidth() / 2));
 
       if (mFinalXPosition == 0)
-         mFinalXPosition = mContext.getResources().getDimensionPixelOffset(R.dimen.abc_action_bar_content_inset_material) + ((int) mCustomFinalHeight / 2) + 140;
+         mFinalXPosition = mContext.getResources().getDimensionPixelOffset(
+               R.dimen.abc_action_bar_content_inset_material) + ((int) mCustomFinalHeight / 2) +
+               Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40,
+                     dependency.getContext().getResources().getDisplayMetrics()));
 
       if (mStartToolbarPosition == 0)
          mStartToolbarPosition = dependency.getY();

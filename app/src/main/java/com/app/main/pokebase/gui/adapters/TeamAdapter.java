@@ -18,7 +18,7 @@ public class TeamAdapter extends RecyclerView.Adapter {
    private Context mContext;
 
    private final static String DRAWABLE = "drawable";
-   private final static String ICON = "icon_";
+   private final static String SPRITES = "sprites_";
 
    public TeamAdapter(Context context, Team[] teams) {
       this.mContext = context;
@@ -44,7 +44,7 @@ public class TeamAdapter extends RecyclerView.Adapter {
       if (teamSize > 0) {
          for (int index = 0; index < teamSize; index++) {
             holder.pokemonList[index].setImageResource(mContext.getResources()
-                  .getIdentifier(ICON + curTeam.mTeam[index].mPokemonId,
+                  .getIdentifier(SPRITES + curTeam.mTeam[index].mPokemonId,
                         DRAWABLE, mContext.getPackageName()));
          }
       }

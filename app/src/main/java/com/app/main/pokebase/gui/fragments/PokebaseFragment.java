@@ -1,8 +1,11 @@
 package com.app.main.pokebase.gui.fragments;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.app.main.pokebase.R;
 import com.app.main.pokebase.gui.adapters.PokemonListAdapter;
@@ -22,11 +28,16 @@ import com.app.main.pokebase.gui.adapters.TextViewSpinnerAdapter;
 import com.app.main.pokebase.gui.views.AnimatedRecyclerView;
 import com.app.main.pokebase.model.components.PokemonListItem;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 
 /**
  * @author Tyler Wong
  */
-public class PokebaseFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class PokebaseFragment extends Fragment implements AdapterView.OnItemSelectedListener,
+      MaterialSearchBar.OnSearchActionListener {
+   private MaterialSearchBar mSearchBar;
+   private EditText mSearchInput;
+   private ImageView mClear;
    private Spinner mTypeSpinner;
    private Spinner mRegionSpinner;
    private AnimatedRecyclerView mPokemonList;
@@ -36,11 +47,12 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
 
    private final static String TYPES = "Types";
    private final static String REGIONS = "Regions";
+   private static final int RECOGNIZER_REQ_CODE = 1234;
 
    @Override
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      getActivity().setTheme(R.style.PokemonEditorTheme);
+      getActivity().setTheme(R.style.PokebaseFragmentTheme);
       mDatabaseHelper = DatabaseOpenHelper.getInstance(getContext());
       setHasOptionsMenu(true);
    }
@@ -48,7 +60,7 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
    @Override
    public void onResume() {
       super.onResume();
-      getActivity().setTheme(R.style.PokemonEditorTheme);
+      getActivity().setTheme(R.style.PokebaseFragmentTheme);
    }
 
    @Override
@@ -92,6 +104,19 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
    public void onViewCreated(View view, Bundle savedInstanceState) {
       super.onViewCreated(view, savedInstanceState);
 
+      mSearchBar = (MaterialSearchBar) view.findViewById(R.id.search_bar);
+      mSearchBar.setOnSearchActionListener(this);
+      mSearchBar.setTextColor(android.R.color.black);
+      mSearchBar.setTextHintColor(android.R.color.secondary_text_dark);
+      mSearchInput = (EditText) view.findViewById(R.id.mt_editText);
+      mClear = (ImageView) view.findViewById(R.id.mt_clear);
+      mClear.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+            mSearchInput.setText("");
+            refreshData();
+         }
+      });
       mTypeSpinner = (Spinner) view.findViewById(R.id.type_spinner);
       mTypeSpinner.setOnItemSelectedListener(this);
       mRegionSpinner = (Spinner) view.findViewById(R.id.region_spinner);
@@ -111,32 +136,55 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
 
    @Override
    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+      ((TextView) view).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
       refreshData();
    }
 
    private void refreshData() {
-      String type = (String) mTypeSpinner.getSelectedItem();
-      String region = (String) mRegionSpinner.getSelectedItem();
-      new RefreshPokemon().execute(type, region);
+      new RefreshPokemon().execute(mSearchInput.getText().toString(), (String) mTypeSpinner.getSelectedItem(),
+            (String) mRegionSpinner.getSelectedItem());
+   }
+
+   @Override
+   public void onSearchConfirmed(CharSequence charSequence) {
+      new RefreshPokemon().execute(charSequence.toString(), (String) mTypeSpinner.getSelectedItem(),
+            (String) mRegionSpinner.getSelectedItem());
+   }
+
+   @Override
+   public void onButtonClicked(int buttonCode) {
+      if (buttonCode == MaterialSearchBar.BUTTON_SPEECH) {
+         Intent voiceIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+         voiceIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+               RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+         voiceIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_prompt));
+         startActivityForResult(voiceIntent, RECOGNIZER_REQ_CODE);
+      }
+   }
+
+   @Override
+   public void onSearchStateChanged(boolean b) {
+
    }
 
    private class RefreshPokemon extends AsyncTask<String, Void, PokemonListItem[]> {
       @Override
       protected PokemonListItem[] doInBackground(String... params) {
-         String type = params[0];
-         String region = params[1];
+         String search = params[0];
+         String type = params[1];
+         String region = params[2];
 
          if (type.equals(TYPES) && !region.equals(REGIONS)) {
-            mPokemon = mDatabaseHelper.queryByRegion(region, mIsAlphabetical);
+            mPokemon = mDatabaseHelper.queryByRegion(search, region, mIsAlphabetical);
          }
          else if (!type.equals(TYPES) && region.equals(REGIONS)) {
-            mPokemon = mDatabaseHelper.queryByType(type, mIsAlphabetical);
+            mPokemon = mDatabaseHelper.queryByType(search, type, mIsAlphabetical);
          }
          else if (!type.equals(TYPES) && !region.equals(REGIONS)) {
-            mPokemon = mDatabaseHelper.queryByTypeAndRegion(type, region, mIsAlphabetical);
+            mPokemon = mDatabaseHelper.queryByTypeAndRegion(search, type, region, mIsAlphabetical);
          }
          else {
-            mPokemon = mDatabaseHelper.queryAll(mIsAlphabetical);
+            mPokemon = mDatabaseHelper.queryAll(search, mIsAlphabetical);
          }
 
          return mPokemon;
@@ -154,7 +202,7 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
       protected Pair<Pair<String[], String[]>, PokemonListItem[]> doInBackground(Void... params) {
          String[] types = mDatabaseHelper.queryAllTypes();
          String[] regions = mDatabaseHelper.queryAllRegions();
-         PokemonListItem[] pokemon = mDatabaseHelper.queryAll(mIsAlphabetical);
+         PokemonListItem[] pokemon = mDatabaseHelper.queryAll("", mIsAlphabetical);
 
          return new Pair<> (new Pair<> (types, regions), pokemon);
       }
@@ -165,6 +213,16 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
          mTypeSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(), result.first.first));
          mRegionSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(), result.first.second));
          mPokemonList.setAdapter(new PokemonListAdapter(getContext(), result.second, false));
+      }
+   }
+
+   @Override
+   public void onActivityResult(int requestCode, int resultCode, Intent data) {
+      super.onActivityResult(requestCode, resultCode, data);
+
+      if (requestCode == RECOGNIZER_REQ_CODE && data != null) {
+         mSearchInput.setText(data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS).get(0));
+         refreshData();
       }
    }
 }

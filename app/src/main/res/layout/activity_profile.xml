@@ -19,7 +19,7 @@
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
+            app:contentScrim="@color/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <RelativeLayout
@@ -29,7 +29,7 @@
                 android:background="@color/colorPrimary"
                 android:orientation="horizontal"
                 app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.5">
+                app:layout_collapseParallaxMultiplier="0.7">
 
                 <LinearLayout
                     android:id="@+id/previous"
@@ -131,6 +131,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         app:layout_anchor="@id/frame_layout"
+        app:layout_collapseMode="pin"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
         app:title="">
 
@@ -160,7 +161,7 @@
         android:layout_height="160dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/circle_shape"
-        android:scaleType="center"
+        android:scaleType="centerInside"
         app:finalHeight="@dimen/image_final_width"
         app:finalYPosition="2dp"
         app:layout_behavior="com.app.main.pokebase.gui.animations.ImageBehavior"

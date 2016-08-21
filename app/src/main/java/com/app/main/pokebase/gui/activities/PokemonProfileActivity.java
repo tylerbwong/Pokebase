@@ -3,6 +3,7 @@ package com.app.main.pokebase.gui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.PaintDrawable;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -91,6 +93,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private final static String COLOR = "color";
    private final static String DRAWABLE = "drawable";
    private final static String RAW = "raw";
+   private final static String UNDO = "UNDO";
    private final static double FT_PER_DM = 0.32808399;
    private final static double LB_PER_HG = 0.22046226218;
    private final static int KG_PER_HG = 10;
@@ -307,6 +310,10 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    }
 
    private void loadTypes(String[] types) {
+      PaintDrawable backgroundColor;
+      float dimension = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2,
+            getResources().getDisplayMetrics());
+
       if (types.length == 1) {
          String type = types[0];
          String colorName = TYPE + type;
@@ -314,7 +321,9 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
 
          mTypeTwoView.setVisibility(View.GONE);
          mTypeOneView.setText(type);
-         mTypeOneView.setBackgroundColor(ContextCompat.getColor(this, colorResId));
+         backgroundColor = new PaintDrawable(ContextCompat.getColor(this, colorResId));
+         backgroundColor.setCornerRadius(dimension);
+         mTypeOneView.setBackground(backgroundColor);
       }
       else {
          String typeOne = types[0];
@@ -323,12 +332,16 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
          int colorResId = getResources().getIdentifier(colorName, COLOR, getPackageName());
 
          mTypeOneView.setText(typeOne);
-         mTypeOneView.setBackgroundColor(ContextCompat.getColor(this, colorResId));
+         backgroundColor = new PaintDrawable(ContextCompat.getColor(this, colorResId));
+         backgroundColor.setCornerRadius(dimension);
+         mTypeOneView.setBackground(backgroundColor);
          mTypeTwoView.setVisibility(View.VISIBLE);
          mTypeTwoView.setText(typeTwo);
          colorName = TYPE + typeTwo;
          colorResId = getResources().getIdentifier(colorName, COLOR, getPackageName());
-         mTypeTwoView.setBackgroundColor(ContextCompat.getColor(this, colorResId));
+         backgroundColor = new PaintDrawable(ContextCompat.getColor(this, colorResId));
+         backgroundColor.setCornerRadius(dimension);
+         mTypeTwoView.setBackground(backgroundColor);
       }
    }
 
@@ -462,7 +475,15 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
                            mPokemonName, DEFAULT_LEVEL, DEFAULT_MOVE, DEFAULT_MOVE,
                            DEFAULT_MOVE, DEFAULT_MOVE);
                      Snackbar snackbar = Snackbar.make(mLayout, String.format(
-                           getString(R.string.add_success), mPokemonName, item), Snackbar.LENGTH_LONG);
+                           getString(R.string.add_success), mPokemonName, item), Snackbar.LENGTH_LONG)
+                           .setAction(UNDO, new View.OnClickListener() {
+                              @Override
+                              public void onClick(View view) {
+                                 mDatabaseHelper.deleteLastAddedPokemon();
+                              }
+                           });
+                     snackbar.setActionTextColor(ContextCompat.getColor(
+                           getApplicationContext(), R.color.colorPrimary));
                      snackbar.show();
                   }
                })
@@ -485,6 +506,15 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
 
       handleAlphaOnTitle(percentage);
       handleToolbarTitleVisibility(percentage);
+
+      if (Math.abs(offset) >= mAppBar.getHeight() - TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, 55, getResources().getDisplayMetrics())) {
+         mActionBar.setElevation(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
+               getResources().getDisplayMetrics()));
+      }
+      else {
+         mActionBar.setElevation(0);
+      }
    }
 
    private void handleToolbarTitleVisibility(float percentage) {

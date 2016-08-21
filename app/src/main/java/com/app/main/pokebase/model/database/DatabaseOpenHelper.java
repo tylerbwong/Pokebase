@@ -65,9 +65,15 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
    private final static String REGIONS = "Regions";
    private final static String CLASSES = "Classes";
    private final static String DATE_FORMAT = "M/d/yyyy h:mm a";
+   private final static String AND = "AND";
+   private final static String WHERE = " WHERE";
+   private final static String PERCENT_START = "\"%";
+   private final static String PERCENT_END = "%\"";
 
    private final static String ALPHABETIZE =
          " ORDER BY P.name";
+   private final static String NAME_SEARCH =
+         " P.name LIKE ";
    private final static String ALL =
          "SELECT P.id, P.name FROM Pokemon AS P";
    private final static String ALL_TYPES =
@@ -177,6 +183,8 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
          "SELECT * FROM Items AS I ORDER BY I.name";
    private final static String ITEM_DESCRIPTION_BY_ID =
          "SELECT I.description FROM ItemDescriptions I WHERE I.itemId = ?";
+   private final static String DELETE_LAST_POKEMON =
+         "DELETE FROM TeamPokemon WHERE _id = (SELECT MAX(_id) FROM TeamPokemon)";
 
    private DatabaseOpenHelper(Context context) {
       super(context, DB_NAME, null, DB_VERSION);
@@ -248,15 +256,19 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return classes;
    }
 
-   public PokemonListItem[] queryByType(String type, boolean alphabetical) {
-      String query;
+   public PokemonListItem[] queryByType(String search, String type, boolean alphabetical) {
+      String query = TYPE_QUERY;
 
-      if (alphabetical) {
-         query = TYPE_QUERY + ALPHABETIZE;
+      if (search.equals("") && alphabetical) {
+         query += ALPHABETIZE;
       }
-      else {
-         query = TYPE_QUERY;
+      else if (!search.equals("") && alphabetical) {
+         query += ((AND + NAME_SEARCH + PERCENT_START + search + PERCENT_END) + ALPHABETIZE);
       }
+      else if (!search.equals("") && !alphabetical) {
+         query += (AND + NAME_SEARCH + PERCENT_START + search + PERCENT_END);
+      }
+
       Cursor cursor = mDatabase.rawQuery(query, new String[]{type});
       PokemonListItem[] typePokemon = new PokemonListItem[cursor.getCount()];
       int index = 0;
@@ -272,14 +284,19 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return typePokemon;
    }
 
-   public PokemonListItem[] queryByRegion(String region, boolean alphabetical) {
-      String query;
-      if (alphabetical) {
-         query = REGION_QUERY + ALPHABETIZE;
+   public PokemonListItem[] queryByRegion(String search, String region, boolean alphabetical) {
+      String query = REGION_QUERY;
+
+      if (search.equals("") && alphabetical) {
+         query += ALPHABETIZE;
       }
-      else {
-         query = REGION_QUERY;
+      else if (!search.equals("") && alphabetical) {
+         query += ((AND + NAME_SEARCH + PERCENT_START + search + PERCENT_END) + ALPHABETIZE);
       }
+      else if (!search.equals("") && !alphabetical) {
+         query += (AND + NAME_SEARCH + PERCENT_START + search + PERCENT_END);
+      }
+
       Cursor cursor = mDatabase.rawQuery(query, new String[]{region});
       PokemonListItem[] regionPokemon = new PokemonListItem[cursor.getCount()];
       int index = 0;
@@ -296,14 +313,20 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return regionPokemon;
    }
 
-   public PokemonListItem[] queryByTypeAndRegion(String type, String region, boolean alphabetical) {
-      String query;
-      if (alphabetical) {
-         query = TYPE_REGION_QUERY + ALPHABETIZE;
+   public PokemonListItem[] queryByTypeAndRegion(String search, String type, String region,
+                                                 boolean alphabetical) {
+      String query = TYPE_REGION_QUERY;
+
+      if (search.equals("") && alphabetical) {
+         query += ALPHABETIZE;
       }
-      else {
-         query = TYPE_REGION_QUERY;
+      else if (!search.equals("") && alphabetical) {
+         query += ((AND + NAME_SEARCH + PERCENT_START + search + PERCENT_END) + ALPHABETIZE);
       }
+      else if (!search.equals("") && !alphabetical) {
+         query += (AND + NAME_SEARCH + PERCENT_START + search + PERCENT_END);
+      }
+
       Cursor cursor = mDatabase.rawQuery(query, new String[]{type, region});
       PokemonListItem[] typeRegionPokemon = new PokemonListItem[cursor.getCount()];
       int index = 0;
@@ -319,14 +342,19 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return typeRegionPokemon;
    }
 
-   public PokemonListItem[] queryAll(boolean alphabetical) {
-      String query;
-      if (alphabetical) {
-         query = ALL + ALPHABETIZE;
+   public PokemonListItem[] queryAll(String search, boolean alphabetical) {
+      String query = ALL;
+
+      if (search.equals("") && alphabetical) {
+         query += ALPHABETIZE;
       }
-      else {
-         query = ALL;
+      else if (!search.equals("") && alphabetical) {
+         query += ((WHERE + NAME_SEARCH + PERCENT_START + search + PERCENT_END) + ALPHABETIZE);
       }
+      else if (!search.equals("") && !alphabetical) {
+         query += (WHERE + NAME_SEARCH + PERCENT_START + search + PERCENT_END);
+      }
+
       Cursor cursor = mDatabase.rawQuery(query, null);
       PokemonListItem[] pokemon = new PokemonListItem[cursor.getCount()];
       int index = 0;
@@ -730,6 +758,11 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
    public boolean deleteAllTeams() {
       mDatabase.delete(TEAM_POKEMON_TABLE, null, null);
       mDatabase.delete(TEAMS_TABLE, null, null);
+      return true;
+   }
+
+   public boolean deleteLastAddedPokemon() {
+      mDatabase.execSQL(DELETE_LAST_POKEMON);
       return true;
    }
 

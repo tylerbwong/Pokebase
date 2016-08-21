@@ -29,6 +29,7 @@
     <string name="close_drawer">Navigation View</string>
     <string name="open_drawer">Navigation View Closed</string>
     <string name="shared_transition">shared transition</string>
+    <string name="speech_prompt">Search for a Pokémon</string>
 
     <!-- BUTTONS -->
     <string name="get_started">Get Started</string>
@@ -103,4 +104,5 @@
     <string name="no_evolutions_message">%1$s does not evolve.</string>
     <string name="show_profile">Show Profile</string>
     <string name="profile_prompt">Are you sure you want to view %1$s\'s profile? Your changes will be saved.</string>
+    <string name="search_hint">Search</string>
 </resources>
