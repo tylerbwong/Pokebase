@@ -48,6 +48,8 @@ public class PokemonEditorActivity extends AppCompatActivity {
    private String mTitle;
    private String mDescription;
    private DatabaseOpenHelper mDatabaseHelper;
+   private PokemonInfoView mInfoView;
+   private LovelyCustomDialog mProfileDialog;
 
    private final static int PROFILE_IMG_ELEVATION = 40;
    private final static int NUM_SPINNERS = 4;
@@ -73,6 +75,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
       setContentView(R.layout.activity_pokemon_editor);
 
       mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
+      mInfoView = new PokemonInfoView(this);
 
       new LoadPokemonTeamMember(this).execute();
    }
@@ -174,15 +177,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
    }
 
    private void showProfile() {
-      PokemonInfoView infoView = new PokemonInfoView(this);
-      infoView.loadPokemonInfo(mPokemonId);
-      new LovelyCustomDialog(this)
-            .setView(infoView)
-            .setIcon(mProfileImg.getDrawable())
-            .setTitle(mNicknameInput.getText().toString())
-            .setCancelable(true)
-            .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
-            .show();
+      mProfileDialog.show();
    }
 
    @Override
@@ -234,6 +229,9 @@ public class PokemonEditorActivity extends AppCompatActivity {
             actionBar.setTitle(mNickname);
          }
 
+         mInfoView.loadPokemonInfo(mPokemonId);
+         mInfoView.setButtonsVisible(false);
+
          int imageResourceId = getResources().getIdentifier(SPRITE + mPokemonId, DRAWABLE, getPackageName());
          mProfileImg.setImageResource(imageResourceId);
          mNicknameInput = (TextInputEditText) findViewById(R.id.nickname_input);
@@ -281,6 +279,13 @@ public class PokemonEditorActivity extends AppCompatActivity {
          mMoveSpinners[2].setSelection(ArrayUtils.indexOf(result, mMoveThree));
          mMoveSpinners[3].setAdapter(new TextViewSpinnerAdapter(mContext, result));
          mMoveSpinners[3].setSelection(ArrayUtils.indexOf(result, mMoveFour));
+
+         mProfileDialog = new LovelyCustomDialog(mContext)
+               .setView(mInfoView)
+               .setIcon(mProfileImg.getDrawable())
+               .setTitle(mNicknameInput.getText().toString())
+               .setCancelable(true)
+               .setTopColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
       }
    }
 }

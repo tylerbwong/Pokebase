@@ -118,8 +118,8 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include
-        layout="@layout/pokemon_info"
+    <com.app.main.pokebase.gui.views.PokemonInfoView
+        android:id="@+id/info_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:behavior_overlapTop="50dp"

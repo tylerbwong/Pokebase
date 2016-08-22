@@ -56,15 +56,5 @@ public class IntroPokebaseFragment extends Fragment {
          charizardImage.setImageDrawable(loaded[1]);
          pokeDexImage.setImageDrawable(loaded[2]);
       }
-
-      @Override
-      protected void onPreExecute() {
-
-      }
-
-      @Override
-      protected void onProgressUpdate(Void... values) {
-
-      }
    }
 }

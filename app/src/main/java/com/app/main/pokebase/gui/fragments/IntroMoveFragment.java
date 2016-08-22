@@ -19,14 +19,14 @@ import com.app.main.pokebase.model.utilities.Typefaces;
 /**
  * @author Tyler Wong
  */
-public class IntroTeamFragment extends Fragment {
+public class IntroMoveFragment extends Fragment {
    private TextView mDescription;
    private Typeface mRobotoLight;
 
    @Nullable
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-      View view = inflater.inflate(R.layout.intro_team_fragment, container, false);
+      View view = inflater.inflate(R.layout.intro_move_fragment, container, false);
       new LoadImage().execute();
 
       mRobotoLight = Typefaces.get(getContext(), Typefaces.ROBOTO_PATH);
@@ -42,13 +42,13 @@ public class IntroTeamFragment extends Fragment {
    private class LoadImage extends AsyncTask<Void, Void, Drawable> {
       @Override
       protected Drawable doInBackground(Void... params) {
-         return ContextCompat.getDrawable(getContext(), R.drawable.trainer);
+         return ContextCompat.getDrawable(getContext(), R.drawable.move_dialog);
       }
 
       @Override
       protected void onPostExecute(Drawable loaded) {
          super.onPostExecute(loaded);
-         ImageView trainerImage = (ImageView) getActivity().findViewById(R.id.trainer);
+         ImageView trainerImage = (ImageView) getActivity().findViewById(R.id.move_dialog);
          trainerImage.setImageDrawable(loaded);
       }
    }

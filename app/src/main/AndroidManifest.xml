@@ -16,7 +16,8 @@
             android:name=".gui.activities.SplashActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -26,43 +27,57 @@
             android:name=".gui.activities.IntroActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/StartTheme">
+            android:theme="@style/StartTheme"
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
             android:name=".gui.activities.SignUpActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/StartTheme">
+            android:theme="@style/StartTheme"
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
             android:name=".gui.activities.GenderActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/StartTheme">
+            android:theme="@style/StartTheme"
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
             android:name=".gui.activities.MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/MainTheme">
+            android:theme="@style/MainTheme"
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
             android:name=".gui.activities.TeamViewActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/MainTheme">
+            android:theme="@style/MainTheme"
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
             android:name=".gui.activities.PokemonProfileActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/PokemonProfileTheme">
+            android:theme="@style/PokemonProfileTheme"
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
             android:name=".gui.activities.PokemonEditorActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/PokemonEditorTheme">
+            android:theme="@style/PokemonEditorTheme"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
+        <activity
+            android:name=".gui.activities.PreferencesActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/PreferencesTheme"
+            android:windowSoftInputMode="adjustPan">
         </activity>
     </application>
 

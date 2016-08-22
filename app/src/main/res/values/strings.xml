@@ -24,12 +24,19 @@
     <string name="basic_info">Basic Info</string>
     <string name="base_stats">Base Stats</string>
     <string name="view_profile">View Profile</string>
+    <string name="no_results">No Results</string>
+    <string name="check_updates">Check for Updates</string>
+    <string name="updates">Updates</string>
+    <string name="version">Version</string>
 
     <!-- VALUES -->
     <string name="close_drawer">Navigation View</string>
     <string name="open_drawer">Navigation View Closed</string>
     <string name="shared_transition">shared transition</string>
     <string name="speech_prompt">Search for a Pokémon</string>
+    <string name="update_url">https://github.com/tylerbwong/Pokebase-SQLite/releases/latest</string>
+    <string name="update_key">update</string>
+    <string name="version_key">version</string>
 
     <!-- BUTTONS -->
     <string name="get_started">Get Started</string>
@@ -41,10 +48,11 @@
 
     <!-- LABELS -->
     <string name="count">0/15</string>
-    <string name="team_description">Create your own teams to save for later when it\'s time to
-        battle!</string>
+    <string name="team_description">Create your own teams to keep track of your favorite
+        Pokémon!</string>
     <string name="pokedex_description">View your Pokébase and look up information on all 721
         Pokémon.</string>
+    <string name="move_description">View quick information about all moves and items.</string>
     <string name="make_team">Make your first team!</string>
     <string name="back_prompt">Are you sure you want to go back? All changes will be lost.</string>
     <string name="type">Type</string>
@@ -105,4 +113,5 @@
     <string name="show_profile">Show Profile</string>
     <string name="profile_prompt">Are you sure you want to view %1$s\'s profile? Your changes will be saved.</string>
     <string name="search_hint">Search</string>
+    <string name="checking">Checking for updates...</string>
 </resources>

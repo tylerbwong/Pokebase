@@ -1,9 +1,7 @@
 package com.app.main.pokebase.gui.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.PaintDrawable;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,7 +11,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 import android.util.TypedValue;
@@ -28,25 +25,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.main.pokebase.R;
-import com.app.main.pokebase.gui.adapters.MoveListAdapter;
-import com.app.main.pokebase.gui.adapters.PokemonListAdapter;
-import com.app.main.pokebase.gui.views.AnimatedRecyclerView;
-import com.app.main.pokebase.model.components.PokemonListItem;
+import com.app.main.pokebase.gui.views.PokemonInfoView;
 import com.app.main.pokebase.model.components.PokemonProfile;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 import com.app.main.pokebase.model.utilities.PokebaseCache;
-import com.db.chart.model.BarSet;
-import com.db.chart.view.AxisController;
-import com.db.chart.view.BarChartView;
-import com.db.chart.view.animation.Animation;
-import com.db.chart.view.animation.easing.BounceEase;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrConfig;
 import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
-import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author Brittany Berlanga
@@ -58,29 +45,18 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private LinearLayout mPrevious;
    private LinearLayout mNext;
    private ImageView mProfileImg;
-   private TextView mTypeOneView;
-   private TextView mTypeTwoView;
-   private TextView mRegionView;
-   private TextView mHeightView;
-   private TextView mWeightView;
-   private TextView mExpView;
    private TextView mTitle;
    private TextView mMainTitle;
    private TextView mPreviousLabel;
    private TextView mNextLabel;
    private ImageView mPreviousImage;
    private ImageView mNextImage;
-   private TextView[] mStats;
-   private TextView mDescription;
    private CoordinatorLayout mLayout;
-   private LovelyCustomDialog mMovesDialog;
-   private LovelyCustomDialog mEvolutionsDialog;
    private LinearLayout mTitleContainer;
-   private BarChartView mBarChart;
+   private PokemonInfoView mInfoView;
    private AppBarLayout mAppBar;
    private ActionBar mActionBar;
    private DatabaseOpenHelper mDatabaseHelper;
-   private AnimatedRecyclerView mEvolutionsList;
 
    private boolean mIsTheTitleVisible = false;
    private boolean mIsTheTitleContainerVisible = true;
@@ -89,16 +65,9 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private final static String ICON = "icon_";
    private final static String SPRITE = "sprites_";
    private final static String AUDIO = "audio_";
-   private final static String TYPE = "type";
-   private final static String COLOR = "color";
    private final static String DRAWABLE = "drawable";
    private final static String RAW = "raw";
    private final static String UNDO = "UNDO";
-   private final static double FT_PER_DM = 0.32808399;
-   private final static double LB_PER_HG = 0.22046226218;
-   private final static int KG_PER_HG = 10;
-   private final static int IN_PER_FT = 12;
-   private final static int DM_PER_M = 10;
    private final static int PROFILE_IMG_ELEVATION = 40;
    private final static int DEFAULT_LEVEL = 1;
    private final static int DEFAULT_MOVE = 0;
@@ -108,8 +77,6 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private final static int HUNDRED = 100;
    private final static String DOUBLE_ZERO = "00";
    private final static String ZERO = "0";
-   private final static String[] STATS =
-         {"HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"};
 
    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.9f;
    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
@@ -127,31 +94,16 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       mProfileImg = (ImageView) findViewById(R.id.profile_image);
       mProfileImg.setClipToOutline(true);
       mProfileImg.setElevation(PROFILE_IMG_ELEVATION);
-      mTypeOneView = (TextView) findViewById(R.id.type_one);
-      mTypeTwoView = (TextView) findViewById(R.id.type_two);
-      mRegionView = (TextView) findViewById(R.id.region);
-      mHeightView = (TextView) findViewById(R.id.height);
-      mWeightView = (TextView) findViewById(R.id.weight);
-      mExpView = (TextView) findViewById(R.id.exp);
-      mBarChart = (BarChartView) findViewById(R.id.chart);
       mLayout = (CoordinatorLayout) findViewById(R.id.layout);
       mTitle = (TextView) findViewById(R.id.pokemon_name);
       mMainTitle = (TextView) findViewById(R.id.main_title);
-      mDescription = (TextView) findViewById(R.id.description);
       mPreviousLabel = (TextView) findViewById(R.id.previous_label);
       mPreviousImage = (ImageView) findViewById(R.id.previous_image);
       mNextLabel = (TextView) findViewById(R.id.next_label);
       mNextImage = (ImageView) findViewById(R.id.next_image);
       mTitleContainer = (LinearLayout) findViewById(R.id.title_layout);
       mAppBar = (AppBarLayout) findViewById(R.id.app_bar);
-
-      mStats = new TextView[STATS.length];
-      mStats[0] = (TextView) findViewById(R.id.hp);
-      mStats[1] = (TextView) findViewById(R.id.attack);
-      mStats[2] = (TextView) findViewById(R.id.defense);
-      mStats[3] = (TextView) findViewById(R.id.special_attack);
-      mStats[4] = (TextView) findViewById(R.id.special_defense);
-      mStats[5] = (TextView) findViewById(R.id.speed);
+      mInfoView = (PokemonInfoView) findViewById(R.id.info_view);
 
       mPrevious.setOnClickListener(new View.OnClickListener() {
          @Override
@@ -199,16 +151,10 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
 
       Slidr.attach(this, config);
 
-      new LoadPokemonProfile(this).execute();
+      new LoadPokemonProfile().execute();
    }
 
    private class LoadPokemonProfile extends AsyncTask<Void, Void, PokemonProfile> {
-      private Context mContext;
-
-      public LoadPokemonProfile(Context context) {
-         this.mContext = context;
-      }
-
       @Override
       protected PokemonProfile doInBackground(Void... params) {
          Bundle extras = getIntent().getExtras();
@@ -222,66 +168,24 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
          mPokemonId = result.getId();
          mPokemonName = result.getName();
 
-         AnimatedRecyclerView movesList = new AnimatedRecyclerView(mContext);
-         movesList.setLayoutManager(new LinearLayoutManager(mContext));
-         movesList.setHasFixedSize(true);
-         movesList.setAdapter(new MoveListAdapter(mContext, result.getMoves()));
-
-         mMovesDialog = new LovelyCustomDialog(mContext)
-               .setTopColorRes(R.color.colorPrimary)
-               .setTitle(R.string.moveset)
-               .setIcon(R.drawable.ic_book_white_24dp)
-               .setView(movesList)
-               .setCancelable(true);
-
-         PokemonListItem[] evolutions = result.getEvolutions();
-
-         mEvolutionsList = new AnimatedRecyclerView(mContext);
-         mEvolutionsList.setLayoutManager(new LinearLayoutManager(mContext));
-         mEvolutionsList.setHasFixedSize(true);
-         mEvolutionsList.setAdapter(new PokemonListAdapter(mContext, evolutions, true));
-
-         mEvolutionsDialog = new LovelyCustomDialog(mContext)
-               .setTopColorRes(R.color.colorPrimary)
-               .setView(mEvolutionsList)
-               .setIcon(R.drawable.ic_group_work_white_24dp)
-               .setCancelable(true);
-
-         if (evolutions.length == 0) {
-            mEvolutionsDialog.setTitle(getString(R.string.no_evolutions));
-            mEvolutionsDialog.setMessage(String.format(getString(R.string.no_evolutions_message),
-                  mPokemonName));
-         }
-         else {
-            mEvolutionsDialog.setTitle(getString(R.string.evolutions));
-         }
+         mInfoView.loadPokemonInfo(mPokemonId);
+         mInfoView.setButtonsVisible(true);
 
          loadNextPrevious();
-
-         mDescription.setText(result.getDescription());
-
-         loadChart(result.getBaseStats());
 
          int imageResourceId = getResources().getIdentifier(SPRITE + mPokemonId,
                DRAWABLE, getPackageName());
          mProfileImg.setImageResource(imageResourceId);
 
-         setHeightViewText(result.getHeight());
-         setWeightViewText(result.getWeight());
-
-         mExpView.setText(String.valueOf(result.getBaseExp()));
-
-         String formattedName = String.format(getString(R.string.pokemon_name), formatId(mPokemonId), mPokemonName);
+         String formattedName = String.format(getString(R.string.pokemon_name),
+               formatId(mPokemonId), mPokemonName);
          mTitle.setText(formattedName);
          mMainTitle.setText(formattedName);
-         mRegionView.setText(result.getRegion());
-
-         loadTypes(result.getTypes());
       }
    }
 
-   public void closeEvolutionDialog() {
-      mEvolutionsDialog.dismiss();
+   public void closeEvolutionsDialog() {
+      mInfoView.closeEvolutionsDialog();
    }
 
    public static String formatId(int id) {
@@ -290,7 +194,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       if (id < TEN) {
          result = DOUBLE_ZERO + String.valueOf(id);
       }
-      else if (id > TEN && id < HUNDRED) {
+      else if (id >= TEN && id < HUNDRED) {
          result = ZERO + String.valueOf(id);
       }
       else {
@@ -305,64 +209,8 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       Bundle extras = new Bundle();
       extras.putInt(PokemonProfileActivity.POKEMON_ID_KEY, pokemonId);
       intent.putExtras(extras);
-      startActivity(getIntent());
+      startActivity(intent);
       finish();
-   }
-
-   private void loadTypes(String[] types) {
-      PaintDrawable backgroundColor;
-      float dimension = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2,
-            getResources().getDisplayMetrics());
-
-      if (types.length == 1) {
-         String type = types[0];
-         String colorName = TYPE + type;
-         int colorResId = getResources().getIdentifier(colorName, COLOR, getPackageName());
-
-         mTypeTwoView.setVisibility(View.GONE);
-         mTypeOneView.setText(type);
-         backgroundColor = new PaintDrawable(ContextCompat.getColor(this, colorResId));
-         backgroundColor.setCornerRadius(dimension);
-         mTypeOneView.setBackground(backgroundColor);
-      }
-      else {
-         String typeOne = types[0];
-         String typeTwo = types[1];
-         String colorName = TYPE + typeOne;
-         int colorResId = getResources().getIdentifier(colorName, COLOR, getPackageName());
-
-         mTypeOneView.setText(typeOne);
-         backgroundColor = new PaintDrawable(ContextCompat.getColor(this, colorResId));
-         backgroundColor.setCornerRadius(dimension);
-         mTypeOneView.setBackground(backgroundColor);
-         mTypeTwoView.setVisibility(View.VISIBLE);
-         mTypeTwoView.setText(typeTwo);
-         colorName = TYPE + typeTwo;
-         colorResId = getResources().getIdentifier(colorName, COLOR, getPackageName());
-         backgroundColor = new PaintDrawable(ContextCompat.getColor(this, colorResId));
-         backgroundColor.setCornerRadius(dimension);
-         mTypeTwoView.setBackground(backgroundColor);
-      }
-   }
-
-   private void loadChart(float[] data) {
-      BarSet dataSet = new BarSet();
-      float tempVal;
-      for (int index = 0; index < data.length; index++) {
-         tempVal = data[index];
-         dataSet.addBar(STATS[index], tempVal);
-         mStats[index].setText(String.valueOf(Math.round(tempVal)));
-      }
-
-      dataSet.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
-      mBarChart.addData(dataSet);
-      mBarChart.setXAxis(false);
-      mBarChart.setYAxis(false);
-      mBarChart.setYLabels(AxisController.LabelPosition.NONE);
-
-      Animation animation = new Animation(1000);
-      animation.setEasing(new BounceEase());
-      mBarChart.show(animation);
    }
 
    private void loadNextPrevious() {
@@ -387,27 +235,6 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       mNextLabel.setText(String.format(getString(R.string.hashtag_format), formatId(nextPokemonId)));
       mNextImage.setImageResource(getResources().getIdentifier(ICON + nextPokemonId,
             DRAWABLE, getPackageName()));
-   }
-
-   private void setHeightViewText(int decimeters) {
-      int feet = (int) Math.floor(decimeters * FT_PER_DM);
-      int inches = (int) Math.round((decimeters * FT_PER_DM - feet) * IN_PER_FT);
-      if (inches == IN_PER_FT) {
-         feet++;
-         inches = 0;
-      }
-      double millimeters = (double) decimeters / DM_PER_M;
-      String heightText = feet + "' " + inches + "'' ("
-            + String.format(Locale.US, "%.2f", millimeters) + " m)";
-      mHeightView.setText(heightText);
-   }
-
-   private void setWeightViewText(int hectograms) {
-      double pounds = hectograms * LB_PER_HG;
-      double kilograms = (double) hectograms / KG_PER_HG;
-      String weightText = String.format(Locale.US, "%.1f", pounds) + " lbs (" +
-            String.format(Locale.US, "%.1f", kilograms) + " kg)";
-      mWeightView.setText(weightText);
    }
 
    @Override
@@ -439,14 +266,6 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       });
       player.start();
       Toast.makeText(this, getString(R.string.sound_played), Toast.LENGTH_SHORT).show();
-   }
-
-   public void showMoves(View view) {
-      mMovesDialog.show();
-   }
-
-   public void showEvolutions(View view) {
-      mEvolutionsDialog.show();
    }
 
    @Override

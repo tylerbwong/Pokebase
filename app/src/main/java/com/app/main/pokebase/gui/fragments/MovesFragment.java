@@ -1,7 +1,9 @@
 package com.app.main.pokebase.gui.fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,8 +19,8 @@ import android.widget.Spinner;
 import com.app.main.pokebase.R;
 import com.app.main.pokebase.gui.adapters.MoveListAdapter;
 import com.app.main.pokebase.gui.adapters.TextViewSpinnerAdapter;
-import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 import com.app.main.pokebase.gui.views.AnimatedRecyclerView;
+import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 
 /**
  * @author Tyler Wong
@@ -90,12 +92,7 @@ public class MovesFragment extends Fragment implements AdapterView.OnItemSelecte
       mMovesList.setLayoutManager(new LinearLayoutManager(getContext()));
       mMovesList.setHasFixedSize(true);
 
-      mTypeSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(),
-            mDatabaseHelper.queryAllTypes()));
-      mClassSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(),
-            mDatabaseHelper.queryAllClasses()));
-      mMovesList.setAdapter(new MoveListAdapter(getContext(),
-            mDatabaseHelper.queryAllMoves()));
+      new LoadMoveList().execute();
    }
 
    @Override
@@ -112,19 +109,54 @@ public class MovesFragment extends Fragment implements AdapterView.OnItemSelecte
       String type = (String) mTypeSpinner.getSelectedItem();
       String className = (String) mClassSpinner.getSelectedItem();
 
-      if (type.equals(TYPES) && !className.equals(CLASSES)) {
-         mMoves = mDatabaseHelper.queryMovesByClass(className);
-      }
-      else if (!type.equals(TYPES) && className.equals(CLASSES)) {
-         mMoves = mDatabaseHelper.queryMovesByType(type);
-      }
-      else if (!type.equals(TYPES) && !className.equals(CLASSES)) {
-         mMoves = mDatabaseHelper.queryMovesByTypeAndClass(type, className);
-      }
-      else {
-         mMoves = mDatabaseHelper.queryAllMoves();
+      new RefreshData().execute(type, className);
+   }
+
+   private class RefreshData extends AsyncTask<String, Void, String[]> {
+      @Override
+      protected String[] doInBackground(String... params) {
+         String type = params[0];
+         String className = params[1];
+
+         if (type.equals(TYPES) && !className.equals(CLASSES)) {
+            mMoves = mDatabaseHelper.queryMovesByClass(className);
+         }
+         else if (!type.equals(TYPES) && className.equals(CLASSES)) {
+            mMoves = mDatabaseHelper.queryMovesByType(type);
+         }
+         else if (!type.equals(TYPES) && !className.equals(CLASSES)) {
+            mMoves = mDatabaseHelper.queryMovesByTypeAndClass(type, className);
+         }
+         else {
+            mMoves = mDatabaseHelper.queryAllMoves();
+         }
+
+         return mMoves;
       }
 
-      mMovesList.setAdapter(new MoveListAdapter(getContext(), mMoves));
+      @Override
+      protected void onPostExecute(String[] result) {
+         super.onPostExecute(result);
+         mMovesList.setAdapter(new MoveListAdapter(getContext(), mMoves));
+      }
+   }
+
+   private class LoadMoveList extends AsyncTask<Void, Void, Pair<Pair<String[], String[]>, String[]>> {
+      @Override
+      protected Pair<Pair<String[], String[]>, String[]> doInBackground(Void... params) {
+         String[] types = mDatabaseHelper.queryAllTypes();
+         String[] classes = mDatabaseHelper.queryAllClasses();
+         String[] moves = mDatabaseHelper.queryAllMoves();
+
+         return new Pair<> (new Pair<> (types, classes), moves);
+      }
+
+      @Override
+      protected void onPostExecute(Pair<Pair<String[], String[]>, String[]> result) {
+         super.onPostExecute(result);
+         mTypeSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(), result.first.first));
+         mClassSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(), result.first.second));
+         mMovesList.setAdapter(new MoveListAdapter(getContext(), result.second));
+      }
    }
 }

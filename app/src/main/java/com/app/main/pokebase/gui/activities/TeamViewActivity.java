@@ -82,6 +82,9 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
 
       mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
       mPokemonList.setHasFixedSize(true);
+      LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+      layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+      mPokemonList.setLayoutManager(layoutManager);
 
       mFab.setOnClickListener(new View.OnClickListener() {
          @Override
@@ -291,8 +294,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
    }
 
    private void backToMain() {
-      Intent mainIntent = new Intent(this, MainActivity.class);
-      startActivity(mainIntent);
+      startActivity(new Intent(this, MainActivity.class));
    }
 
    private void checkPokemon() {
@@ -358,10 +360,6 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
             ViewGroup viewGroup = (ViewGroup) mFab.getParent();
             viewGroup.removeView(mFab);
          }
-
-         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
-         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-         mPokemonList.setLayoutManager(layoutManager);
 
          checkPokemon();
       }

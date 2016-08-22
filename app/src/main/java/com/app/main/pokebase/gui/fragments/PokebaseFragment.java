@@ -1,6 +1,7 @@
 package com.app.main.pokebase.gui.fragments;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -41,6 +43,7 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
    private Spinner mTypeSpinner;
    private Spinner mRegionSpinner;
    private AnimatedRecyclerView mPokemonList;
+   private LinearLayout mEmptyView;
    private DatabaseOpenHelper mDatabaseHelper;
    private PokemonListItem[] mPokemon;
    private boolean mIsAlphabetical = false;
@@ -126,12 +129,26 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
       mPokemonList.setLayoutManager(new LinearLayoutManager(getContext()));
       mPokemonList.setHasFixedSize(true);
 
+      mEmptyView = (LinearLayout) view.findViewById(R.id.empty_layout);
+
       new LoadPokemonList().execute();
+      new LoadEmptyView().execute();
    }
 
    @Override
    public void onNothingSelected(AdapterView<?> parent) {
 
+   }
+
+   private void checkEmpty(PokemonListItem[] pokemon) {
+      if (pokemon.length == 0) {
+         mPokemonList.setVisibility(View.GONE);
+         mEmptyView.setVisibility(View.VISIBLE);
+      }
+      else {
+         mPokemonList.setVisibility(View.VISIBLE);
+         mEmptyView.setVisibility(View.GONE);
+      }
    }
 
    @Override
@@ -194,6 +211,21 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
       protected void onPostExecute(PokemonListItem[] result) {
          super.onPostExecute(result);
          mPokemonList.setAdapter(new PokemonListAdapter(getContext(), result, false));
+         checkEmpty(mPokemon);
+      }
+   }
+
+   private class LoadEmptyView extends AsyncTask<Void, Void, Drawable> {
+      @Override
+      protected Drawable doInBackground(Void... params) {
+         return ContextCompat.getDrawable(getContext(), R.drawable.no_teams);
+      }
+
+      @Override
+      protected void onPostExecute(Drawable loaded) {
+         super.onPostExecute(loaded);
+         ImageView emptyImage = (ImageView) getActivity().findViewById(R.id.no_results);
+         emptyImage.setImageDrawable(loaded);
       }
    }
 
@@ -213,6 +245,7 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
          mTypeSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(), result.first.first));
          mRegionSpinner.setAdapter(new TextViewSpinnerAdapter(getContext(), result.first.second));
          mPokemonList.setAdapter(new PokemonListAdapter(getContext(), result.second, false));
+         checkEmpty(result.second);
       }
    }
 

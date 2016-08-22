@@ -20,9 +20,9 @@ import android.widget.LinearLayout;
 import com.app.main.pokebase.R;
 import com.app.main.pokebase.gui.activities.TeamViewActivity;
 import com.app.main.pokebase.gui.adapters.TeamAdapter;
+import com.app.main.pokebase.gui.views.AnimatedRecyclerView;
 import com.app.main.pokebase.model.components.Team;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
-import com.app.main.pokebase.gui.views.AnimatedRecyclerView;
 import com.github.fabtransitionactivity.SheetLayout;
 
 /**
@@ -52,6 +52,9 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
       mEmptyView = (LinearLayout) view.findViewById(R.id.empty_layout);
 
       mTeamList.setHasFixedSize(true);
+      LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+      layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+      mTeamList.setLayoutManager(layoutManager);
 
       mFab.setOnClickListener(new View.OnClickListener() {
          @Override
@@ -135,9 +138,6 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
       protected void onPostExecute(Team[] loaded) {
          super.onPostExecute(loaded);
 
-         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-         mTeamList.setLayoutManager(layoutManager);
          mTeamAdapter = new TeamAdapter(getContext(), loaded);
          mTeamList.setAdapter(mTeamAdapter);
 

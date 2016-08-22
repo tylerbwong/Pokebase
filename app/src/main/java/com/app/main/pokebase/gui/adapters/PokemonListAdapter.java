@@ -65,7 +65,7 @@ public class PokemonListAdapter extends RecyclerView.Adapter implements View.OnC
 
       if (mIsEvolutions) {
          ((PokemonProfileActivity) mContext).finish();
-         ((PokemonProfileActivity) mContext).closeEvolutionDialog();
+         ((PokemonProfileActivity) mContext).closeEvolutionsDialog();
       }
    }
 }

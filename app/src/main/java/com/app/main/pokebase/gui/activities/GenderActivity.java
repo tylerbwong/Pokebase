@@ -91,8 +91,7 @@ public class GenderActivity extends AppCompatActivity {
          ed.putString(GENDER, FEMALE);
       }
       ed.apply();
-      Intent mainIntent = new Intent(this, MainActivity.class);
-      startActivity(mainIntent);
+      startActivity(new Intent(this, MainActivity.class));
       finish();
    }
 }

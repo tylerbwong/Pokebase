@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="70dp"
-        android:layout_marginTop="85dp"
+        android:layout_marginTop="65dp"
         android:text="@string/pokedex_description"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"

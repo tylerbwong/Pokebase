@@ -69,21 +69,7 @@ public class MainActivity extends AppCompatActivity {
       mToolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(mToolbar);
 
-      Intent intent = getIntent();
-      mPokemonAdd = intent.getBooleanExtra(TeamViewActivity.POKEMON_ADD, false);
-
-      if (mPokemonAdd) {
-         mNavigationView.getMenu().getItem(1).setChecked(true);
-         mCurrentFragment = new PokebaseFragment();
-      }
-      else {
-         mNavigationView.getMenu().getItem(0).setChecked(true);
-         mCurrentFragment = new TeamsFragment();
-      }
-
-      mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-      mFragmentTransaction.replace(R.id.frame, mCurrentFragment);
-      mFragmentTransaction.commit();
+      new SetupTask().execute();
 
       mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
@@ -107,6 +93,10 @@ public class MainActivity extends AppCompatActivity {
 
                case R.id.items:
                   mCurrentFragment = new ItemsFragment();
+                  break;
+
+               case R.id.settings:
+                  switchToSettings();
                   break;
             }
 
@@ -152,6 +142,9 @@ public class MainActivity extends AppCompatActivity {
          case R.id.clear_all_teams_action:
             showClearAllTeamsDialog();
             break;
+         case R.id.settings:
+            switchToSettings();
+            break;
          case R.id.exit_action:
             showExitDialog();
             break;
@@ -159,6 +152,10 @@ public class MainActivity extends AppCompatActivity {
             return false;
       }
       return true;
+   }
+
+   private void switchToSettings() {
+      startActivity(new Intent(MainActivity.this, PreferencesActivity.class));
    }
 
    private void showClearAllTeamsDialog() {
@@ -244,6 +241,34 @@ public class MainActivity extends AppCompatActivity {
       protected void onPostExecute(Drawable loaded) {
          super.onPostExecute(loaded);
          mProfilePicture.setImageDrawable(loaded);
+      }
+   }
+
+   private class SetupTask extends AsyncTask<Void, Void, Void> {
+      @Override
+      protected Void doInBackground(Void... params) {
+         return null;
+      }
+
+      @Override
+      protected void onPostExecute(Void result) {
+         super.onPostExecute(result);
+
+         Intent intent = getIntent();
+         mPokemonAdd = intent.getBooleanExtra(TeamViewActivity.POKEMON_ADD, false);
+
+         if (mPokemonAdd) {
+            mNavigationView.getMenu().getItem(1).setChecked(true);
+            mCurrentFragment = new PokebaseFragment();
+         }
+         else {
+            mNavigationView.getMenu().getItem(0).setChecked(true);
+            mCurrentFragment = new TeamsFragment();
+         }
+
+         mFragmentTransaction = getSupportFragmentManager().beginTransaction();
+         mFragmentTransaction.replace(R.id.frame, mCurrentFragment);
+         mFragmentTransaction.commit();
       }
    }
 }

@@ -1,5 +1,6 @@
 package com.app.main.pokebase.gui.fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -14,8 +15,9 @@ import android.view.ViewGroup;
 
 import com.app.main.pokebase.R;
 import com.app.main.pokebase.gui.adapters.ItemListAdapter;
-import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 import com.app.main.pokebase.gui.views.AnimatedRecyclerView;
+import com.app.main.pokebase.model.components.Item;
+import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 
 /**
  * @author Tyler Wong
@@ -76,7 +78,18 @@ public class ItemsFragment extends Fragment {
       mItemsList.setLayoutManager(new LinearLayoutManager(getContext()));
       mItemsList.setHasFixedSize(true);
 
-      mItemsList.setAdapter(new ItemListAdapter(getContext(),
-            mDatabaseHelper.queryAllItems()));
+      new LoadItems().execute();
+   }
+
+   private class LoadItems extends AsyncTask<Void, Void, Item[]> {
+      @Override
+      protected Item[] doInBackground(Void... params) {
+         return mDatabaseHelper.queryAllItems();
+      }
+
+      @Override
+      protected void onPostExecute(Item[] loaded) {
+         mItemsList.setAdapter(new ItemListAdapter(getContext(), loaded));
+      }
    }
 }

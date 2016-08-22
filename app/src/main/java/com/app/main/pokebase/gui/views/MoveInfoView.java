@@ -1,8 +1,10 @@
 package com.app.main.pokebase.gui.views;
 
 import android.content.Context;
+import android.graphics.drawable.PaintDrawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -56,6 +58,10 @@ public class MoveInfoView extends RelativeLayout {
    }
 
    public void setFields(String type, String power, String pp, String accuracy, String className, String description) {
+      PaintDrawable backgroundColor;
+      float dimension = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2,
+            getResources().getDisplayMetrics());
+
       mType.setText(type);
       mPower.setText(power);
       mPp.setText(pp);
@@ -65,10 +71,14 @@ public class MoveInfoView extends RelativeLayout {
 
       String classColor = CLASS + className;
       int colorResId = getResources().getIdentifier(classColor, COLOR, mContext.getPackageName());
-      mClass.setBackgroundColor(ContextCompat.getColor(mContext, colorResId));
+      backgroundColor = new PaintDrawable(ContextCompat.getColor(mContext, colorResId));
+      backgroundColor.setCornerRadius(dimension);
+      mClass.setBackground(backgroundColor);
 
       String typeColor = TYPE + type;
       colorResId = getResources().getIdentifier(typeColor, COLOR, mContext.getPackageName());
-      mType.setBackgroundColor(ContextCompat.getColor(mContext, colorResId));
+      backgroundColor = new PaintDrawable(ContextCompat.getColor(mContext, colorResId));
+      backgroundColor.setCornerRadius(dimension);
+      mType.setBackground(backgroundColor);
    }
 }

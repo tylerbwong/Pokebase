@@ -43,15 +43,9 @@ Pokébase is simple Pokémon application to view information and save informatio
 * Images and cost
 * More coming soon!
 
-No internet connection is required.
+Internet connection is required for updates only.
 
-### Disclaimer
-
-This application has no affiliation with Nintendo, The Pokémon Company or Game Freak. All images and information used belong to ©1998-2016 The Pokémon Company. No copyright or trademark infringement is intended.
-
-Databases provided by www.serebii.net and www.veekun.com/dex
-
-### Libraries Used
+## Credits
 
 * hdodenhof/CircleImageView
 * paolorotolo/AppIntro
@@ -61,3 +55,9 @@ Databases provided by www.serebii.net and www.veekun.com/dex
 * diogobernardino/WilliamChart
 * r0adkll/SlidableActivity
 * mancj/MaterialSearchBar
+
+### Disclaimer
+
+This application has no affiliation with Nintendo, The Pokémon Company or Game Freak. All images and information used belong to ©1998-2016 The Pokémon Company. No copyright or trademark infringement is intended.
+
+Databases provided by www.serebii.net and www.veekun.com/dex

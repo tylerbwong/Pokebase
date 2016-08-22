@@ -35,6 +35,7 @@ public class SignUpActivity extends AppCompatActivity {
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_signup);
+
       mRobotoLight = Typefaces.get(this, Typefaces.ROBOTO_PATH);
 
       mTitleLabel = (TextView) findViewById(R.id.title_label);
@@ -106,8 +107,7 @@ public class SignUpActivity extends AppCompatActivity {
       SharedPreferences.Editor ed = pref.edit();
       ed.putString(USERNAME, mNameInput.getText().toString());
       ed.apply();
-      Intent genderIntent = new Intent(this, GenderActivity.class);
-      startActivity(genderIntent);
+      startActivity(new Intent(this, GenderActivity.class));
    }
 
    private void close() {
