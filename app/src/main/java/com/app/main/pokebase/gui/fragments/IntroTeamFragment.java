@@ -16,27 +16,38 @@ import android.widget.TextView;
 import com.app.main.pokebase.R;
 import com.app.main.pokebase.model.utilities.Typefaces;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * @author Tyler Wong
  */
 public class IntroTeamFragment extends Fragment {
-   private TextView mDescription;
-   private Typeface mRobotoLight;
+   @BindView(R.id.description) TextView mDescription;
+
+   private Unbinder mUnbinder;
 
    @Nullable
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       View view = inflater.inflate(R.layout.intro_team_fragment, container, false);
+      mUnbinder = ButterKnife.bind(this, view);
+
       new LoadImage().execute();
 
-      mRobotoLight = Typefaces.get(getContext(), Typefaces.ROBOTO_PATH);
+      Typeface robotoLight = Typefaces.get(getContext(), Typefaces.ROBOTO_PATH);
 
-      mDescription = (TextView) view.findViewById(R.id.description);
-
-      if (mRobotoLight != null) {
-         mDescription.setTypeface(mRobotoLight);
+      if (robotoLight != null) {
+         mDescription.setTypeface(robotoLight);
       }
       return view;
+   }
+
+   @Override
+   public void onDestroyView() {
+      super.onDestroyView();
+      mUnbinder.unbind();
    }
 
    private class LoadImage extends AsyncTask<Void, Void, Drawable> {

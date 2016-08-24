@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
 
 repositories {
     mavenCentral()
@@ -46,4 +47,6 @@ dependencies {
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
     compile 'com.diogobernardino:williamchart:2.2'
     compile 'com.r0adkll:slidableactivity:2.0.5'
+    compile 'com.jakewharton:butterknife:8.3.0'
+    apt 'com.jakewharton:butterknife-compiler:8.3.0'
 }

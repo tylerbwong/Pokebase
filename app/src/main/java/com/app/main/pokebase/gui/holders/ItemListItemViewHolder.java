@@ -7,22 +7,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.main.pokebase.R;
-import com.app.main.pokebase.model.components.Item;
 import com.app.main.pokebase.gui.views.ItemInfoView;
+import com.app.main.pokebase.model.components.Item;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 import com.yarolegovich.lovelydialog.LovelyCustomDialog;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * @author Tyler Wong
  */
 public class ItemListItemViewHolder extends RecyclerView.ViewHolder {
+   @BindView(R.id.name) public TextView mNameView;
+   @BindView(R.id.small_icon) public ImageView mItemView;
+
    public final View mView;
-   public final TextView mNameView;
-   public final ImageView mItemView;
 
    public Item mItem;
-
-   private DatabaseOpenHelper mDatabaseHelper;
 
    private final static String DRAWABLE = "drawable";
    private final static String NONE = "0";
@@ -30,9 +32,9 @@ public class ItemListItemViewHolder extends RecyclerView.ViewHolder {
 
    public ItemListItemViewHolder(View itemView) {
       super(itemView);
-      mView = itemView;
-      mNameView = (TextView) itemView.findViewById(R.id.name);
-      mItemView = (ImageView) itemView.findViewById(R.id.small_icon);
+      ButterKnife.bind(this, itemView);
+
+      this.mView = itemView;
 
       mView.setOnClickListener(new View.OnClickListener() {
          @Override
@@ -44,7 +46,7 @@ public class ItemListItemViewHolder extends RecyclerView.ViewHolder {
 
    private void showItemDialog() {
       Context context = mView.getContext();
-      mDatabaseHelper = DatabaseOpenHelper.getInstance(context);
+      DatabaseOpenHelper databaseHelper = DatabaseOpenHelper.getInstance(context);
 
       int imageResourceId = context.getResources().getIdentifier(mItem.getIdentifier(),
             DRAWABLE, context.getPackageName());
@@ -53,7 +55,7 @@ public class ItemListItemViewHolder extends RecyclerView.ViewHolder {
       String description;
 
       if (mItem.getDescription() == null) {
-         description = mDatabaseHelper.queryItemDescription(mItem.getId());
+         description = databaseHelper.queryItemDescription(mItem.getId());
          mItem.setDescription(description);
       }
       else {

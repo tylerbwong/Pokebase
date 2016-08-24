@@ -27,15 +27,21 @@ import com.app.main.pokebase.model.utilities.ArrayUtils;
 import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
+import butterknife.BindView;
+import butterknife.BindViews;
+import butterknife.ButterKnife;
+
 /**
  * @author Brittany Berlanga
  */
 public class PokemonEditorActivity extends AppCompatActivity {
-   private Toolbar mToolbar;
-   private ImageView mProfileImg;
-   private TextInputEditText mNicknameInput;
-   private Spinner mLevelSpinner;
-   private Spinner[] mMoveSpinners;
+   @BindView(R.id.toolbar) Toolbar mToolbar;
+   @BindView(R.id.profile_image) ImageView mProfileImg;
+   @BindView(R.id.nickname_input) TextInputEditText mNicknameInput;
+   @BindView(R.id.level_spinner) Spinner mLevelSpinner;
+   @BindViews({R.id.move_one_spinner, R.id.move_two_spinner, R.id.move_three_spinner,
+         R.id.move_four_spinner}) Spinner[] mMoveSpinners;
+
    private int mTeamId;
    private int mMemberId;
    private int mPokemonId;
@@ -52,7 +58,6 @@ public class PokemonEditorActivity extends AppCompatActivity {
    private LovelyCustomDialog mProfileDialog;
 
    private final static int PROFILE_IMG_ELEVATION = 40;
-   private final static int NUM_SPINNERS = 4;
    private final static int MIN_LEVEL = 1;
    private final static int MAX_LEVEL = 100;
    public final static String TEAM_ID = "teamId";
@@ -73,6 +78,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_pokemon_editor);
+      ButterKnife.bind(this);
 
       mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
       mInfoView = new PokemonInfoView(this);
@@ -214,14 +220,12 @@ public class PokemonEditorActivity extends AppCompatActivity {
       protected void onPostExecute(String[] result) {
          super.onPostExecute(result);
 
-         mToolbar = (Toolbar) findViewById(R.id.toolbar);
          setSupportActionBar(mToolbar);
          final ActionBar actionBar = getSupportActionBar();
          if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
          }
 
-         mProfileImg = (ImageView) findViewById(R.id.profile_image);
          mProfileImg.setClipToOutline(true);
          mProfileImg.setElevation(PROFILE_IMG_ELEVATION);
 
@@ -234,7 +238,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
 
          int imageResourceId = getResources().getIdentifier(SPRITE + mPokemonId, DRAWABLE, getPackageName());
          mProfileImg.setImageResource(imageResourceId);
-         mNicknameInput = (TextInputEditText) findViewById(R.id.nickname_input);
+
          mNicknameInput.setText(mNickname);
 
          mNicknameInput.addTextChangedListener(new TextWatcher() {
@@ -255,13 +259,6 @@ public class PokemonEditorActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
             }
          });
-
-         mLevelSpinner = (Spinner) findViewById(R.id.level_spinner);
-         mMoveSpinners = new Spinner[NUM_SPINNERS];
-         mMoveSpinners[0] = (Spinner) findViewById(R.id.move_one_spinner);
-         mMoveSpinners[1] = (Spinner) findViewById(R.id.move_two_spinner);
-         mMoveSpinners[2] = (Spinner) findViewById(R.id.move_three_spinner);
-         mMoveSpinners[3] = (Spinner) findViewById(R.id.move_four_spinner);
 
          String[] levels = new String[MAX_LEVEL];
          for (int lvl = MIN_LEVEL; lvl <= levels.length; lvl++) {

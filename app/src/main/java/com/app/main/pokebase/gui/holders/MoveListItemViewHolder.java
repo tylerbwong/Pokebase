@@ -6,18 +6,22 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.app.main.pokebase.R;
+import com.app.main.pokebase.gui.views.MoveInfoView;
 import com.app.main.pokebase.model.components.Move;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
-import com.app.main.pokebase.gui.views.MoveInfoView;
 import com.app.main.pokebase.model.utilities.PokebaseCache;
 import com.yarolegovich.lovelydialog.LovelyCustomDialog;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * @author Tyler Wong
  */
 public class MoveListItemViewHolder extends RecyclerView.ViewHolder {
+   @BindView(R.id.name) public TextView mNameView;
+
    public final View mView;
-   public final TextView mNameView;
 
    private Move mMove;
    private String mType;
@@ -30,8 +34,9 @@ public class MoveListItemViewHolder extends RecyclerView.ViewHolder {
 
    public MoveListItemViewHolder(View itemView) {
       super(itemView);
-      mView = itemView;
-      mNameView = (TextView) itemView.findViewById(R.id.name);
+      ButterKnife.bind(this, itemView);
+
+      this.mView = itemView;
       mDatabaseHelper = DatabaseOpenHelper.getInstance(mView.getContext());
 
       mView.setOnClickListener(new View.OnClickListener() {

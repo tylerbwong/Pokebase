@@ -19,13 +19,18 @@ import com.app.main.pokebase.gui.views.AnimatedRecyclerView;
 import com.app.main.pokebase.model.components.Item;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * @author Tyler Wong
  */
 public class ItemsFragment extends Fragment {
-   private AnimatedRecyclerView mItemsList;
+   @BindView(R.id.items_list) AnimatedRecyclerView mItemsList;
 
    private DatabaseOpenHelper mDatabaseHelper;
+   private Unbinder mUnbinder;
 
    @Override
    public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,7 @@ public class ItemsFragment extends Fragment {
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       View view = inflater.inflate(R.layout.items_fragment, container, false);
+      mUnbinder = ButterKnife.bind(this, view);
 
       ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
       if (actionBar != null) {
@@ -74,11 +80,16 @@ public class ItemsFragment extends Fragment {
    public void onViewCreated(View view, Bundle savedInstanceState) {
       super.onViewCreated(view, savedInstanceState);
 
-      mItemsList = (AnimatedRecyclerView) view.findViewById(R.id.items_list);
       mItemsList.setLayoutManager(new LinearLayoutManager(getContext()));
       mItemsList.setHasFixedSize(true);
 
       new LoadItems().execute();
+   }
+
+   @Override
+   public void onDestroyView() {
+      super.onDestroyView();
+      mUnbinder.unbind();
    }
 
    private class LoadItems extends AsyncTask<Void, Void, Item[]> {

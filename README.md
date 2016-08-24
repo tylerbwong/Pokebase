@@ -55,6 +55,7 @@ Internet connection is required for updates only.
 * diogobernardino/WilliamChart
 * r0adkll/SlidableActivity
 * mancj/MaterialSearchBar
+* JakeWharton/butterknife
 
 ### Disclaimer
 

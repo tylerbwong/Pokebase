@@ -13,7 +13,6 @@ import com.app.main.pokebase.R;
 
 @SuppressWarnings("unused")
 public class ImageBehavior extends CoordinatorLayout.Behavior<ImageView> {
-
    private final static String TAG = "behavior";
    private final static String STATUS_BAR_HEIGHT = "status_bar_height";
    private final static String DIMEN = "dimen";

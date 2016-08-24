@@ -17,7 +17,6 @@ import com.app.main.pokebase.R;
  */
 public class PreferencesFragment extends PreferenceFragment implements
       Preference.OnPreferenceClickListener {
-
    private Preference mUpdatePreference;
    private Preference mVersionPreference;
 

@@ -12,8 +12,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,19 +30,26 @@ import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 import com.github.fabtransitionactivity.SheetLayout;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
+
 /**
  * @author Tyler Wong
  */
 public class TeamViewActivity extends AppCompatActivity implements SheetLayout.OnFabAnimationEndListener {
-   private Toolbar mToolbar;
-   private FloatingActionButton mFab;
-   private SheetLayout mSheetLayout;
-   private AnimatedRecyclerView mPokemonList;
-   private LinearLayout mEmptyView;
-   private ImageView mNoTeam;
-   private TextView mNoTeamLabel;
-   private TextInputEditText mNameInput;
-   private TextInputEditText mDescriptionInput;
+   @BindView(R.id.toolbar) Toolbar mToolbar;
+   @BindView(R.id.fab) FloatingActionButton mFab;
+   @BindView(R.id.bottom_sheet) SheetLayout mSheetLayout;
+   @BindView(R.id.team_list) AnimatedRecyclerView mPokemonList;
+   @BindView(R.id.empty_layout) LinearLayout mEmptyView;
+   @BindView(R.id.no_team) ImageView mNoTeam;
+   @BindView(R.id.no_team_label) TextView mNoTeamLabel;
+   @BindView(R.id.name_input) TextInputEditText mNameInput;
+   @BindView(R.id.description_input) TextInputEditText mDescriptionInput;
+
+   private ActionBar mActionBar;
 
    private PokemonTeamMemberAdapter mPokemonAdapter;
    private PokemonTeamMember[] mPokemon;
@@ -67,31 +72,16 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_team);
+      ButterKnife.bind(this);
 
-      mToolbar = (Toolbar) findViewById(R.id.toolbar);
-      mFab = (FloatingActionButton) findViewById(R.id.fab);
-      mSheetLayout = (SheetLayout) findViewById(R.id.bottom_sheet);
-      mPokemonList = (AnimatedRecyclerView) findViewById(R.id.team_list);
-      mEmptyView = (LinearLayout) findViewById(R.id.empty_layout);
-      mNoTeam = (ImageView) findViewById(R.id.no_team);
-      mNoTeamLabel = (TextView) findViewById(R.id.no_team_label);
-      mNameInput = (TextInputEditText) findViewById(R.id.name_input);
-      mDescriptionInput = (TextInputEditText) findViewById(R.id.description_input);
+      mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
 
       new LoadNoTeamMembersDrawable(this).execute();
 
-      mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
       mPokemonList.setHasFixedSize(true);
       LinearLayoutManager layoutManager = new LinearLayoutManager(this);
       layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
       mPokemonList.setLayoutManager(layoutManager);
-
-      mFab.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View view) {
-            onFabClick();
-         }
-      });
 
       mSheetLayout.setFab(mFab);
       mSheetLayout.setFabAnimationEndListener(this);
@@ -105,35 +95,12 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       String description = extras.getString(DESCRIPTION, DEFAULT_DESCRIPTION);
 
       setSupportActionBar(mToolbar);
-      final ActionBar actionBar = getSupportActionBar();
+      mActionBar = getSupportActionBar();
 
-      if (actionBar != null) {
-         actionBar.setDisplayHomeAsUpEnabled(true);
-         actionBar.setTitle(teamTitle);
+      if (mActionBar != null) {
+         mActionBar.setDisplayHomeAsUpEnabled(true);
+         mActionBar.setTitle(teamTitle);
       }
-
-      mNameInput.addTextChangedListener(new TextWatcher() {
-
-         @Override
-         public void onTextChanged(CharSequence sequence, int start, int before, int count) {
-            if (actionBar != null) {
-               actionBar.setTitle(sequence.toString());
-
-               if (!mUpdateKey && sequence.toString().trim().length() == 0) {
-                  actionBar.setTitle(R.string.new_team);
-               }
-            }
-         }
-
-         @Override
-         public void beforeTextChanged(CharSequence sequence, int start, int count, int after) {
-
-         }
-
-         @Override
-         public void afterTextChanged(Editable editable) {
-         }
-      });
 
       mNameInput.setText(teamTitle);
       mDescriptionInput.setText(description);
@@ -142,12 +109,24 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
          new LoadTeamMembers(this).execute();
       }
       else {
-         if (actionBar != null) {
-            actionBar.setTitle(R.string.new_team);
+         if (mActionBar != null) {
+            mActionBar.setTitle(R.string.new_team);
          }
       }
    }
 
+   @OnTextChanged(R.id.name_input)
+   public void textChanged(CharSequence sequence) {
+      if (mActionBar != null) {
+         mActionBar.setTitle(sequence.toString());
+
+         if (!mUpdateKey && sequence.toString().trim().length() == 0) {
+            mActionBar.setTitle(R.string.new_team);
+         }
+      }
+   }
+
+   @OnClick(R.id.fab)
    public void onFabClick() {
       if (addTeam()) {
          mSheetLayout.expandFab();

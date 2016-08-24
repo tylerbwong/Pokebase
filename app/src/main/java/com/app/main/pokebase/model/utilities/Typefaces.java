@@ -3,7 +3,6 @@ package com.app.main.pokebase.model.utilities;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.Hashtable;
 
@@ -13,8 +12,6 @@ import java.util.Hashtable;
 public class Typefaces {
    private static final Hashtable<String, Typeface> cache = new Hashtable<>();
 
-   private static final String TAG = "Typefaces";
-   private final static String ERROR = "Could not getPokemonProfile typeface.";
    public final static String ROBOTO_PATH = "fonts/roboto-light.ttf";
 
    @Nullable
@@ -26,7 +23,6 @@ public class Typefaces {
                cache.put(assetPath, typeface);
             }
             catch (Exception e) {
-               Log.e(TAG, ERROR);
                return null;
             }
          }

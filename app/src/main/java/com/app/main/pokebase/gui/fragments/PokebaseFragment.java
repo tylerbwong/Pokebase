@@ -32,20 +32,28 @@ import com.app.main.pokebase.model.components.PokemonListItem;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnItemSelected;
+import butterknife.Unbinder;
+
 /**
  * @author Tyler Wong
  */
 public class PokebaseFragment extends Fragment implements AdapterView.OnItemSelectedListener,
       MaterialSearchBar.OnSearchActionListener {
-   private MaterialSearchBar mSearchBar;
-   private EditText mSearchInput;
-   private ImageView mClear;
-   private Spinner mTypeSpinner;
-   private Spinner mRegionSpinner;
-   private AnimatedRecyclerView mPokemonList;
-   private LinearLayout mEmptyView;
+   @BindView(R.id.search_bar) MaterialSearchBar mSearchBar;
+   @BindView(R.id.mt_editText) EditText mSearchInput;
+   @BindView(R.id.mt_clear) ImageView mClear;
+   @BindView(R.id.type_spinner) Spinner mTypeSpinner;
+   @BindView(R.id.region_spinner) Spinner mRegionSpinner;
+   @BindView(R.id.pokemon_list) AnimatedRecyclerView mPokemonList;
+   @BindView(R.id.empty_layout) LinearLayout mEmptyView;
+
    private DatabaseOpenHelper mDatabaseHelper;
    private PokemonListItem[] mPokemon;
+   private Unbinder mUnbinder;
    private boolean mIsAlphabetical = false;
 
    private final static String TYPES = "Types";
@@ -69,6 +77,7 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       View view = inflater.inflate(R.layout.pokebase_fragment, container, false);
+      mUnbinder = ButterKnife.bind(this, view);
 
       ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
       if (actionBar != null) {
@@ -107,29 +116,12 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
    public void onViewCreated(View view, Bundle savedInstanceState) {
       super.onViewCreated(view, savedInstanceState);
 
-      mSearchBar = (MaterialSearchBar) view.findViewById(R.id.search_bar);
       mSearchBar.setOnSearchActionListener(this);
       mSearchBar.setTextColor(android.R.color.black);
       mSearchBar.setTextHintColor(android.R.color.secondary_text_dark);
-      mSearchInput = (EditText) view.findViewById(R.id.mt_editText);
-      mClear = (ImageView) view.findViewById(R.id.mt_clear);
-      mClear.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View view) {
-            mSearchInput.setText("");
-            refreshData();
-         }
-      });
-      mTypeSpinner = (Spinner) view.findViewById(R.id.type_spinner);
-      mTypeSpinner.setOnItemSelectedListener(this);
-      mRegionSpinner = (Spinner) view.findViewById(R.id.region_spinner);
-      mRegionSpinner.setOnItemSelectedListener(this);
 
-      mPokemonList = (AnimatedRecyclerView) view.findViewById(R.id.pokemon_list);
       mPokemonList.setLayoutManager(new LinearLayoutManager(getContext()));
       mPokemonList.setHasFixedSize(true);
-
-      mEmptyView = (LinearLayout) view.findViewById(R.id.empty_layout);
 
       new LoadPokemonList().execute();
       new LoadEmptyView().execute();
@@ -138,6 +130,12 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
    @Override
    public void onNothingSelected(AdapterView<?> parent) {
 
+   }
+
+   @OnClick(R.id.mt_clear)
+   public void onClear() {
+      mSearchInput.setText("");
+      refreshData();
    }
 
    private void checkEmpty(PokemonListItem[] pokemon) {
@@ -151,6 +149,7 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
       }
    }
 
+   @OnItemSelected({R.id.type_spinner, R.id.region_spinner})
    @Override
    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
       ((TextView) view).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
@@ -182,6 +181,12 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
    @Override
    public void onSearchStateChanged(boolean b) {
 
+   }
+
+   @Override
+   public void onDestroyView() {
+      super.onDestroyView();
+      mUnbinder.unbind();
    }
 
    private class RefreshPokemon extends AsyncTask<String, Void, PokemonListItem[]> {

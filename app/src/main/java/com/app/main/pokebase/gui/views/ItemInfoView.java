@@ -9,16 +9,18 @@ import android.widget.TextView;
 
 import com.app.main.pokebase.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * @author Tyler Wong
  */
 public class ItemInfoView extends RelativeLayout {
+   @BindView(R.id.cost) TextView mCost;
+   @BindView(R.id.item) ImageView mItem;
+   @BindView(R.id.description) TextView mDescription;
 
    private Context mContext;
-
-   private TextView mCost;
-   private ImageView mItem;
-   private TextView mDescription;
 
    public ItemInfoView(Context context) {
       super(context, null);
@@ -40,10 +42,7 @@ public class ItemInfoView extends RelativeLayout {
 
    private void init() {
       View view = inflate(mContext, R.layout.item_info, this);
-
-      mCost = (TextView) view.findViewById(R.id.cost);
-      mItem = (ImageView) view.findViewById(R.id.item);
-      mDescription = (TextView) view.findViewById(R.id.description);
+      ButterKnife.bind(this, view);
    }
 
    public void setFields(String cost, int identifier, String description) {

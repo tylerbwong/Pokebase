@@ -13,16 +13,20 @@ import com.app.main.pokebase.gui.activities.PokemonEditorActivity;
 import com.app.main.pokebase.gui.activities.TeamViewActivity;
 import com.app.main.pokebase.model.components.PokemonTeamMember;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * @author Tyler Wong
  */
 public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
+   @BindView(R.id.pokemon) public ImageView mPokemon;
+   @BindView(R.id.name) public TextView mName;
+   @BindView(R.id.level) public TextView mLevel;
+   @BindView(R.id.last_updated) public TextView mLastUpdated;
+   @BindView(R.id.moveset) public TextView mMoveset;
+
    public final View mView;
-   public final ImageView mPokemon;
-   public final TextView mName;
-   public final TextView mLevel;
-   public final TextView mLastUpdated;
-   public final TextView mMoveset;
 
    private PokemonTeamMember mPokemonData;
    private String mTitle;
@@ -31,9 +35,11 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
 
    public PokemonTeamMemberViewHolder(View itemView) {
       super(itemView);
+      ButterKnife.bind(this, itemView);
+
       this.mView = itemView;
 
-      this.mView.setOnClickListener(new View.OnClickListener() {
+      mView.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View view) {
             Context cardContext = view.getContext();
@@ -56,27 +62,21 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
             view.getContext().startActivity(editorIntent, transitionActivityOptions.toBundle());
          }
       });
-
-      mPokemon = (ImageView) itemView.findViewById(R.id.pokemon);
-      mName = (TextView) itemView.findViewById(R.id.name);
-      mLevel = (TextView) itemView.findViewById(R.id.level);
-      mLastUpdated = (TextView) itemView.findViewById(R.id.last_updated);
-      mMoveset = (TextView) itemView.findViewById(R.id.moveset);
    }
 
    public void setPokemon(PokemonTeamMember member) {
-      this.mPokemonData = member;
+      mPokemonData = member;
    }
 
    public void setTitle(String name) {
-      this.mTitle = name;
+      mTitle = name;
    }
 
    public void setDescription(String description) {
-      this.mDescription = description;
+      mDescription = description;
    }
 
    public void setTeamId(int teamId) {
-      this.mTeamId = teamId;
+      mTeamId = teamId;
    }
 }

@@ -16,13 +16,14 @@ import com.app.main.pokebase.R;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 import com.app.main.pokebase.model.utilities.Typefaces;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * @author Brittany Berlanga
  */
 public class SplashActivity extends AppCompatActivity {
-   private TextView mTitleLabel;
-
-   private Typeface mRobotoLight;
+   @BindView(R.id.title_label) TextView mTitleLabel;
 
    public final static String ACTIVITY_PREF = "ActivityPREF";
    public final static String INTRO_FINISHED = "appIntroFinished";
@@ -31,11 +32,14 @@ public class SplashActivity extends AppCompatActivity {
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      mRobotoLight = Typefaces.get(this, Typefaces.ROBOTO_PATH);
       setContentView(R.layout.activity_splash);
+      ButterKnife.bind(this);
 
-      mTitleLabel = (TextView) findViewById(R.id.title_label);
-      mTitleLabel.setTypeface(mRobotoLight);
+      Typeface robotoLight = Typefaces.get(this, Typefaces.ROBOTO_PATH);
+
+      if (robotoLight != null) {
+         mTitleLabel.setTypeface(robotoLight);
+      }
 
       new BackgroundTask(this).execute();
    }

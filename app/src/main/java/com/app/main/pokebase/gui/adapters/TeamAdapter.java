@@ -43,7 +43,7 @@ public class TeamAdapter extends RecyclerView.Adapter {
 
       if (teamSize > 0) {
          for (int index = 0; index < teamSize; index++) {
-            holder.pokemonList[index].setImageResource(mContext.getResources()
+            holder.mPokemonList[index].setImageResource(mContext.getResources()
                   .getIdentifier(SPRITES + curTeam.mTeam[index].mPokemonId,
                         DRAWABLE, mContext.getPackageName()));
          }

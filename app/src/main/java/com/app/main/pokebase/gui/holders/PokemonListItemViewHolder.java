@@ -7,20 +7,23 @@ import android.widget.TextView;
 
 import com.app.main.pokebase.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * @author Brittany Berlanga
  */
 public class PokemonListItemViewHolder extends RecyclerView.ViewHolder {
+   @BindView(R.id.id) public TextView mIdView;
+   @BindView(R.id.name) public TextView mNameView;
+   @BindView(R.id.small_icon) public ImageView mIconView;
+
    public final View mView;
-   public final TextView mIdView;
-   public final TextView mNameView;
-   public final ImageView mIconView;
 
    public PokemonListItemViewHolder(View itemView) {
       super(itemView);
-      mView = itemView;
-      mIdView = (TextView) itemView.findViewById(R.id.id);
-      mNameView = (TextView) itemView.findViewById(R.id.name);
-      mIconView = (ImageView) itemView.findViewById(R.id.small_icon);
+      ButterKnife.bind(this, itemView);
+
+      this.mView = itemView;
    }
 }

@@ -6,9 +6,9 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -31,54 +31,56 @@ import com.app.main.pokebase.gui.fragments.TeamsFragment;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * @author Tyler Wong
  */
 public class MainActivity extends AppCompatActivity {
-   private NavigationView mNavigationView;
-   private DrawerLayout mDrawerLayout;
-   private Toolbar mToolbar;
+   @BindView(R.id.navigation_view) NavigationView mNavigationView;
+   @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
+   @BindView(R.id.toolbar) Toolbar mToolbar;
+
    private ImageView mProfilePicture;
    private TextView mUsernameView;
-   private FragmentTransaction mFragmentTransaction;
+
    private Fragment mCurrentFragment;
    private DatabaseOpenHelper mDatabaseHelper;
 
+   private int mLastClicked;
    private boolean mPokemonAdd;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
-
-      mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
-      final View headerView = mNavigationView.getHeaderView(0);
-      mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-      mProfilePicture = (ImageView) headerView.findViewById(R.id.profile_image);
-      mUsernameView = (TextView) headerView.findViewById(R.id.username);
+      ButterKnife.bind(this);
 
       mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
+
+      View headerView = mNavigationView.getHeaderView(0);
+      mProfilePicture = (ImageView) headerView.findViewById(R.id.profile_image);
+      mUsernameView = (TextView) headerView.findViewById(R.id.username);
 
       SharedPreferences pref = getSharedPreferences(SplashActivity.ACTIVITY_PREF, Context.MODE_PRIVATE);
       mUsernameView.setText(String.format(getString(R.string.trainer),
             pref.getString(SignUpActivity.USERNAME, "")));
 
       new LoadGenderImage().execute((pref.getString(GenderActivity.GENDER, GenderActivity.MALE)));
-
-      mToolbar = (Toolbar) findViewById(R.id.toolbar);
-      setSupportActionBar(mToolbar);
-
       new SetupTask().execute();
+
+      setSupportActionBar(mToolbar);
 
       mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
          @Override
-         public boolean onNavigationItemSelected(MenuItem menuItem) {
-            mDrawerLayout.closeDrawers();
-            mFragmentTransaction = getSupportFragmentManager().beginTransaction();
+         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            int menuId = menuItem.getItemId();
 
-            switch (menuItem.getItemId()) {
+            mDrawerLayout.closeDrawers();
+
+            switch (menuId) {
                case R.id.teams:
                   mCurrentFragment = new TeamsFragment();
                   break;
@@ -100,8 +102,15 @@ public class MainActivity extends AppCompatActivity {
                   break;
             }
 
-            mFragmentTransaction.replace(R.id.frame, mCurrentFragment);
-            mFragmentTransaction.commit();
+            if (menuId != mLastClicked) {
+               getSupportFragmentManager().beginTransaction()
+                     .replace(R.id.frame, mCurrentFragment).commit();
+            }
+
+            if (menuId != R.id.settings) {
+               mLastClicked = menuId;
+            }
+
             return true;
          }
       });
@@ -244,31 +253,29 @@ public class MainActivity extends AppCompatActivity {
       }
    }
 
-   private class SetupTask extends AsyncTask<Void, Void, Void> {
+   private class SetupTask extends AsyncTask<Void, Void, Boolean> {
       @Override
-      protected Void doInBackground(Void... params) {
-         return null;
+      protected Boolean doInBackground(Void... params) {
+         return mPokemonAdd = getIntent().getBooleanExtra(TeamViewActivity.POKEMON_ADD, false);
       }
 
       @Override
-      protected void onPostExecute(Void result) {
+      protected void onPostExecute(Boolean result) {
          super.onPostExecute(result);
 
-         Intent intent = getIntent();
-         mPokemonAdd = intent.getBooleanExtra(TeamViewActivity.POKEMON_ADD, false);
-
-         if (mPokemonAdd) {
+         if (result) {
             mNavigationView.getMenu().getItem(1).setChecked(true);
             mCurrentFragment = new PokebaseFragment();
+            mLastClicked = R.id.pokebase;
          }
          else {
             mNavigationView.getMenu().getItem(0).setChecked(true);
             mCurrentFragment = new TeamsFragment();
+            mLastClicked = R.id.teams;
          }
 
-         mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-         mFragmentTransaction.replace(R.id.frame, mCurrentFragment);
-         mFragmentTransaction.commit();
+         getSupportFragmentManager().beginTransaction()
+               .replace(R.id.frame, mCurrentFragment).commit();
       }
    }
 }

@@ -25,18 +25,22 @@ import com.app.main.pokebase.model.components.Team;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 import com.github.fabtransitionactivity.SheetLayout;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
+
 /**
  * @author Tyler Wong
  */
 public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimationEndListener {
+   @BindView(R.id.bottom_sheet) SheetLayout mSheetLayout;
+   @BindView(R.id.fab) FloatingActionButton mFab;
+   @BindView(R.id.team_list) AnimatedRecyclerView mTeamList;
+   @BindView(R.id.empty_layout) LinearLayout mEmptyView;
 
-   private SheetLayout mSheetLayout;
-   private FloatingActionButton mFab;
-   private AnimatedRecyclerView mTeamList;
-   private LinearLayout mEmptyView;
-
-   private TeamAdapter mTeamAdapter;
    private DatabaseOpenHelper mDatabaseHelper;
+   private Unbinder mUnbinder;
 
    private final static int REQUEST_CODE = 1;
 
@@ -44,37 +48,32 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       View view = inflater.inflate(R.layout.teams_fragment, container, false);
-      new LoadEmptyView().execute();
+      mUnbinder = ButterKnife.bind(this, view);
 
-      mSheetLayout = (SheetLayout) view.findViewById(R.id.bottom_sheet);
-      mTeamList = (AnimatedRecyclerView) view.findViewById(R.id.team_list);
-      mFab = (FloatingActionButton) view.findViewById(R.id.fab);
-      mEmptyView = (LinearLayout) view.findViewById(R.id.empty_layout);
+      mDatabaseHelper = DatabaseOpenHelper.getInstance(getContext());
 
       mTeamList.setHasFixedSize(true);
       LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
       layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
       mTeamList.setLayoutManager(layoutManager);
 
-      mFab.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View view) {
-            onFabClick();
-         }
-      });
-
       mSheetLayout.setFab(mFab);
       mSheetLayout.setFabAnimationEndListener(this);
 
-      final ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+      ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
       if (actionBar != null) {
          actionBar.setTitle(R.string.teams);
       }
 
-      mDatabaseHelper = DatabaseOpenHelper.getInstance(getContext());
-      new LoadTeams().execute();
-
       return view;
+   }
+
+   @Override
+   public void onViewCreated(View view, Bundle savedInstanceState) {
+      super.onViewCreated(view, savedInstanceState);
+
+      new LoadEmptyView().execute();
+      new LoadTeams().execute();
    }
 
    public void refreshAdapter() {
@@ -92,6 +91,7 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
       }
    }
 
+   @OnClick(R.id.fab)
    public void onFabClick() {
       mSheetLayout.expandFab();
    }
@@ -112,6 +112,12 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
       if (requestCode == REQUEST_CODE) {
          mSheetLayout.contractFab();
       }
+   }
+
+   @Override
+   public void onDestroyView() {
+      super.onDestroyView();
+      mUnbinder.unbind();
    }
 
    private class LoadEmptyView extends AsyncTask<Void, Void, Drawable> {
@@ -137,10 +143,7 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
       @Override
       protected void onPostExecute(Team[] loaded) {
          super.onPostExecute(loaded);
-
-         mTeamAdapter = new TeamAdapter(getContext(), loaded);
-         mTeamList.setAdapter(mTeamAdapter);
-
+         mTeamList.setAdapter(new TeamAdapter(getContext(), loaded));
          checkEmpty(loaded);
       }
    }

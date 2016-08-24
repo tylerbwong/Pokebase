@@ -11,23 +11,40 @@ import android.view.View;
  */
 public class AnimatedRecyclerView extends RecyclerView {
    private boolean mScrollable;
+   private Runnable mRunnable;
+
+   private final static int TRANSLATION_Y = 100;
+   private final static int DELAY = 100;
+   private final static int DURATION = 200;
 
    public AnimatedRecyclerView(Context context) {
       this(context, null);
+      init();
    }
 
    public AnimatedRecyclerView(Context context, AttributeSet attrs) {
       this(context, attrs, 0);
+      init();
    }
 
    public AnimatedRecyclerView(Context context, AttributeSet attrs, int defStyle) {
       super(context, attrs, defStyle);
       mScrollable = false;
+      init();
+   }
+
+   private void init() {
+      mRunnable = new Runnable() {
+         @Override
+         public void run() {
+            mScrollable = true;
+         }
+      };
    }
 
    @Override
-   public boolean dispatchTouchEvent(MotionEvent ev) {
-      return !mScrollable || super.dispatchTouchEvent(ev);
+   public boolean dispatchTouchEvent(MotionEvent event) {
+      return !mScrollable || super.dispatchTouchEvent(event);
    }
 
    @Override
@@ -37,20 +54,15 @@ public class AnimatedRecyclerView extends RecyclerView {
          animate(getChildAt(index), index);
 
          if (index == getChildCount() - 1) {
-            getHandler().postDelayed(new Runnable() {
-               @Override
-               public void run() {
-                  mScrollable = true;
-               }
-            }, index * 100);
+            getHandler().postDelayed(mRunnable, index * DELAY);
          }
       }
    }
 
-   private void animate(View view, final int pos) {
+   private void animate(View view, int position) {
       view.animate().cancel();
-      view.setTranslationY(100);
+      view.setTranslationY(TRANSLATION_Y);
       view.setAlpha(0);
-      view.animate().alpha(1.0f).translationY(0).setDuration(300).setStartDelay(pos * 100);
+      view.animate().alpha(1.0f).translationY(0).setDuration(DURATION).setStartDelay(position * DELAY);
    }
 }

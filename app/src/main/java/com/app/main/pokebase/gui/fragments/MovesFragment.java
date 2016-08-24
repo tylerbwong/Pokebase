@@ -22,15 +22,20 @@ import com.app.main.pokebase.gui.adapters.TextViewSpinnerAdapter;
 import com.app.main.pokebase.gui.views.AnimatedRecyclerView;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * @author Tyler Wong
  */
 public class MovesFragment extends Fragment implements AdapterView.OnItemSelectedListener {
-   private Spinner mTypeSpinner;
-   private Spinner mClassSpinner;
-   private AnimatedRecyclerView mMovesList;
+   @BindView(R.id.type_spinner) Spinner mTypeSpinner;
+   @BindView(R.id.class_spinner) Spinner mClassSpinner;
+   @BindView(R.id.moves_list) AnimatedRecyclerView mMovesList;
 
    private DatabaseOpenHelper mDatabaseHelper;
+   private Unbinder mUnbinder;
    private String[] mMoves;
 
    private final static String TYPES = "Types";
@@ -53,6 +58,7 @@ public class MovesFragment extends Fragment implements AdapterView.OnItemSelecte
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       View view = inflater.inflate(R.layout.moves_fragment, container, false);
+      mUnbinder = ButterKnife.bind(this, view);
 
       ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
       if (actionBar != null) {
@@ -83,12 +89,9 @@ public class MovesFragment extends Fragment implements AdapterView.OnItemSelecte
    public void onViewCreated(View view, Bundle savedInstanceState) {
       super.onViewCreated(view, savedInstanceState);
 
-      mTypeSpinner = (Spinner) view.findViewById(R.id.type_spinner);
       mTypeSpinner.setOnItemSelectedListener(this);
-      mClassSpinner = (Spinner) view.findViewById(R.id.class_spinner);
       mClassSpinner.setOnItemSelectedListener(this);
 
-      mMovesList = (AnimatedRecyclerView) view.findViewById(R.id.moves_list);
       mMovesList.setLayoutManager(new LinearLayoutManager(getContext()));
       mMovesList.setHasFixedSize(true);
 
@@ -110,6 +113,12 @@ public class MovesFragment extends Fragment implements AdapterView.OnItemSelecte
       String className = (String) mClassSpinner.getSelectedItem();
 
       new RefreshData().execute(type, className);
+   }
+
+   @Override
+   public void onDestroyView() {
+      super.onDestroyView();
+      mUnbinder.unbind();
    }
 
    private class RefreshData extends AsyncTask<String, Void, String[]> {

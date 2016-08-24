@@ -28,23 +28,30 @@ import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.BindViews;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * @author Tyler Wong
  */
 public class PokemonInfoView extends NestedScrollView {
+   @BindView(R.id.type_one) TextView mTypeOneView;
+   @BindView(R.id.type_two) TextView mTypeTwoView;
+   @BindView(R.id.region) TextView mRegionView;
+   @BindView(R.id.height) TextView mHeightView;
+   @BindView(R.id.weight) TextView mWeightView;
+   @BindView(R.id.exp) TextView mExpView;
+   @BindView(R.id.description) TextView mDescription;
+   @BindView(R.id.moves) Button mMovesButton;
+   @BindView(R.id.evolutions) Button mEvolutionsButton;
+   @BindView(R.id.chart) BarChartView mBarChart;
+   @BindView(R.id.buttons) CardView mButtons;
+   @BindViews({R.id.hp, R.id.attack, R.id.defense, R.id.special_attack,
+         R.id.special_defense, R.id.speed}) TextView[] mStats;
+
    private Context mContext;
-   private TextView mTypeOneView;
-   private TextView mTypeTwoView;
-   private TextView mRegionView;
-   private TextView mHeightView;
-   private TextView mWeightView;
-   private TextView mExpView;
-   private TextView[] mStats;
-   private TextView mDescription;
-   private Button mMovesButton;
-   private Button mEvolutionsButton;
-   private BarChartView mBarChart;
-   private CardView mButtons;
    private PokemonProfile mProfile;
    private LovelyCustomDialog mMovesDialog;
    private LovelyCustomDialog mEvolutionsDialog;
@@ -79,26 +86,7 @@ public class PokemonInfoView extends NestedScrollView {
 
    private void init() {
       View view = inflate(mContext, R.layout.pokemon_info, this);
-
-      mTypeOneView = (TextView) view.findViewById(R.id.type_one);
-      mTypeTwoView = (TextView) view.findViewById(R.id.type_two);
-      mRegionView = (TextView) view.findViewById(R.id.region);
-      mHeightView = (TextView) view.findViewById(R.id.height);
-      mWeightView = (TextView) view.findViewById(R.id.weight);
-      mExpView = (TextView) view.findViewById(R.id.exp);
-      mBarChart = (BarChartView) view.findViewById(R.id.chart);
-      mDescription = (TextView) view.findViewById(R.id.description);
-      mMovesButton = (Button) view.findViewById(R.id.moves);
-      mEvolutionsButton = (Button) view.findViewById(R.id.evolutions);
-      mButtons = (CardView) view.findViewById(R.id.buttons);
-
-      mStats = new TextView[STATS.length];
-      mStats[0] = (TextView) view.findViewById(R.id.hp);
-      mStats[1] = (TextView) view.findViewById(R.id.attack);
-      mStats[2] = (TextView) view.findViewById(R.id.defense);
-      mStats[3] = (TextView) view.findViewById(R.id.special_attack);
-      mStats[4] = (TextView) view.findViewById(R.id.special_defense);
-      mStats[5] = (TextView) view.findViewById(R.id.speed);
+      ButterKnife.bind(this, view);
    }
 
    public void setButtonsVisible(boolean isVisible) {
@@ -138,27 +126,23 @@ public class PokemonInfoView extends NestedScrollView {
          else {
             mEvolutionsDialog.setTitle(mContext.getString(R.string.evolutions));
          }
-
-         mMovesButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               if (mMovesDialog != null) {
-                  mMovesDialog.show();
-               }
-            }
-         });
-
-         mEvolutionsButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               if (mEvolutionsDialog != null) {
-                  mEvolutionsDialog.show();
-               }
-            }
-         });
       }
       else {
          mButtons.setVisibility(GONE);
+      }
+   }
+
+   @OnClick(R.id.moves)
+   public void onMoves() {
+      if (mMovesDialog != null) {
+         mMovesDialog.show();
+      }
+   }
+
+   @OnClick(R.id.evolutions)
+   public void onEvolutions() {
+      if (mEvolutionsDialog != null) {
+         mEvolutionsDialog.show();
       }
    }
 

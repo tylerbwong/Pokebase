@@ -14,7 +14,6 @@ import com.app.main.pokebase.gui.holders.PokemonTeamMemberViewHolder;
  * @author Tyler Wong
  */
 public class PokemonTeamMemberAdapter extends RecyclerView.Adapter<PokemonTeamMemberViewHolder> {
-
    private PokemonTeamMember[] mPokemon;
    private Context mContext;
    private String mName;

@@ -35,29 +35,34 @@ import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * @author Brittany Berlanga
  */
 public class PokemonProfileActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
+   @BindView(R.id.toolbar) Toolbar mToolbar;
+   @BindView(R.id.previous) LinearLayout mPrevious;
+   @BindView(R.id.next) LinearLayout mNext;
+   @BindView(R.id.profile_image) ImageView mProfileImg;
+   @BindView(R.id.pokemon_name) TextView mTitle;
+   @BindView(R.id.main_title) TextView mMainTitle;
+   @BindView(R.id.previous_label) TextView mPreviousLabel;
+   @BindView(R.id.next_label) TextView mNextLabel;
+   @BindView(R.id.previous_image) ImageView mPreviousImage;
+   @BindView(R.id.next_image) ImageView mNextImage;
+   @BindView(R.id.layout) CoordinatorLayout mLayout;
+   @BindView(R.id.title_layout) LinearLayout mTitleContainer;
+   @BindView(R.id.app_bar) AppBarLayout mAppBar;
+   @BindView(R.id.info_view) PokemonInfoView mInfoView;
+
+   private ActionBar mActionBar;
+
+   private DatabaseOpenHelper mDatabaseHelper;
    private int mPokemonId;
    private String mPokemonName;
-   private Toolbar mToolbar;
-   private LinearLayout mPrevious;
-   private LinearLayout mNext;
-   private ImageView mProfileImg;
-   private TextView mTitle;
-   private TextView mMainTitle;
-   private TextView mPreviousLabel;
-   private TextView mNextLabel;
-   private ImageView mPreviousImage;
-   private ImageView mNextImage;
-   private CoordinatorLayout mLayout;
-   private LinearLayout mTitleContainer;
-   private PokemonInfoView mInfoView;
-   private AppBarLayout mAppBar;
-   private ActionBar mActionBar;
-   private DatabaseOpenHelper mDatabaseHelper;
-
    private boolean mIsTheTitleVisible = false;
    private boolean mIsTheTitleContainerVisible = true;
 
@@ -85,49 +90,13 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_profile);
+      ButterKnife.bind(this);
+
       mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
 
-      setContentView(R.layout.activity_profile);
-      mToolbar = (Toolbar) findViewById(R.id.toolbar);
-      mPrevious = (LinearLayout) findViewById(R.id.previous);
-      mNext = (LinearLayout) findViewById(R.id.next);
-      mProfileImg = (ImageView) findViewById(R.id.profile_image);
       mProfileImg.setClipToOutline(true);
       mProfileImg.setElevation(PROFILE_IMG_ELEVATION);
-      mLayout = (CoordinatorLayout) findViewById(R.id.layout);
-      mTitle = (TextView) findViewById(R.id.pokemon_name);
-      mMainTitle = (TextView) findViewById(R.id.main_title);
-      mPreviousLabel = (TextView) findViewById(R.id.previous_label);
-      mPreviousImage = (ImageView) findViewById(R.id.previous_image);
-      mNextLabel = (TextView) findViewById(R.id.next_label);
-      mNextImage = (ImageView) findViewById(R.id.next_image);
-      mTitleContainer = (LinearLayout) findViewById(R.id.title_layout);
-      mAppBar = (AppBarLayout) findViewById(R.id.app_bar);
-      mInfoView = (PokemonInfoView) findViewById(R.id.info_view);
-
-      mPrevious.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View view) {
-            if (mPokemonId == FIRST_POKEMON) {
-               switchPokemon(LAST_POKEMON);
-            }
-            else {
-               switchPokemon(mPokemonId - 1);
-            }
-         }
-      });
-
-      mNext.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View view) {
-            if (mPokemonId == LAST_POKEMON) {
-               switchPokemon(FIRST_POKEMON);
-            }
-            else {
-               switchPokemon(mPokemonId + 1);
-            }
-         }
-      });
 
       setSupportActionBar(mToolbar);
       mActionBar = getSupportActionBar();
@@ -152,6 +121,26 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       Slidr.attach(this, config);
 
       new LoadPokemonProfile().execute();
+   }
+
+   @OnClick(R.id.previous)
+   public void onPrevious() {
+      if (mPokemonId == FIRST_POKEMON) {
+         switchPokemon(LAST_POKEMON);
+      }
+      else {
+         switchPokemon(mPokemonId - 1);
+      }
+   }
+
+   @OnClick(R.id.next)
+   public void onNext() {
+      if (mPokemonId == LAST_POKEMON) {
+         switchPokemon(FIRST_POKEMON);
+      }
+      else {
+         switchPokemon(mPokemonId + 1);
+      }
    }
 
    private class LoadPokemonProfile extends AsyncTask<Void, Void, PokemonProfile> {
