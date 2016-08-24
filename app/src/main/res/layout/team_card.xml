@@ -6,6 +6,7 @@
                                     android:layout_marginEnd="14dp"
                                     android:layout_marginStart="14dp"
                                     android:layout_marginTop="7dp"
+                                    android:background="@null"
                                     android:orientation="horizontal">
 
     <RelativeLayout
@@ -19,6 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:background="@null"
             android:orientation="vertical">
 
             <LinearLayout
@@ -26,6 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:background="@null"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -33,6 +36,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginEnd="20dp"
+                    android:background="@null"
                     android:scaleType="centerInside"/>
 
                 <ImageView
@@ -40,12 +44,14 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginEnd="20dp"
+                    android:background="@null"
                     android:scaleType="centerInside"/>
 
                 <ImageView
                     android:id="@+id/pokemon_3"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:background="@null"
                     android:scaleType="centerInside"/>
             </LinearLayout>
 
@@ -53,6 +59,7 @@
                 android:id="@+id/bottom_pokemon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@null"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -60,6 +67,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginEnd="20dp"
+                    android:background="@null"
                     android:scaleType="centerInside"/>
 
                 <ImageView
@@ -67,12 +75,14 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginEnd="20dp"
+                    android:background="@null"
                     android:scaleType="centerInside"/>
 
                 <ImageView
                     android:id="@+id/pokemon_6"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:background="@null"
                     android:scaleType="centerInside"/>
 
             </LinearLayout>
@@ -84,8 +94,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/pokemon"
             android:layout_marginTop="24dp"
-            android:textSize="24sp"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:textSize="24sp"/>
 
         <TextView
             android:id="@+id/last_updated"
@@ -101,8 +111,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/last_updated"
-            android:textSize="14sp"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:textSize="14sp"/>
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

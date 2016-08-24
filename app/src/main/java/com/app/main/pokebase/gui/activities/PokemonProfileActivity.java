@@ -2,6 +2,7 @@ package com.app.main.pokebase.gui.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -319,9 +320,12 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
             TypedValue.COMPLEX_UNIT_DIP, 55, getResources().getDisplayMetrics())) {
          mActionBar.setElevation(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
                getResources().getDisplayMetrics()));
+         mActionBar.setBackgroundDrawable(new ColorDrawable(
+               ContextCompat.getColor(this, R.color.colorPrimary)));
       }
       else {
          mActionBar.setElevation(0);
+         mActionBar.setBackgroundDrawable(null);
       }
    }
 

@@ -12,6 +12,7 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -19,6 +20,7 @@
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@null"
             app:contentScrim="@color/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
@@ -47,6 +49,7 @@
                         android:layout_gravity="center"
                         android:textAlignment="center"
                         android:textColor="@color/colorAccent"
+                        android:background="@null"
                         android:textSize="18sp"/>
 
                     <ImageView
@@ -54,6 +57,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:background="@null"
                         android:scaleType="fitCenter"/>
 
                 </LinearLayout>
@@ -74,6 +78,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:textAlignment="center"
+                        android:background="@null"
                         android:textColor="@color/colorAccent"
                         android:textSize="18sp"/>
 
@@ -82,6 +87,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:background="@null"
                         android:scaleType="fitCenter"/>
 
                 </LinearLayout>
@@ -92,7 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_gravity="bottom|center_horizontal"
-                android:background="@color/colorPrimary"
+                android:background="@null"
                 android:orientation="vertical"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.3">
@@ -102,6 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:background="@null"
                     android:orientation="vertical">
 
                     <TextView
@@ -122,6 +129,7 @@
         android:id="@+id/info_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
         app:behavior_overlapTop="50dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
@@ -129,7 +137,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="@null"
         app:layout_anchor="@id/frame_layout"
         app:layout_collapseMode="pin"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
@@ -138,11 +146,13 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:background="@null"
             android:orientation="horizontal">
 
             <Space
                 android:layout_width="@dimen/image_final_width"
-                android:layout_height="@dimen/image_final_width"/>
+                android:layout_height="@dimen/image_final_width"
+                android:background="@null"/>
 
             <TextView
                 android:id="@+id/pokemon_name"
