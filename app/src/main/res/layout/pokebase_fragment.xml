@@ -32,14 +32,14 @@
             <Spinner
                 android:id="@+id/type_spinner"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_marginEnd="20dp"
                 android:layout_weight="1"/>
 
             <Spinner
                 android:id="@+id/region_spinner"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_weight="1"/>
         </LinearLayout>
 
