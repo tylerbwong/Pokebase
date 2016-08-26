@@ -1,4 +1,5 @@
 # Pokébase
+[![Build Status](https://travis-ci.org/tylerbwong/Pokebase-SQLite.svg?branch=master)](https://travis-ci.org/tylerbwong/Pokebase-SQLite)
 
 ![Pokébase](/art/showcase.png)
 
