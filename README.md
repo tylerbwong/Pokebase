@@ -1,5 +1,6 @@
 # Pokébase
-[![Build Status](https://travis-ci.org/tylerbwong/Pokebase-SQLite.svg?branch=master)](https://travis-ci.org/tylerbwong/Pokebase-SQLite)
+[![Build Status](https://travis-ci.org/tylerbwong/Pokebase-SQLite.svg?branch=master)](https://travis-ci.org/tylerbwong/Pokebase-SQLite) [![codecov](https://codecov.io/gh/tylerbwong/Pokebase-SQLite/branch/master/graph/badge.svg)](https://codecov.io/gh/tylerbwong/Pokebase-SQLite)
+
 
 ![Pokébase](/art/showcase.png)
 
