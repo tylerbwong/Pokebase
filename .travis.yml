@@ -5,10 +5,12 @@ android:
   components:
     - platform-tools
     - tools
-
     - build-tools-24.0.2
-
     - android-24
-
     - extra-android-m2repository
     - extra-android-support
+  script:
+    - ./gradlew jacocoTestReport
+    - ./gradlew connectedCheck
+  after_success:
+    - bash <(curl -s https://codecov.io/bash)
