@@ -9,7 +9,3 @@ android:
     - android-24
     - extra-android-m2repository
     - extra-android-support
-  script:
-    - ./gradlew build jacocoTestReport
-  after_success:
-    - bash <(curl -s https://codecov.io/bash)
