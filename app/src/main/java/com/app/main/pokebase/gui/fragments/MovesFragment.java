@@ -65,6 +65,14 @@ public class MovesFragment extends Fragment implements AdapterView.OnItemSelecte
          actionBar.setTitle(R.string.moves);
       }
 
+      mTypeSpinner.setOnItemSelectedListener(this);
+      mClassSpinner.setOnItemSelectedListener(this);
+
+      mMovesList.setLayoutManager(new LinearLayoutManager(getContext()));
+      mMovesList.setHasFixedSize(true);
+
+      new LoadMoveList().execute();
+
       return view;
    }
 
@@ -83,19 +91,6 @@ public class MovesFragment extends Fragment implements AdapterView.OnItemSelecte
             break;
       }
       return super.onOptionsItemSelected(item);
-   }
-
-   @Override
-   public void onViewCreated(View view, Bundle savedInstanceState) {
-      super.onViewCreated(view, savedInstanceState);
-
-      mTypeSpinner.setOnItemSelectedListener(this);
-      mClassSpinner.setOnItemSelectedListener(this);
-
-      mMovesList.setLayoutManager(new LinearLayoutManager(getContext()));
-      mMovesList.setHasFixedSize(true);
-
-      new LoadMoveList().execute();
    }
 
    @Override

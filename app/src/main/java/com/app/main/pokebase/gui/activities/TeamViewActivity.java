@@ -276,13 +276,11 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       startActivity(new Intent(this, MainActivity.class));
    }
 
-   private void checkPokemon() {
+   private void checkEmpty() {
       if (mPokemon == null || mPokemon.length == 0) {
-         mPokemonList.setVisibility(View.GONE);
          mEmptyView.setVisibility(View.VISIBLE);
       }
       else {
-         mPokemonList.setVisibility(View.VISIBLE);
          mEmptyView.setVisibility(View.GONE);
       }
    }
@@ -310,7 +308,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
 
          mNoTeam.setImageDrawable(loaded);
          mNoTeamLabel.setText(getString(R.string.no_pokemon));
-         checkPokemon();
+         checkEmpty();
       }
    }
 
@@ -340,7 +338,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
             viewGroup.removeView(mFab);
          }
 
-         checkPokemon();
+         checkEmpty();
       }
    }
 }

@@ -84,6 +84,16 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
          actionBar.setTitle(R.string.pokebase);
       }
 
+      mSearchBar.setOnSearchActionListener(this);
+      mSearchBar.setTextColor(android.R.color.black);
+      mSearchBar.setTextHintColor(android.R.color.secondary_text_dark);
+
+      mPokemonList.setLayoutManager(new LinearLayoutManager(getContext()));
+      mPokemonList.setHasFixedSize(true);
+
+      new LoadPokemonList().execute();
+      new LoadEmptyView().execute();
+
       return view;
    }
 
@@ -113,21 +123,6 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
    }
 
    @Override
-   public void onViewCreated(View view, Bundle savedInstanceState) {
-      super.onViewCreated(view, savedInstanceState);
-
-      mSearchBar.setOnSearchActionListener(this);
-      mSearchBar.setTextColor(android.R.color.black);
-      mSearchBar.setTextHintColor(android.R.color.secondary_text_dark);
-
-      mPokemonList.setLayoutManager(new LinearLayoutManager(getContext()));
-      mPokemonList.setHasFixedSize(true);
-
-      new LoadPokemonList().execute();
-      new LoadEmptyView().execute();
-   }
-
-   @Override
    public void onNothingSelected(AdapterView<?> parent) {
 
    }
@@ -140,11 +135,9 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
 
    private void checkEmpty(PokemonListItem[] pokemon) {
       if (pokemon.length == 0) {
-         mPokemonList.setVisibility(View.GONE);
          mEmptyView.setVisibility(View.VISIBLE);
       }
       else {
-         mPokemonList.setVisibility(View.VISIBLE);
          mEmptyView.setVisibility(View.GONE);
       }
    }

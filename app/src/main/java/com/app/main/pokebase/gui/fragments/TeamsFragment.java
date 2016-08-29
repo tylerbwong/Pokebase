@@ -65,15 +65,10 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
          actionBar.setTitle(R.string.teams);
       }
 
-      return view;
-   }
-
-   @Override
-   public void onViewCreated(View view, Bundle savedInstanceState) {
-      super.onViewCreated(view, savedInstanceState);
-
       new LoadEmptyView().execute();
       new LoadTeams().execute();
+
+      return view;
    }
 
    public void refreshAdapter() {
@@ -82,11 +77,9 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
 
    private void checkEmpty(Team[] teams) {
       if (teams.length == 0) {
-         mTeamList.setVisibility(View.GONE);
          mEmptyView.setVisibility(View.VISIBLE);
       }
       else {
-         mTeamList.setVisibility(View.VISIBLE);
          mEmptyView.setVisibility(View.GONE);
       }
    }

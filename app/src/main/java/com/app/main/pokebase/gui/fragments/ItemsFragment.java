@@ -56,6 +56,11 @@ public class ItemsFragment extends Fragment {
          actionBar.setTitle(R.string.items);
       }
 
+      mItemsList.setLayoutManager(new LinearLayoutManager(getContext()));
+      mItemsList.setHasFixedSize(true);
+
+      new LoadItems().execute();
+
       return view;
    }
 
@@ -74,16 +79,6 @@ public class ItemsFragment extends Fragment {
             break;
       }
       return super.onOptionsItemSelected(item);
-   }
-
-   @Override
-   public void onViewCreated(View view, Bundle savedInstanceState) {
-      super.onViewCreated(view, savedInstanceState);
-
-      mItemsList.setLayoutManager(new LinearLayoutManager(getContext()));
-      mItemsList.setHasFixedSize(true);
-
-      new LoadItems().execute();
    }
 
    @Override

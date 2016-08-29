@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -49,7 +50,10 @@ public class MainActivity extends AppCompatActivity {
    private DatabaseOpenHelper mDatabaseHelper;
 
    private int mLastClicked;
+   private int mMenuId;
    private boolean mPokemonAdd;
+
+   private final static int DELAY = 250;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -73,43 +77,60 @@ public class MainActivity extends AppCompatActivity {
       setSupportActionBar(mToolbar);
 
       mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-
          @Override
-         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            int menuId = menuItem.getItemId();
-
+         public boolean onNavigationItemSelected(@NonNull final MenuItem menuItem) {
             mDrawerLayout.closeDrawers();
+            new Handler().postDelayed(new Runnable() {
+               @Override
+               public void run() {
+                  String fragTag = "";
+                  mMenuId = menuItem.getItemId();
 
-            switch (menuId) {
-               case R.id.teams:
-                  mCurrentFragment = new TeamsFragment();
-                  break;
+                  switch (mMenuId) {
+                     case R.id.teams:
+                        fragTag = TeamsFragment.class.getSimpleName();
+                        mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+                        if (mCurrentFragment == null) {
+                           mCurrentFragment = new TeamsFragment();
+                        }
+                        break;
 
-               case R.id.pokebase:
-                  mCurrentFragment = new PokebaseFragment();
-                  break;
+                     case R.id.pokebase:
+                        fragTag = PokebaseFragment.class.getSimpleName();
+                        mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+                        if (mCurrentFragment == null) {
+                           mCurrentFragment = new PokebaseFragment();
+                        }
+                        break;
 
-               case R.id.moves:
-                  mCurrentFragment = new MovesFragment();
-                  break;
+                     case R.id.moves:
+                        fragTag = MovesFragment.class.getSimpleName();
+                        mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+                        if (mCurrentFragment == null) {
+                           mCurrentFragment = new MovesFragment();
+                        }
+                        break;
 
-               case R.id.items:
-                  mCurrentFragment = new ItemsFragment();
-                  break;
+                     case R.id.items:
+                        fragTag = ItemsFragment.class.getSimpleName();
+                        mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+                        if (mCurrentFragment == null) {
+                           mCurrentFragment = new ItemsFragment();
+                        }
+                        break;
 
-               case R.id.settings:
-                  switchToSettings();
-                  break;
-            }
+                     case R.id.settings:
+                        switchToSettings();
+                        break;
+                  }
 
-            if (menuId != mLastClicked) {
-               getSupportFragmentManager().beginTransaction()
-                     .replace(R.id.frame, mCurrentFragment).commit();
-            }
-
-            if (menuId != R.id.settings) {
-               mLastClicked = menuId;
-            }
+                  if (mMenuId != R.id.settings && mMenuId != mLastClicked) {
+                     getSupportFragmentManager().beginTransaction()
+                           .replace(R.id.frame, mCurrentFragment, fragTag).commit();
+                     mLastClicked = mMenuId;
+                  }
+               }
+            }, DELAY);
 
             return true;
          }
@@ -262,20 +283,29 @@ public class MainActivity extends AppCompatActivity {
       @Override
       protected void onPostExecute(Boolean result) {
          super.onPostExecute(result);
+         String fragTag;
 
          if (result) {
+            fragTag = PokebaseFragment.class.getSimpleName();
             mNavigationView.getMenu().getItem(1).setChecked(true);
-            mCurrentFragment = new PokebaseFragment();
+            mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+            if (mCurrentFragment == null) {
+               mCurrentFragment = new PokebaseFragment();
+            }
             mLastClicked = R.id.pokebase;
          }
          else {
+            fragTag = TeamsFragment.class.getSimpleName();
             mNavigationView.getMenu().getItem(0).setChecked(true);
-            mCurrentFragment = new TeamsFragment();
+            mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+            if (mCurrentFragment == null) {
+               mCurrentFragment = new TeamsFragment();
+            }
             mLastClicked = R.id.teams;
          }
 
          getSupportFragmentManager().beginTransaction()
-               .replace(R.id.frame, mCurrentFragment).commit();
+               .replace(R.id.frame, mCurrentFragment, fragTag).commit();
       }
    }
 }
