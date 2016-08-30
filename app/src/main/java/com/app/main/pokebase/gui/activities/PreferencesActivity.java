@@ -19,7 +19,8 @@ import butterknife.ButterKnife;
  * @author Tyler Wong
  */
 public class PreferencesActivity extends AppCompatActivity {
-   @BindView(R.id.toolbar) Toolbar mToolbar;
+   @BindView(R.id.toolbar)
+   Toolbar mToolbar;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {

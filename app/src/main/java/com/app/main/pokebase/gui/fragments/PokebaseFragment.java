@@ -43,13 +43,20 @@ import butterknife.Unbinder;
  */
 public class PokebaseFragment extends Fragment implements AdapterView.OnItemSelectedListener,
       MaterialSearchBar.OnSearchActionListener {
-   @BindView(R.id.search_bar) MaterialSearchBar mSearchBar;
-   @BindView(R.id.mt_editText) EditText mSearchInput;
-   @BindView(R.id.mt_clear) ImageView mClear;
-   @BindView(R.id.type_spinner) Spinner mTypeSpinner;
-   @BindView(R.id.region_spinner) Spinner mRegionSpinner;
-   @BindView(R.id.pokemon_list) AnimatedRecyclerView mPokemonList;
-   @BindView(R.id.empty_layout) LinearLayout mEmptyView;
+   @BindView(R.id.search_bar)
+   MaterialSearchBar mSearchBar;
+   @BindView(R.id.mt_editText)
+   EditText mSearchInput;
+   @BindView(R.id.mt_clear)
+   ImageView mClear;
+   @BindView(R.id.type_spinner)
+   Spinner mTypeSpinner;
+   @BindView(R.id.region_spinner)
+   Spinner mRegionSpinner;
+   @BindView(R.id.pokemon_list)
+   AnimatedRecyclerView mPokemonList;
+   @BindView(R.id.empty_layout)
+   LinearLayout mEmptyView;
 
    private DatabaseOpenHelper mDatabaseHelper;
    private PokemonListItem[] mPokemon;
@@ -234,7 +241,7 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
          String[] regions = mDatabaseHelper.queryAllRegions();
          PokemonListItem[] pokemon = mDatabaseHelper.queryAll("", mIsAlphabetical);
 
-         return new Pair<> (new Pair<> (types, regions), pokemon);
+         return new Pair<>(new Pair<>(types, regions), pokemon);
       }
 
       @Override

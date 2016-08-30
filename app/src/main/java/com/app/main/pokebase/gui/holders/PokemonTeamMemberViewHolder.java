@@ -20,11 +20,16 @@ import butterknife.ButterKnife;
  * @author Tyler Wong
  */
 public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
-   @BindView(R.id.pokemon) public ImageView mPokemon;
-   @BindView(R.id.name) public TextView mName;
-   @BindView(R.id.level) public TextView mLevel;
-   @BindView(R.id.last_updated) public TextView mLastUpdated;
-   @BindView(R.id.moveset) public TextView mMoveset;
+   @BindView(R.id.pokemon)
+   public ImageView mPokemon;
+   @BindView(R.id.name)
+   public TextView mName;
+   @BindView(R.id.level)
+   public TextView mLevel;
+   @BindView(R.id.last_updated)
+   public TextView mLastUpdated;
+   @BindView(R.id.moveset)
+   public TextView mMoveset;
 
    public final View mView;
 

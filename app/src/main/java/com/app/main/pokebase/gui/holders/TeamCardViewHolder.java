@@ -18,15 +18,24 @@ import butterknife.ButterKnife;
  * @author Tyler Wong
  */
 public class TeamCardViewHolder extends RecyclerView.ViewHolder {
-   @BindView(R.id.title_label) public TextView mTitleLabel;
-   @BindView(R.id.description) public TextView mDescription;
-   @BindView(R.id.last_updated) public TextView mLastUpdated;
-   @BindView(R.id.pokemon_1) public ImageView mPokemonOne;
-   @BindView(R.id.pokemon_2) public ImageView mPokemonTwo;
-   @BindView(R.id.pokemon_3) public ImageView mPokemonThree;
-   @BindView(R.id.pokemon_4) public ImageView mPokemonFour;
-   @BindView(R.id.pokemon_5) public ImageView mPokemonFive;
-   @BindView(R.id.pokemon_6) public ImageView mPokemonSix;
+   @BindView(R.id.title_label)
+   public TextView mTitleLabel;
+   @BindView(R.id.description)
+   public TextView mDescription;
+   @BindView(R.id.last_updated)
+   public TextView mLastUpdated;
+   @BindView(R.id.pokemon_1)
+   public ImageView mPokemonOne;
+   @BindView(R.id.pokemon_2)
+   public ImageView mPokemonTwo;
+   @BindView(R.id.pokemon_3)
+   public ImageView mPokemonThree;
+   @BindView(R.id.pokemon_4)
+   public ImageView mPokemonFour;
+   @BindView(R.id.pokemon_5)
+   public ImageView mPokemonFive;
+   @BindView(R.id.pokemon_6)
+   public ImageView mPokemonSix;
 
    public final View mView;
    public ImageView[] mPokemonList;

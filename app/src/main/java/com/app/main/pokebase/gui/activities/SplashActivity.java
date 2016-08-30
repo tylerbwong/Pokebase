@@ -23,7 +23,8 @@ import butterknife.ButterKnife;
  * @author Brittany Berlanga
  */
 public class SplashActivity extends AppCompatActivity {
-   @BindView(R.id.title_label) TextView mTitleLabel;
+   @BindView(R.id.title_label)
+   TextView mTitleLabel;
 
    public final static String ACTIVITY_PREF = "ActivityPREF";
    public final static String INTRO_FINISHED = "appIntroFinished";

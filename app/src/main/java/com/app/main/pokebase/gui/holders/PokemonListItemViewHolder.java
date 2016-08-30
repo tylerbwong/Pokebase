@@ -14,9 +14,12 @@ import butterknife.ButterKnife;
  * @author Brittany Berlanga
  */
 public class PokemonListItemViewHolder extends RecyclerView.ViewHolder {
-   @BindView(R.id.id) public TextView mIdView;
-   @BindView(R.id.name) public TextView mNameView;
-   @BindView(R.id.small_icon) public ImageView mIconView;
+   @BindView(R.id.id)
+   public TextView mIdView;
+   @BindView(R.id.name)
+   public TextView mNameView;
+   @BindView(R.id.small_icon)
+   public ImageView mIconView;
 
    public final View mView;
 

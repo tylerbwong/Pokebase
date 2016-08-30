@@ -39,9 +39,12 @@ import butterknife.ButterKnife;
  * @author Tyler Wong
  */
 public class MainActivity extends AppCompatActivity {
-   @BindView(R.id.navigation_view) NavigationView mNavigationView;
-   @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
-   @BindView(R.id.toolbar) Toolbar mToolbar;
+   @BindView(R.id.navigation_view)
+   NavigationView mNavigationView;
+   @BindView(R.id.drawer_layout)
+   DrawerLayout mDrawerLayout;
+   @BindView(R.id.toolbar)
+   Toolbar mToolbar;
 
    private ImageView mProfilePicture;
    private TextView mUsernameView;

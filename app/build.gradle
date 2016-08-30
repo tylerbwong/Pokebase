@@ -24,14 +24,19 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.pro'
         }
         debug {
             debuggable true
             minifyEnabled false
             testCoverageEnabled true
         }
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
     lintOptions {
         abortOnError false

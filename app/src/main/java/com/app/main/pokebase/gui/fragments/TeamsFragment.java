@@ -34,10 +34,14 @@ import butterknife.Unbinder;
  * @author Tyler Wong
  */
 public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimationEndListener {
-   @BindView(R.id.bottom_sheet) SheetLayout mSheetLayout;
-   @BindView(R.id.fab) FloatingActionButton mFab;
-   @BindView(R.id.team_list) AnimatedRecyclerView mTeamList;
-   @BindView(R.id.empty_layout) LinearLayout mEmptyView;
+   @BindView(R.id.bottom_sheet)
+   SheetLayout mSheetLayout;
+   @BindView(R.id.fab)
+   FloatingActionButton mFab;
+   @BindView(R.id.team_list)
+   AnimatedRecyclerView mTeamList;
+   @BindView(R.id.empty_layout)
+   LinearLayout mEmptyView;
 
    private DatabaseOpenHelper mDatabaseHelper;
    private Unbinder mUnbinder;

@@ -27,7 +27,8 @@ import butterknife.Unbinder;
  * @author Tyler Wong
  */
 public class ItemsFragment extends Fragment {
-   @BindView(R.id.items_list) AnimatedRecyclerView mItemsList;
+   @BindView(R.id.items_list)
+   AnimatedRecyclerView mItemsList;
 
    private DatabaseOpenHelper mDatabaseHelper;
    private Unbinder mUnbinder;

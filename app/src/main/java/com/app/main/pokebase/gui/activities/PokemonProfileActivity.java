@@ -44,20 +44,34 @@ import butterknife.OnClick;
  * @author Brittany Berlanga
  */
 public class PokemonProfileActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
-   @BindView(R.id.toolbar) Toolbar mToolbar;
-   @BindView(R.id.previous) LinearLayout mPrevious;
-   @BindView(R.id.next) LinearLayout mNext;
-   @BindView(R.id.profile_image) ImageView mProfileImg;
-   @BindView(R.id.pokemon_name) TextView mTitle;
-   @BindView(R.id.main_title) TextView mMainTitle;
-   @BindView(R.id.previous_label) TextView mPreviousLabel;
-   @BindView(R.id.next_label) TextView mNextLabel;
-   @BindView(R.id.previous_image) ImageView mPreviousImage;
-   @BindView(R.id.next_image) ImageView mNextImage;
-   @BindView(R.id.layout) CoordinatorLayout mLayout;
-   @BindView(R.id.title_layout) LinearLayout mTitleContainer;
-   @BindView(R.id.app_bar) AppBarLayout mAppBar;
-   @BindView(R.id.info_view) PokemonInfoView mInfoView;
+   @BindView(R.id.toolbar)
+   Toolbar mToolbar;
+   @BindView(R.id.previous)
+   LinearLayout mPrevious;
+   @BindView(R.id.next)
+   LinearLayout mNext;
+   @BindView(R.id.profile_image)
+   ImageView mProfileImg;
+   @BindView(R.id.pokemon_name)
+   TextView mTitle;
+   @BindView(R.id.main_title)
+   TextView mMainTitle;
+   @BindView(R.id.previous_label)
+   TextView mPreviousLabel;
+   @BindView(R.id.next_label)
+   TextView mNextLabel;
+   @BindView(R.id.previous_image)
+   ImageView mPreviousImage;
+   @BindView(R.id.next_image)
+   ImageView mNextImage;
+   @BindView(R.id.layout)
+   CoordinatorLayout mLayout;
+   @BindView(R.id.title_layout)
+   LinearLayout mTitleContainer;
+   @BindView(R.id.app_bar)
+   AppBarLayout mAppBar;
+   @BindView(R.id.info_view)
+   PokemonInfoView mInfoView;
 
    private ActionBar mActionBar;
 

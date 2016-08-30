@@ -16,9 +16,12 @@ import butterknife.ButterKnife;
  * @author Tyler Wong
  */
 public class ItemInfoView extends RelativeLayout {
-   @BindView(R.id.cost) TextView mCost;
-   @BindView(R.id.item) ImageView mItem;
-   @BindView(R.id.description) TextView mDescription;
+   @BindView(R.id.cost)
+   TextView mCost;
+   @BindView(R.id.item)
+   ImageView mItem;
+   @BindView(R.id.description)
+   TextView mDescription;
 
    private Context mContext;
 

@@ -37,19 +37,31 @@ import butterknife.OnClick;
  * @author Tyler Wong
  */
 public class PokemonInfoView extends NestedScrollView {
-   @BindView(R.id.type_one) TextView mTypeOneView;
-   @BindView(R.id.type_two) TextView mTypeTwoView;
-   @BindView(R.id.region) TextView mRegionView;
-   @BindView(R.id.height) TextView mHeightView;
-   @BindView(R.id.weight) TextView mWeightView;
-   @BindView(R.id.exp) TextView mExpView;
-   @BindView(R.id.description) TextView mDescription;
-   @BindView(R.id.moves) Button mMovesButton;
-   @BindView(R.id.evolutions) Button mEvolutionsButton;
-   @BindView(R.id.chart) BarChartView mBarChart;
-   @BindView(R.id.buttons) CardView mButtons;
+   @BindView(R.id.type_one)
+   TextView mTypeOneView;
+   @BindView(R.id.type_two)
+   TextView mTypeTwoView;
+   @BindView(R.id.region)
+   TextView mRegionView;
+   @BindView(R.id.height)
+   TextView mHeightView;
+   @BindView(R.id.weight)
+   TextView mWeightView;
+   @BindView(R.id.exp)
+   TextView mExpView;
+   @BindView(R.id.description)
+   TextView mDescription;
+   @BindView(R.id.moves)
+   Button mMovesButton;
+   @BindView(R.id.evolutions)
+   Button mEvolutionsButton;
+   @BindView(R.id.chart)
+   BarChartView mBarChart;
+   @BindView(R.id.buttons)
+   CardView mButtons;
    @BindViews({R.id.hp, R.id.attack, R.id.defense, R.id.special_attack,
-         R.id.special_defense, R.id.speed}) TextView[] mStats;
+         R.id.special_defense, R.id.speed})
+   TextView[] mStats;
 
    private Context mContext;
    private PokemonProfile mProfile;

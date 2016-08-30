@@ -35,12 +35,17 @@ import butterknife.ButterKnife;
  * @author Brittany Berlanga
  */
 public class PokemonEditorActivity extends AppCompatActivity {
-   @BindView(R.id.toolbar) Toolbar mToolbar;
-   @BindView(R.id.profile_image) ImageView mProfileImg;
-   @BindView(R.id.nickname_input) TextInputEditText mNicknameInput;
-   @BindView(R.id.level_spinner) Spinner mLevelSpinner;
+   @BindView(R.id.toolbar)
+   Toolbar mToolbar;
+   @BindView(R.id.profile_image)
+   ImageView mProfileImg;
+   @BindView(R.id.nickname_input)
+   TextInputEditText mNicknameInput;
+   @BindView(R.id.level_spinner)
+   Spinner mLevelSpinner;
    @BindViews({R.id.move_one_spinner, R.id.move_two_spinner, R.id.move_three_spinner,
-         R.id.move_four_spinner}) Spinner[] mMoveSpinners;
+         R.id.move_four_spinner})
+   Spinner[] mMoveSpinners;
 
    private int mTeamId;
    private int mMemberId;

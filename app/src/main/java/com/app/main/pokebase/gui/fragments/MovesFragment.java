@@ -30,9 +30,12 @@ import butterknife.Unbinder;
  * @author Tyler Wong
  */
 public class MovesFragment extends Fragment implements AdapterView.OnItemSelectedListener {
-   @BindView(R.id.type_spinner) Spinner mTypeSpinner;
-   @BindView(R.id.class_spinner) Spinner mClassSpinner;
-   @BindView(R.id.moves_list) AnimatedRecyclerView mMovesList;
+   @BindView(R.id.type_spinner)
+   Spinner mTypeSpinner;
+   @BindView(R.id.class_spinner)
+   Spinner mClassSpinner;
+   @BindView(R.id.moves_list)
+   AnimatedRecyclerView mMovesList;
 
    private DatabaseOpenHelper mDatabaseHelper;
    private Unbinder mUnbinder;
@@ -152,7 +155,7 @@ public class MovesFragment extends Fragment implements AdapterView.OnItemSelecte
          String[] classes = mDatabaseHelper.queryAllClasses();
          String[] moves = mDatabaseHelper.queryAllMoves();
 
-         return new Pair<> (new Pair<> (types, classes), moves);
+         return new Pair<>(new Pair<>(types, classes), moves);
       }
 
       @Override

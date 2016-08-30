@@ -18,12 +18,18 @@ import butterknife.ButterKnife;
  * @author Tyler Wong
  */
 public class MoveInfoView extends RelativeLayout {
-   @BindView(R.id.type_label) TextView mType;
-   @BindView(R.id.power_label) TextView mPower;
-   @BindView(R.id.pp_label) TextView mPp;
-   @BindView(R.id.accuracy_label) TextView mAccuracy;
-   @BindView(R.id.class_label) TextView mClass;
-   @BindView(R.id.description) TextView mDescription;
+   @BindView(R.id.type_label)
+   TextView mType;
+   @BindView(R.id.power_label)
+   TextView mPower;
+   @BindView(R.id.pp_label)
+   TextView mPp;
+   @BindView(R.id.accuracy_label)
+   TextView mAccuracy;
+   @BindView(R.id.class_label)
+   TextView mClass;
+   @BindView(R.id.description)
+   TextView mDescription;
 
    private Context mContext;
 

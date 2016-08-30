@@ -39,15 +39,24 @@ import butterknife.OnTextChanged;
  * @author Tyler Wong
  */
 public class TeamViewActivity extends AppCompatActivity implements SheetLayout.OnFabAnimationEndListener {
-   @BindView(R.id.toolbar) Toolbar mToolbar;
-   @BindView(R.id.fab) FloatingActionButton mFab;
-   @BindView(R.id.bottom_sheet) SheetLayout mSheetLayout;
-   @BindView(R.id.team_list) AnimatedRecyclerView mPokemonList;
-   @BindView(R.id.empty_layout) LinearLayout mEmptyView;
-   @BindView(R.id.no_team) ImageView mNoTeam;
-   @BindView(R.id.no_team_label) TextView mNoTeamLabel;
-   @BindView(R.id.name_input) TextInputEditText mNameInput;
-   @BindView(R.id.description_input) TextInputEditText mDescriptionInput;
+   @BindView(R.id.toolbar)
+   Toolbar mToolbar;
+   @BindView(R.id.fab)
+   FloatingActionButton mFab;
+   @BindView(R.id.bottom_sheet)
+   SheetLayout mSheetLayout;
+   @BindView(R.id.team_list)
+   AnimatedRecyclerView mPokemonList;
+   @BindView(R.id.empty_layout)
+   LinearLayout mEmptyView;
+   @BindView(R.id.no_team)
+   ImageView mNoTeam;
+   @BindView(R.id.no_team_label)
+   TextView mNoTeamLabel;
+   @BindView(R.id.name_input)
+   TextInputEditText mNameInput;
+   @BindView(R.id.description_input)
+   TextInputEditText mDescriptionInput;
 
    private ActionBar mActionBar;
 

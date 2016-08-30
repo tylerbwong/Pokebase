@@ -24,7 +24,8 @@ import butterknife.Unbinder;
  * @author Tyler Wong
  */
 public class IntroPokebaseFragment extends Fragment {
-   @BindView(R.id.description) TextView mDescription;
+   @BindView(R.id.description)
+   TextView mDescription;
 
    private Unbinder mUnbinder;
 

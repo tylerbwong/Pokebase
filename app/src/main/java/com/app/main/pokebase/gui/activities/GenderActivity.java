@@ -22,10 +22,14 @@ import butterknife.OnTouch;
  * @author Tyler Wong
  */
 public class GenderActivity extends AppCompatActivity {
-   @BindView(R.id.title_label) TextView mTitleLabel;
-   @BindView(R.id.boy_button) ImageButton mBoyButton;
-   @BindView(R.id.girl_button) ImageButton mGirlButton;
-   @BindView(R.id.gender_select) Button mGoButton;
+   @BindView(R.id.title_label)
+   TextView mTitleLabel;
+   @BindView(R.id.boy_button)
+   ImageButton mBoyButton;
+   @BindView(R.id.girl_button)
+   ImageButton mGirlButton;
+   @BindView(R.id.gender_select)
+   Button mGoButton;
 
    private boolean mIsBoy = true;
 

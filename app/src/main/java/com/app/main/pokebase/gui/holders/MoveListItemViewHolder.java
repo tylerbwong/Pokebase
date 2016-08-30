@@ -19,7 +19,8 @@ import butterknife.ButterKnife;
  * @author Tyler Wong
  */
 public class MoveListItemViewHolder extends RecyclerView.ViewHolder {
-   @BindView(R.id.name) public TextView mNameView;
+   @BindView(R.id.name)
+   public TextView mNameView;
 
    public final View mView;
 

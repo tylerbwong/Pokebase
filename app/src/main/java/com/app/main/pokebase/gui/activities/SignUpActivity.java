@@ -22,11 +22,16 @@ import butterknife.OnTextChanged;
  * @author Tyler Wong
  */
 public class SignUpActivity extends AppCompatActivity {
-   @BindView(R.id.title_label) TextView mTitleLabel;
-   @BindView(R.id.name_input) TextInputEditText mNameInput;
-   @BindView(R.id.name_count) TextView mNameCount;
-   @BindView(R.id.exit_button) Button mExitButton;
-   @BindView(R.id.create_user) Button mCreateButton;
+   @BindView(R.id.title_label)
+   TextView mTitleLabel;
+   @BindView(R.id.name_input)
+   TextInputEditText mNameInput;
+   @BindView(R.id.name_count)
+   TextView mNameCount;
+   @BindView(R.id.exit_button)
+   Button mExitButton;
+   @BindView(R.id.create_user)
+   Button mCreateButton;
 
    private boolean mHasText = false;
 

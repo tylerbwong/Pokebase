@@ -75,7 +75,7 @@ public class PreferencesFragment extends PreferenceFragment implements
 
    @Override
    public boolean onPreferenceClick(Preference preference) {
-      if(preference.getKey().equals(getString(R.string.update_key))){
+      if (preference.getKey().equals(getString(R.string.update_key))) {
          preference.setSummary(getString(R.string.checking));
 
          Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.update_url)));
