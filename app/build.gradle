@@ -3,7 +3,7 @@ apply plugin: 'android-apt'
 apply plugin: 'jacoco-android'
 
 repositories {
-    mavenCentral()
+    jcenter()
 
     maven {
         url "https://jitpack.io"
@@ -20,6 +20,7 @@ android {
         targetSdkVersion 24
         versionCode 1
         versionName "1.0.1"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
