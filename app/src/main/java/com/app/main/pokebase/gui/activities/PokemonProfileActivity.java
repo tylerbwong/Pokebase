@@ -78,6 +78,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private DatabaseOpenHelper mDatabaseHelper;
    private int mPokemonId;
    private String mPokemonName;
+   private List<Pair<Integer, String>> mPokemonTeams;
    private boolean mIsTheTitleVisible = false;
    private boolean mIsTheTitleContainerVisible = true;
 
@@ -185,6 +186,8 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
                formatId(mPokemonId), mPokemonName);
          mTitle.setText(formattedName);
          mMainTitle.setText(formattedName);
+
+         mPokemonTeams = mDatabaseHelper.queryTeamIdsAndNames();
       }
    }
 
@@ -251,7 +254,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
             playAudio();
             break;
          case R.id.add_action:
-            showAddToTeamDialog(mDatabaseHelper.queryTeamIdsAndNames());
+            showAddToTeamDialog(mPokemonTeams);
             break;
          default:
             break;

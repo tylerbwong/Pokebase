@@ -191,7 +191,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       mDatabase = getWritableDatabase();
    }
 
-   public static DatabaseOpenHelper getInstance(Context context) {
+   public synchronized static DatabaseOpenHelper getInstance(Context context) {
       if (mDatabaseOpenHelper == null) {
          mDatabaseOpenHelper = new DatabaseOpenHelper(context);
       }
@@ -370,7 +370,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return pokemon;
    }
 
-   public String[] queryPokemonTypes(int id) {
+   private String[] queryPokemonTypes(int id) {
       Cursor cursor = mDatabase.rawQuery(POKEMON_TYPES_QUERY, new String[]{String.valueOf(id)});
       String[] pokemonTypes = new String[cursor.getCount()];
       int index = 0;
@@ -418,7 +418,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return pokemon;
    }
 
-   public PokemonListItem[] queryPokemonEvolutions(int id) {
+   private PokemonListItem[] queryPokemonEvolutions(int id) {
       Cursor cursor = mDatabase.rawQuery(POKEMON_EVOLUTIONS_QUERY, new String[]{String.valueOf(id)});
       PokemonListItem[] pokemonEvolutions = new PokemonListItem[cursor.getCount()];
       int index = 0;
@@ -470,7 +470,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return true;
    }
 
-   public int queryTeamCount(int teamId) {
+   private int queryTeamCount(int teamId) {
       int result;
       Cursor cursor = mDatabase.rawQuery(TEAM_SIZE, new String[]{String.valueOf(teamId)});
       cursor.moveToFirst();
@@ -490,7 +490,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return result;
    }
 
-   public boolean updateTeamLastUpdated(int teamId) {
+   private boolean updateTeamLastUpdated(int teamId) {
       String teamFilter = ROW_ID_COL + "=" + teamId;
       ContentValues contentValues = new ContentValues();
       contentValues.put(LAST_UPDATED_COL, getDate());
@@ -521,7 +521,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return result;
    }
 
-   public String queryTeamName(int teamId) {
+   private String queryTeamName(int teamId) {
       String result;
       Cursor cursor = mDatabase.rawQuery(TEAM_NAME_BY_ID, new String[]{String.valueOf(teamId)});
       cursor.moveToFirst();
@@ -549,7 +549,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return teamNames;
    }
 
-   public PokemonTeamItem[] queryTeamPokemonIds(int teamId) {
+   private PokemonTeamItem[] queryTeamPokemonIds(int teamId) {
       Cursor cursor = mDatabase.rawQuery(ALL_TEAM_POKEMON, new String[]{String.valueOf(teamId)});
       PokemonTeamItem[] teamPokemon = new PokemonTeamItem[cursor.getCount()];
       int index = 0;
@@ -583,7 +583,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return teams;
    }
 
-   public String queryPokemonMove(int moveId) {
+   private String queryPokemonMove(int moveId) {
       String result = "";
       Cursor cursor = mDatabase.rawQuery(SINGLE_MOVE, new String[]{String.valueOf(moveId)});
       cursor.moveToFirst();
@@ -599,7 +599,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return result;
    }
 
-   public String[] queryPokemonMoves(int moveOne, int moveTwo, int moveThree, int moveFour) {
+   private String[] queryPokemonMoves(int moveOne, int moveTwo, int moveThree, int moveFour) {
       String[] moves = new String[MAX_NUM_MOVES];
       String moveOneName = queryPokemonMove(moveOne);
       String moveTwoName = queryPokemonMove(moveTwo);
@@ -682,7 +682,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return moves;
    }
 
-   public int queryMoveIdByName(String moveName) {
+   private int queryMoveIdByName(String moveName) {
       int moveId;
       Cursor cursor = mDatabase.rawQuery(QUERY_MOVE_ID, new String[]{moveName});
       cursor.moveToFirst();
@@ -766,7 +766,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return true;
    }
 
-   public float[] queryPokemonStats(int pokemonId) {
+   private float[] queryPokemonStats(int pokemonId) {
       Cursor cursor = mDatabase.rawQuery(SELECTED_POKEMON_STATS,
             new String[]{String.valueOf(pokemonId)});
       int index = 0;
@@ -797,7 +797,7 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return moves;
    }
 
-   public String queryPokemonDescription(int pokemonId) {
+   private String queryPokemonDescription(int pokemonId) {
       String result;
       Cursor cursor = mDatabase.rawQuery(POKEMON_DESCRIPTION, new String[]{String.valueOf(pokemonId)});
       cursor.moveToFirst();
