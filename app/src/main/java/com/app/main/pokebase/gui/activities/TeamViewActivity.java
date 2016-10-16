@@ -28,6 +28,7 @@ import com.app.main.pokebase.gui.views.AnimatedRecyclerView;
 import com.app.main.pokebase.model.components.PokemonTeamMember;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 import com.github.fabtransitionactivity.SheetLayout;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import butterknife.BindView;
@@ -66,9 +67,12 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
 
    private boolean mUpdateKey;
    private int mTeamId;
+   private FirebaseAnalytics mAnalytics;
 
    private final static String DEFAULT_NAME = "Team ";
    private final static String DEFAULT_DESCRIPTION = "None";
+   private final static String TEAM_CREATED = "team_created";
+   private final static String CREATED_TEAM = "created_team";
    public static final String TEAM_ID_KEY = "team_id_key";
    public static final String UPDATE_KEY = "update_key";
    public final static String TEAM_NAME = "teamName";
@@ -84,6 +88,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
       ButterKnife.bind(this);
 
       mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
+      mAnalytics = FirebaseAnalytics.getInstance(this);
 
       new LoadNoTeamMembersDrawable(this).execute();
 
@@ -211,6 +216,10 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
          Toast.makeText(this, String.format(getString(R.string.team_add), name),
                Toast.LENGTH_SHORT).show();
          result = true;
+
+         Bundle bundle = new Bundle();
+         bundle.putBoolean(TEAM_CREATED, true);
+         mAnalytics.logEvent(CREATED_TEAM, bundle);
       }
       else if (mUpdateKey && !doesTeamNameExist) {
          mDatabaseHelper.updateTeam(mTeamId, name, description);

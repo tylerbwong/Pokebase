@@ -30,6 +30,7 @@ import com.app.main.pokebase.gui.views.PokemonInfoView;
 import com.app.main.pokebase.model.components.PokemonProfile;
 import com.app.main.pokebase.model.database.DatabaseOpenHelper;
 import com.app.main.pokebase.model.utilities.PokebaseCache;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrConfig;
 import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
@@ -76,19 +77,20 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private ActionBar mActionBar;
 
    private DatabaseOpenHelper mDatabaseHelper;
+   private FirebaseAnalytics mAnalytics;
    private int mPokemonId;
    private String mPokemonName;
    private List<Pair<Integer, String>> mPokemonTeams;
    private boolean mIsTheTitleVisible = false;
    private boolean mIsTheTitleContainerVisible = true;
 
-   public final static String POKEMON_ID_KEY = "pokemon_id";
    private final static String ICON = "icon_";
    private final static String SPRITE = "sprites_";
    private final static String AUDIO = "audio_";
    private final static String DRAWABLE = "drawable";
    private final static String RAW = "raw";
    private final static String UNDO = "UNDO";
+   private final static String PROFILE = "profile";
    private final static int PROFILE_IMG_ELEVATION = 40;
    private final static int DEFAULT_LEVEL = 1;
    private final static int DEFAULT_MOVE = 0;
@@ -103,6 +105,8 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
    private static final int ALPHA_ANIMATIONS_DURATION = 200;
 
+   public final static String POKEMON_ID_KEY = "pokemon_id";
+
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -110,6 +114,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       ButterKnife.bind(this);
 
       mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
+      mAnalytics = FirebaseAnalytics.getInstance(this);
 
       mProfileImg.setClipToOutline(true);
       mProfileImg.setElevation(PROFILE_IMG_ELEVATION);
@@ -159,19 +164,21 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       }
    }
 
-   private class LoadPokemonProfile extends AsyncTask<Void, Void, PokemonProfile> {
+   private class LoadPokemonProfile extends
+         AsyncTask<Void, Void, Pair<List<Pair<Integer, String>>, PokemonProfile>> {
       @Override
-      protected PokemonProfile doInBackground(Void... params) {
+      protected Pair<List<Pair<Integer, String>>, PokemonProfile> doInBackground(Void... params) {
          Bundle extras = getIntent().getExtras();
-         return PokebaseCache.getPokemonProfile(mDatabaseHelper, extras.getInt(POKEMON_ID_KEY));
+         return new Pair<>(mDatabaseHelper.queryTeamIdsAndNames(),
+               PokebaseCache.getPokemonProfile(mDatabaseHelper, extras.getInt(POKEMON_ID_KEY)));
       }
 
       @Override
-      protected void onPostExecute(PokemonProfile result) {
+      protected void onPostExecute(Pair<List<Pair<Integer, String>>, PokemonProfile> result) {
          super.onPostExecute(result);
 
-         mPokemonId = result.getId();
-         mPokemonName = result.getName();
+         mPokemonId = result.second.getId();
+         mPokemonName = result.second.getName();
 
          mInfoView.loadPokemonInfo(mPokemonId);
          mInfoView.setButtonsVisible(true);
@@ -187,7 +194,13 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
          mTitle.setText(formattedName);
          mMainTitle.setText(formattedName);
 
-         mPokemonTeams = mDatabaseHelper.queryTeamIdsAndNames();
+         mPokemonTeams = result.first;
+
+         Bundle bundle = new Bundle();
+         bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, mPokemonId);
+         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mPokemonName);
+         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, PROFILE);
+         mAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
       }
    }
 
