@@ -5,10 +5,10 @@ android:
   components:
     - platform-tools
     - tools
-    - build-tools-24.0.2
-    - android-24
+    - build-tools-25.0.0
+    - android-25
     - extra-google-google_play_services
     - extra-android-m2repository
     - extra-google-m2repository
     - extra-android-support
-    - addon-google_apis-google-24
+    - addon-google_apis-google-25
