@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016 Tyler Wong
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.app.main.pokebase.gui.activities;
 
 import android.content.Context;
@@ -32,7 +48,7 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 
 /**
- * @author Brittany Berlanga
+ * @author Tyler Wong
  */
 public class PokemonEditorActivity extends AppCompatActivity {
    @BindView(R.id.toolbar)
@@ -88,7 +104,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
       mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
       mInfoView = new PokemonInfoView(this);
 
-      new LoadPokemonTeamMember(this).execute();
+      new LoadPokemonTeamMember(this, savedInstanceState).execute();
    }
 
    @Override
@@ -196,11 +212,24 @@ public class PokemonEditorActivity extends AppCompatActivity {
       showBackDialog();
    }
 
+   @Override
+   protected void onSaveInstanceState(Bundle outState) {
+      super.onSaveInstanceState(outState);
+      outState.putInt(MOVE_ONE, mMoveSpinners[0].getSelectedItemPosition());
+      outState.putInt(MOVE_TWO, mMoveSpinners[1].getSelectedItemPosition());
+      outState.putInt(MOVE_THREE, mMoveSpinners[2].getSelectedItemPosition());
+      outState.putInt(MOVE_FOUR, mMoveSpinners[3].getSelectedItemPosition());
+      outState.putInt(LEVEL, mLevelSpinner.getSelectedItemPosition());
+      outState.putString(NICKNAME, mNicknameInput.getText().toString());
+   }
+
    private class LoadPokemonTeamMember extends AsyncTask<Void, Void, String[]> {
       private Context mContext;
+      private Bundle mSavedInstanceState;
 
-      public LoadPokemonTeamMember(Context context) {
+      public LoadPokemonTeamMember(Context context, Bundle savedInstanceState) {
          this.mContext = context;
+         this.mSavedInstanceState = savedInstanceState;
       }
 
       @Override
@@ -288,6 +317,15 @@ public class PokemonEditorActivity extends AppCompatActivity {
                .setTitle(mNicknameInput.getText().toString())
                .setCancelable(true)
                .setTopColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+
+         if (mSavedInstanceState != null) {
+            mMoveSpinners[0].setSelection(mSavedInstanceState.getInt(MOVE_ONE, 0));
+            mMoveSpinners[1].setSelection(mSavedInstanceState.getInt(MOVE_TWO, 0));
+            mMoveSpinners[2].setSelection(mSavedInstanceState.getInt(MOVE_THREE, 0));
+            mMoveSpinners[3].setSelection(mSavedInstanceState.getInt(MOVE_FOUR, 0));
+            mLevelSpinner.setSelection(mSavedInstanceState.getInt(LEVEL, 0));
+            mNicknameInput.setText(mSavedInstanceState.getString(NICKNAME, ""));
+         }
       }
    }
 }

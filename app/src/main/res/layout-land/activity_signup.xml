@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_marginStart="60dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="40dp"
             android:lines="2"
             android:text="@string/name_title"
             android:textAlignment="textStart"
@@ -43,7 +43,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="60dp">
+            android:layout_marginTop="40dp">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/name_input"

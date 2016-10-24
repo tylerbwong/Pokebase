@@ -25,13 +25,6 @@
         android:id="@+id/toolbar"
         layout="@layout/tool_bar"/>
 
-    <View
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:layout_below="@+id/toolbar"
-        android:background="@color/colorPrimary"/>
-
     <LinearLayout
         android:id="@+id/detail_view"
         android:layout_width="match_parent"
@@ -39,12 +32,12 @@
         android:layout_below="@id/header"
         android:layout_marginEnd="40dp"
         android:layout_marginStart="40dp"
-        android:orientation="vertical"
-        android:paddingTop="90dp">
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/text_layout"
@@ -69,8 +62,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="4dp"
                 android:layout_marginStart="8dp"
-                android:layout_toLeftOf="@+id/level_spinner"
-                android:text="Lvl"
+                android:layout_toStartOf="@+id/level_spinner"
+                android:text="@string/lvl"
                 android:textSize="18sp"/>
 
             <Spinner
@@ -83,36 +76,55 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="bottom"
             android:text="@string/moveset"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp"/>
 
-        <Spinner
-            android:id="@+id/move_one_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
 
-        <Spinner
-            android:id="@+id/move_two_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/move_three_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+                <Spinner
+                    android:id="@+id/move_one_spinner"
+                    android:layout_width="220dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"/>
 
-        <Spinner
-            android:id="@+id/move_four_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+                <Spinner
+                    android:id="@+id/move_two_spinner"
+                    android:layout_width="220dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="100dp">
+
+                <Spinner
+                    android:id="@+id/move_three_spinner"
+                    android:layout_width="220dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"/>
+
+                <Spinner
+                    android:id="@+id/move_four_spinner"
+                    android:layout_width="220dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <ImageView
@@ -125,4 +137,12 @@
         android:background="@drawable/circle_shape"
         android:scaleType="centerInside"
         android:transitionName="@string/shared_transition"/>
+
+    <View
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@color/colorPrimary"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentStart="true"/>
 </RelativeLayout>
