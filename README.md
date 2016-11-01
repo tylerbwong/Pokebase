@@ -53,7 +53,7 @@ Internet connection is required for updates only.
 * paolorotolo/AppIntro
 * coyarzun89/FabTransitionActivity
 * yarolegovich/LovelyDialog
-* readstatesoftware/SQLiteAssetHelper
+* readystatesoftware/SQLiteAssetHelper
 * diogobernardino/WilliamChart
 * r0adkll/SlidableActivity
 * mancj/MaterialSearchBar
