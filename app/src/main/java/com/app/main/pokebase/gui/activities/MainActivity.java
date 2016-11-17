@@ -23,7 +23,6 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -95,13 +94,9 @@ public class MainActivity extends AppCompatActivity {
 
       setSupportActionBar(mToolbar);
 
-      mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-         @Override
-         public boolean onNavigationItemSelected(@NonNull final MenuItem menuItem) {
-            mDrawerLayout.closeDrawers();
-            new Handler().postDelayed(new Runnable() {
-               @Override
-               public void run() {
+      mNavigationView.setNavigationItemSelectedListener(menuItem -> {
+               mDrawerLayout.closeDrawers();
+               new Handler().postDelayed(() -> {
                   String fragTag = "";
                   mMenuId = menuItem.getItemId();
 
@@ -148,12 +143,10 @@ public class MainActivity extends AppCompatActivity {
                            .replace(R.id.frame, mCurrentFragment, fragTag).commit();
                      mLastClicked = mMenuId;
                   }
-               }
-            }, DELAY);
-
-            return true;
-         }
-      });
+               }, DELAY);
+               return true;
+            }
+      );
 
       ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
             this, mDrawerLayout, mToolbar, R.string.open_drawer, R.string.close_drawer) {
@@ -213,12 +206,7 @@ public class MainActivity extends AppCompatActivity {
             .setTitle(R.string.clear_all_teams)
             .setMessage(R.string.clear_all_teams_prompt)
             .setCancelable(true)
-            .setPositiveButton(R.string.yes, new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                  clearAllTeams();
-               }
-            })
+            .setPositiveButton(R.string.yes, v -> clearAllTeams())
             .setNegativeButton(R.string.no, null)
             .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
             .show();
@@ -248,14 +236,11 @@ public class MainActivity extends AppCompatActivity {
             .setTitle(R.string.close_title)
             .setMessage(R.string.close_prompt)
             .setCancelable(true)
-            .setPositiveButton(R.string.yes, new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
+            .setPositiveButton(R.string.yes, v -> {
                   Intent intent = new Intent(Intent.ACTION_MAIN);
                   intent.addCategory(Intent.CATEGORY_HOME);
                   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                   startActivity(intent);
-               }
             }).setNegativeButton(R.string.no, null)
             .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
             .show();

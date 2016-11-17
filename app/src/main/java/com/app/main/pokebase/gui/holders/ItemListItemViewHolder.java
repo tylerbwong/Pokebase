@@ -54,12 +54,7 @@ public class ItemListItemViewHolder extends RecyclerView.ViewHolder {
 
       this.mView = itemView;
 
-      mView.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View view) {
-            showItemDialog();
-         }
-      });
+      mView.setOnClickListener(view -> showItemDialog());
    }
 
    private void showItemDialog() {

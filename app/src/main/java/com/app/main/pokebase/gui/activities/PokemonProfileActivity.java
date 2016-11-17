@@ -294,12 +294,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
    private void playAudio() {
       final MediaPlayer player = MediaPlayer.create(this, getResources().getIdentifier(
             AUDIO + mPokemonId, RAW, getPackageName()));
-      player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-         @Override
-         public void onCompletion(MediaPlayer mediaPlayer) {
-            player.release();
-         }
-      });
+      player.setOnCompletionListener(mediaPlayer -> player.release());
       player.start();
       Toast.makeText(this, getString(R.string.sound_played), Toast.LENGTH_SHORT).show();
    }
@@ -323,25 +318,19 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
                .setTopColorRes(R.color.colorPrimary)
                .setTitle(String.format(getString(R.string.add_team_title), mPokemonName))
                .setIcon(R.drawable.ic_add_circle_outline_white_24dp)
-               .setItems(teamNames, new LovelyChoiceDialog.OnItemSelectedListener<String>() {
-                  @Override
-                  public void onItemSelected(int position, String item) {
+               .setItems(teamNames, (position, item) -> {
                      mDatabaseHelper.insertTeamPokemon(teams.get(position).first, mPokemonId,
                            mPokemonName, DEFAULT_LEVEL, DEFAULT_MOVE, DEFAULT_MOVE,
                            DEFAULT_MOVE, DEFAULT_MOVE);
+
                      Snackbar snackbar = Snackbar.make(mLayout, String.format(
                            getString(R.string.add_success), mPokemonName, item), Snackbar.LENGTH_LONG)
-                           .setAction(UNDO, new View.OnClickListener() {
-                              @Override
-                              public void onClick(View view) {
-                                 mDatabaseHelper.deleteLastAddedPokemon();
-                              }
-                           });
+                           .setAction(UNDO, view -> mDatabaseHelper.deleteLastAddedPokemon());
+
                      snackbar.setActionTextColor(ContextCompat.getColor(
                            getApplicationContext(), R.color.colorPrimary));
                      snackbar.show();
-                  }
-               })
+                  })
                .show();
       }
       else {

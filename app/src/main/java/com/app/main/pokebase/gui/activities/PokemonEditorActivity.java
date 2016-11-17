@@ -30,7 +30,6 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -144,12 +143,8 @@ public class PokemonEditorActivity extends AppCompatActivity {
             .setMessage(String.format(getString(R.string.delete_team_prompt),
                   mNicknameInput.getText().toString()))
             .setCancelable(true)
-            .setPositiveButton(R.string.yes, new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                  deletePokemon();
-               }
-            }).setNegativeButton(R.string.no, null)
+            .setPositiveButton(R.string.yes, v -> deletePokemon())
+            .setNegativeButton(R.string.no, null)
             .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
             .show();
    }
@@ -192,12 +187,7 @@ public class PokemonEditorActivity extends AppCompatActivity {
             .setTitle(R.string.go_back)
             .setMessage(R.string.back_prompt)
             .setCancelable(true)
-            .setPositiveButton(R.string.yes, new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                  backToTeamView();
-               }
-            })
+            .setPositiveButton(R.string.yes, v -> backToTeamView())
             .setNegativeButton(R.string.no, null)
             .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
             .show();

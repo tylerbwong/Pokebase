@@ -67,9 +67,7 @@ public class TeamCardViewHolder extends RecyclerView.ViewHolder {
       this.mView = itemView;
       mTeamId = 0;
 
-      this.mView.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View view) {
+      this.mView.setOnClickListener(view -> {
             Context cardContext = view.getContext();
             Intent editorIntent = new Intent(cardContext, TeamViewActivity.class);
             Bundle extras = new Bundle();
@@ -80,7 +78,7 @@ public class TeamCardViewHolder extends RecyclerView.ViewHolder {
             editorIntent.putExtras(extras);
             view.getContext().startActivity(editorIntent);
          }
-      });
+      );
 
       mPokemonList = new ImageView[NUM_POKEMON];
 

@@ -60,9 +60,7 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
 
       this.mView = itemView;
 
-      mView.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View view) {
+      mView.setOnClickListener(view -> {
             Context cardContext = view.getContext();
             Intent editorIntent = new Intent(cardContext, PokemonEditorActivity.class);
             String transitionName = cardContext.getString(R.string.shared_transition);
@@ -82,7 +80,7 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
 
             view.getContext().startActivity(editorIntent, transitionActivityOptions.toBundle());
          }
-      });
+      );
    }
 
    public void setPokemon(PokemonTeamMember member) {

@@ -27,6 +27,8 @@ import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -113,6 +115,23 @@ public class PokebaseFragment extends Fragment implements AdapterView.OnItemSele
 
       mPokemonList.setLayoutManager(new LinearLayoutManager(getContext()));
       mPokemonList.setHasFixedSize(true);
+
+      mSearchInput.addTextChangedListener(new TextWatcher() {
+
+         @Override
+         public void onTextChanged(CharSequence sequence, int start, int before, int count) {
+            refreshData();
+         }
+
+         @Override
+         public void beforeTextChanged(CharSequence sequence, int start, int count, int after) {
+
+         }
+
+         @Override
+         public void afterTextChanged(Editable editable) {
+         }
+      });
 
       new LoadPokemonList().execute();
       new LoadEmptyView().execute();

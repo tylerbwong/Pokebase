@@ -56,9 +56,7 @@ public class MoveListItemViewHolder extends RecyclerView.ViewHolder {
       this.mView = itemView;
       mDatabaseHelper = DatabaseOpenHelper.getInstance(mView.getContext());
 
-      mView.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View view) {
+      mView.setOnClickListener(view -> {
             mMove = PokebaseCache.getMove(mDatabaseHelper, mNameView.getText().toString());
 
             if (mMove.getTypeName() == null) {
@@ -71,7 +69,7 @@ public class MoveListItemViewHolder extends RecyclerView.ViewHolder {
 
             showMoveInfoDialog();
          }
-      });
+      );
    }
 
    private void showMoveInfoDialog() {

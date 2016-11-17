@@ -269,12 +269,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
             .setMessage(String.format(getString(R.string.delete_team_prompt),
                   mNameInput.getText().toString().trim()))
             .setCancelable(true)
-            .setPositiveButton(R.string.yes, new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                  deleteTeam();
-               }
-            })
+            .setPositiveButton(R.string.yes, v -> deleteTeam())
             .setNegativeButton(R.string.no, null)
             .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
             .show();
@@ -295,12 +290,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
             .setTitle(R.string.go_back)
             .setMessage(R.string.back_prompt)
             .setCancelable(true)
-            .setPositiveButton(R.string.yes, new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-                  backToMain();
-               }
-            })
+            .setPositiveButton(R.string.yes, v -> backToMain())
             .setNegativeButton(R.string.no, null)
             .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
             .show();
