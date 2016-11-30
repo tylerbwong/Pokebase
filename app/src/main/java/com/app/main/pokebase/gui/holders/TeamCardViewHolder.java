@@ -68,16 +68,16 @@ public class TeamCardViewHolder extends RecyclerView.ViewHolder {
       mTeamId = 0;
 
       this.mView.setOnClickListener(view -> {
-            Context cardContext = view.getContext();
-            Intent editorIntent = new Intent(cardContext, TeamViewActivity.class);
-            Bundle extras = new Bundle();
-            extras.putInt(TeamViewActivity.TEAM_ID_KEY, mTeamId);
-            extras.putBoolean(TeamViewActivity.UPDATE_KEY, true);
-            extras.putString(TeamViewActivity.TEAM_NAME, mTitleLabel.getText().toString());
-            extras.putString(TeamViewActivity.DESCRIPTION, mDescription.getText().toString());
-            editorIntent.putExtras(extras);
-            view.getContext().startActivity(editorIntent);
-         }
+               Context cardContext = view.getContext();
+               Intent editorIntent = new Intent(cardContext, TeamViewActivity.class);
+               Bundle extras = new Bundle();
+               extras.putInt(TeamViewActivity.TEAM_ID_KEY, mTeamId);
+               extras.putBoolean(TeamViewActivity.UPDATE_KEY, true);
+               extras.putString(TeamViewActivity.TEAM_NAME, mTitleLabel.getText().toString());
+               extras.putString(TeamViewActivity.DESCRIPTION, mDescription.getText().toString());
+               editorIntent.putExtras(extras);
+               view.getContext().startActivity(editorIntent);
+            }
       );
 
       mPokemonList = new ImageView[NUM_POKEMON];

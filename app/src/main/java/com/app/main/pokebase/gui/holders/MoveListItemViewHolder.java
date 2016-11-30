@@ -57,18 +57,18 @@ public class MoveListItemViewHolder extends RecyclerView.ViewHolder {
       mDatabaseHelper = DatabaseOpenHelper.getInstance(mView.getContext());
 
       mView.setOnClickListener(view -> {
-            mMove = PokebaseCache.getMove(mDatabaseHelper, mNameView.getText().toString());
+               mMove = PokebaseCache.getMove(mDatabaseHelper, mNameView.getText().toString());
 
-            if (mMove.getTypeName() == null) {
-               mType = mDatabaseHelper.queryTypeById(mMove.getTypeId());
-               mMove.setTypeName(mType);
-            }
-            else {
-               mType = mMove.getTypeName();
-            }
+               if (mMove.getTypeName() == null) {
+                  mType = mDatabaseHelper.queryTypeById(mMove.getTypeId());
+                  mMove.setTypeName(mType);
+               }
+               else {
+                  mType = mMove.getTypeName();
+               }
 
-            showMoveInfoDialog();
-         }
+               showMoveInfoDialog();
+            }
       );
    }
 

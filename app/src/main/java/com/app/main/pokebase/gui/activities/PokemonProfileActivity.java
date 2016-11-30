@@ -319,18 +319,18 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
                .setTitle(String.format(getString(R.string.add_team_title), mPokemonName))
                .setIcon(R.drawable.ic_add_circle_outline_white_24dp)
                .setItems(teamNames, (position, item) -> {
-                     mDatabaseHelper.insertTeamPokemon(teams.get(position).first, mPokemonId,
-                           mPokemonName, DEFAULT_LEVEL, DEFAULT_MOVE, DEFAULT_MOVE,
-                           DEFAULT_MOVE, DEFAULT_MOVE);
+                  mDatabaseHelper.insertTeamPokemon(teams.get(position).first, mPokemonId,
+                        mPokemonName, DEFAULT_LEVEL, DEFAULT_MOVE, DEFAULT_MOVE,
+                        DEFAULT_MOVE, DEFAULT_MOVE);
 
-                     Snackbar snackbar = Snackbar.make(mLayout, String.format(
-                           getString(R.string.add_success), mPokemonName, item), Snackbar.LENGTH_LONG)
-                           .setAction(UNDO, view -> mDatabaseHelper.deleteLastAddedPokemon());
+                  Snackbar snackbar = Snackbar.make(mLayout, String.format(
+                        getString(R.string.add_success), mPokemonName, item), Snackbar.LENGTH_LONG)
+                        .setAction(UNDO, view -> mDatabaseHelper.deleteLastAddedPokemon());
 
-                     snackbar.setActionTextColor(ContextCompat.getColor(
-                           getApplicationContext(), R.color.colorPrimary));
-                     snackbar.show();
-                  })
+                  snackbar.setActionTextColor(ContextCompat.getColor(
+                        getApplicationContext(), R.color.colorPrimary));
+                  snackbar.show();
+               })
                .show();
       }
       else {

@@ -61,25 +61,25 @@ public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
       this.mView = itemView;
 
       mView.setOnClickListener(view -> {
-            Context cardContext = view.getContext();
-            Intent editorIntent = new Intent(cardContext, PokemonEditorActivity.class);
-            String transitionName = cardContext.getString(R.string.shared_transition);
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(
-                  (TeamViewActivity) cardContext, mPokemon, transitionName);
-            editorIntent.putExtra("pokemonId", mPokemonData.mPokemonId);
-            editorIntent.putExtra("teamId", mTeamId);
-            editorIntent.putExtra("title", mTitle);
-            editorIntent.putExtra("description", mDescription);
-            editorIntent.putExtra("memberId", mPokemonData.mMemberId);
-            editorIntent.putExtra("level", mPokemonData.mLevel);
-            editorIntent.putExtra("nickname", mPokemonData.mNickname);
-            editorIntent.putExtra("moveOne", mPokemonData.mMoves[0]);
-            editorIntent.putExtra("moveTwo", mPokemonData.mMoves[1]);
-            editorIntent.putExtra("moveThree", mPokemonData.mMoves[2]);
-            editorIntent.putExtra("moveFour", mPokemonData.mMoves[3]);
+               Context cardContext = view.getContext();
+               Intent editorIntent = new Intent(cardContext, PokemonEditorActivity.class);
+               String transitionName = cardContext.getString(R.string.shared_transition);
+               ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(
+                     (TeamViewActivity) cardContext, mPokemon, transitionName);
+               editorIntent.putExtra("pokemonId", mPokemonData.mPokemonId);
+               editorIntent.putExtra("teamId", mTeamId);
+               editorIntent.putExtra("title", mTitle);
+               editorIntent.putExtra("description", mDescription);
+               editorIntent.putExtra("memberId", mPokemonData.mMemberId);
+               editorIntent.putExtra("level", mPokemonData.mLevel);
+               editorIntent.putExtra("nickname", mPokemonData.mNickname);
+               editorIntent.putExtra("moveOne", mPokemonData.mMoves[0]);
+               editorIntent.putExtra("moveTwo", mPokemonData.mMoves[1]);
+               editorIntent.putExtra("moveThree", mPokemonData.mMoves[2]);
+               editorIntent.putExtra("moveFour", mPokemonData.mMoves[3]);
 
-            view.getContext().startActivity(editorIntent, transitionActivityOptions.toBundle());
-         }
+               view.getContext().startActivity(editorIntent, transitionActivityOptions.toBundle());
+            }
       );
    }
 

@@ -237,10 +237,10 @@ public class MainActivity extends AppCompatActivity {
             .setMessage(R.string.close_prompt)
             .setCancelable(true)
             .setPositiveButton(R.string.yes, v -> {
-                  Intent intent = new Intent(Intent.ACTION_MAIN);
-                  intent.addCategory(Intent.CATEGORY_HOME);
-                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                  startActivity(intent);
+               Intent intent = new Intent(Intent.ACTION_MAIN);
+               intent.addCategory(Intent.CATEGORY_HOME);
+               intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+               startActivity(intent);
             }).setNegativeButton(R.string.no, null)
             .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
             .show();
