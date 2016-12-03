@@ -180,21 +180,19 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
       }
    }
 
-   private class LoadPokemonProfile extends
-         AsyncTask<Void, Void, Pair<List<Pair<Integer, String>>, PokemonProfile>> {
+   private class LoadPokemonProfile extends AsyncTask<Void, Void, PokemonProfile> {
       @Override
-      protected Pair<List<Pair<Integer, String>>, PokemonProfile> doInBackground(Void... params) {
+      protected PokemonProfile doInBackground(Void... params) {
          Bundle extras = getIntent().getExtras();
-         return new Pair<>(mDatabaseHelper.queryTeamIdsAndNames(),
-               PokebaseCache.getPokemonProfile(mDatabaseHelper, extras.getInt(POKEMON_ID_KEY)));
+         return PokebaseCache.getPokemonProfile(mDatabaseHelper, extras.getInt(POKEMON_ID_KEY));
       }
 
       @Override
-      protected void onPostExecute(Pair<List<Pair<Integer, String>>, PokemonProfile> result) {
+      protected void onPostExecute(PokemonProfile result) {
          super.onPostExecute(result);
 
-         mPokemonId = result.second.getId();
-         mPokemonName = result.second.getName();
+         mPokemonId = result.getId();
+         mPokemonName = result.getName();
 
          mInfoView.loadPokemonInfo(mPokemonId);
          mInfoView.setButtonsVisible(true);
@@ -209,8 +207,6 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
                formatId(mPokemonId), mPokemonName);
          mTitle.setText(formattedName);
          mMainTitle.setText(formattedName);
-
-         mPokemonTeams = result.first;
 
          Bundle bundle = new Bundle();
          bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, mPokemonId);
@@ -283,7 +279,7 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
             playAudio();
             break;
          case R.id.add_action:
-            showAddToTeamDialog(mPokemonTeams);
+            showAddToTeamDialog(mPokemonTeams = mDatabaseHelper.queryTeamIdsAndNames());
             break;
          default:
             break;
