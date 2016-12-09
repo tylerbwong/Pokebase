@@ -23,6 +23,10 @@
     <string name="teams">My Teams</string>
     <string name="new_team">New Team</string>
 
+    <!-- URLS -->
+    <string name="sprite_url">https://img.pokemondb.net/sprites/omega-ruby-alpha-sapphire/dex/normal/%1$s.png</string>
+    <string name="icon_url">https://raw.githubusercontent.com/msikma/pokesprite/master/icons/pokemon/regular/%1$s.png</string>
+
     <!-- TITLES -->
     <string name="name_title">First, what is\nyour name?</string>
     <string name="gender_title">Are you a Boy?\nOr are you a Girl?</string>

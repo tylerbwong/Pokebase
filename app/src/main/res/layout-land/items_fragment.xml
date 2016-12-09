@@ -20,7 +20,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <com.app.main.pokebase.gui.views.AnimatedRecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/items_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

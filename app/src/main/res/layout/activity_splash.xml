@@ -22,7 +22,7 @@
               android:background="@color/colorPrimary"
               android:gravity="center"
               android:orientation="vertical"
-              tools:context=".gui.activities.SplashActivity">
+              tools:context="me.tylerbwong.pokebase.gui.activities.SplashActivity">
 
     <LinearLayout
         android:id="@+id/logo"

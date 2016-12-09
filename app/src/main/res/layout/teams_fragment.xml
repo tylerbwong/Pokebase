@@ -20,7 +20,7 @@
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent">
 
-    <com.app.main.pokebase.gui.views.AnimatedRecyclerView
+    <me.tylerbwong.pokebase.gui.views.AnimatedRecyclerView
         android:id="@+id/team_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -39,7 +39,7 @@
         app:fabSize="normal"
         app:layout_anchor="@+id/team_list"
         app:layout_anchorGravity="bottom|end"
-        app:layout_behavior="com.app.main.pokebase.gui.animations.FABScrollBehavior"
+        app:layout_behavior="me.tylerbwong.pokebase.gui.animations.FABScrollBehavior"
         app:rippleColor="@color/colorAccent"/>
 
     <LinearLayout

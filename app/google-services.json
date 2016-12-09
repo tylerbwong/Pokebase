@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:511344133435:android:af1af53e544b2c0d",
+        "mobilesdk_app_id": "1:511344133435:android:f96074ea6da5e920",
         "android_client_info": {
-          "package_name": "com.app.main.pokebase"
+          "package_name": "me.tylerbwong.pokebase"
         }
       },
       "oauth_client": [

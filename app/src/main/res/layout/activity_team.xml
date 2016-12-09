@@ -58,7 +58,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <com.app.main.pokebase.gui.views.AnimatedRecyclerView
+    <me.tylerbwong.pokebase.gui.views.AnimatedRecyclerView
         android:id="@+id/team_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -99,7 +99,7 @@
         app:fabSize="normal"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|right|end"
-        app:layout_behavior="com.app.main.pokebase.gui.animations.FABScrollBehavior"
+        app:layout_behavior="me.tylerbwong.pokebase.gui.animations.FABScrollBehavior"
         app:rippleColor="@color/colorAccent"/>
 
     <com.github.fabtransitionactivity.SheetLayout
