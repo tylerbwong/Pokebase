@@ -26,8 +26,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -51,9 +49,7 @@ public class IntroTeamFragment extends Fragment {
       View view = inflater.inflate(R.layout.intro_team_fragment, container, false);
       mUnbinder = ButterKnife.bind(this, view);
 
-      Glide.with(this)
-            .load(R.drawable.trainer)
-            .into(mTrainerImage);
+      mTrainerImage.setImageResource(R.drawable.trainer);
 
       Typeface robotoLight = Typefaces.get(getContext(), Typefaces.ROBOTO_PATH);
 

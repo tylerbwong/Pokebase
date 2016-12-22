@@ -46,7 +46,9 @@
     <string name="base_stats">Base Stats</string>
     <string name="view_profile">View Profile</string>
     <string name="no_results">No Results</string>
+    <string name="change_trainer_name">Change Trainer Name</string>
     <string name="check_updates">Check for updates</string>
+    <string name="trainer_name">Trainer Name</string>
     <string name="updates">Updates</string>
     <string name="version">Version</string>
 
@@ -56,6 +58,7 @@
     <string name="shared_transition">shared transition</string>
     <string name="speech_prompt">Search for a Pokémon</string>
     <string name="update_url">https://github.com/tylerbwong/Pokebase-SQLite/releases/latest</string>
+    <string name="trainer_name_key">name</string>
     <string name="update_key">update</string>
     <string name="version_key">version</string>
 

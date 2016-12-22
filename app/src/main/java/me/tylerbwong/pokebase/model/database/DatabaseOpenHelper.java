@@ -664,11 +664,21 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       cursor.moveToFirst();
       result = cursor.getString(0);
 
-      if (result.equals("Nidoran♂")) {
-         result = "Nidoran-M";
-      }
-      else if(result.equals("Nidoran♀")) {
-         result = "Nidoran-F";
+      switch (result) {
+         case "Nidoran♂":
+            result = "Nidoran-M";
+            break;
+         case "Nidoran♀":
+            result = "Nidoran-F";
+            break;
+         case "Mr. Mime":
+            result = "Mr-Mime";
+            break;
+         case "Mime Jr.":
+            result = "Mime-Jr";
+            break;
+         default:
+            break;
       }
 
       cursor.close();

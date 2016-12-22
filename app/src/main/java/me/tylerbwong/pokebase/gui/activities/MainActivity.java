@@ -153,6 +153,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
    }
 
    @Override
+   protected void onResume() {
+      super.onResume();
+      SharedPreferences pref = getSharedPreferences(SplashActivity.ACTIVITY_PREF, Context.MODE_PRIVATE);
+      mUsernameView.setText(String.format(getString(R.string.trainer),
+            pref.getString(SignUpActivity.USERNAME, "Error")));
+   }
+
+   @Override
    public boolean onCreateOptionsMenu(Menu menu) {
       MenuInflater inflater = getMenuInflater();
       inflater.inflate(R.menu.menu_main, menu);

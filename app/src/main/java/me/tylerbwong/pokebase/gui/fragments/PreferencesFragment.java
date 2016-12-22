@@ -16,32 +16,42 @@
 
 package me.tylerbwong.pokebase.gui.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ListView;
 
+import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
+
 import me.tylerbwong.pokebase.R;
+import me.tylerbwong.pokebase.gui.activities.SignUpActivity;
+import me.tylerbwong.pokebase.gui.activities.SplashActivity;
 
 /**
  * @author Tyler Wong
  */
 public class PreferencesFragment extends PreferenceFragment implements
       Preference.OnPreferenceClickListener {
+   private Preference mNamePreference;
    private Preference mUpdatePreference;
    private Preference mVersionPreference;
 
+   private SharedPreferences mPref;
    private boolean mListStyled = false;
 
    @Override
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-
+      mPref = getActivity().getSharedPreferences(SplashActivity.ACTIVITY_PREF,
+            Context.MODE_PRIVATE);
       View rootView = getView();
       ListView list = null;
       if (rootView != null) {
@@ -62,10 +72,15 @@ public class PreferencesFragment extends PreferenceFragment implements
       }
 
       addPreferencesFromResource(R.xml.preferences);
+
+      mNamePreference = getPreferenceScreen().findPreference(getString(R.string.trainer_name_key));
       mUpdatePreference = getPreferenceScreen().findPreference(getString(R.string.update_key));
       mVersionPreference = getPreferenceScreen().findPreference(getString(R.string.version_key));
 
+      mNamePreference.setOnPreferenceClickListener(this);
       mUpdatePreference.setOnPreferenceClickListener(this);
+
+      mNamePreference.setSummary(mPref.getString(SignUpActivity.USERNAME, "Error"));
 
       if (packageInfo != null) {
          mVersionPreference.setSummary(packageInfo.versionName);
@@ -91,12 +106,25 @@ public class PreferencesFragment extends PreferenceFragment implements
 
    @Override
    public boolean onPreferenceClick(Preference preference) {
-      if (preference.getKey().equals(getString(R.string.update_key))) {
+      if (preference.getKey().equals(getString(R.string.trainer_name_key))) {
+         new LovelyTextInputDialog(getActivity())
+               .setTopColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary))
+               .setTitle(getString(R.string.change_trainer_name))
+               .setIcon(R.drawable.ic_info_white_24dp)
+               .setInitialInput(mPref.getString(SignUpActivity.USERNAME, "Error"))
+               .setConfirmButton(android.R.string.ok, text -> {
+                  if (!text.isEmpty()) {
+                     mPref.edit().putString(SignUpActivity.USERNAME, text).apply();
+                     mNamePreference.setSummary(mPref.getString(SignUpActivity.USERNAME, "Error"));
+                  }
+               }).show();
+      }
+      else if (preference.getKey().equals(getString(R.string.update_key))) {
          preference.setSummary(getString(R.string.checking));
 
          Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.update_url)));
          startActivity(browserIntent);
       }
-      return false;
+      return true;
    }
 }
