@@ -88,7 +88,7 @@ dependencies {
     // RxJava
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.2.2'
-    compile 'com.artemzin.rxjava:proguard-rules:1.2.2.0'
+    compile 'com.artemzin.rxjava:proguard-rules:1.2.6.0'
 
     // Circle Image View
     compile 'de.hdodenhof:circleimageview:2.1.0'
@@ -115,8 +115,8 @@ dependencies {
     compile 'com.r0adkll:slidableactivity:2.0.5'
 
     // Butterknife
-    compile 'com.jakewharton:butterknife:8.3.0'
-    apt 'com.jakewharton:butterknife-compiler:8.3.0'
+    compile 'com.jakewharton:butterknife:8.5.1'
+    apt 'com.jakewharton:butterknife-compiler:8.5.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

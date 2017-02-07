@@ -11,4 +11,8 @@ android:
     - extra-android-m2repository
     - extra-google-m2repository
     - extra-android-support
-    - addon-google_apis-google-24
+    - addon-google_apis-google-25
+script:
+    ./gradlew build jacocoTestReport assembleAndroidTest
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -t 75dfc243-1ef7-4eaf-a6f0-b44f299584c8
