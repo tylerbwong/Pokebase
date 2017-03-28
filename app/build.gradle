@@ -109,7 +109,7 @@ dependencies {
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
 
     // William Chart
-    compile 'com.diogobernardino:williamchart:2.4.0'
+    compile 'com.diogobernardino:williamchart:2.2'
 
     // Slideable Activity
     compile 'com.r0adkll:slidableactivity:2.0.5'
