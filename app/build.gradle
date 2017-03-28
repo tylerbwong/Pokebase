@@ -94,22 +94,22 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
 
     // Material Search Bar
-    compile 'com.github.mancj:MaterialSearchBar:0.3.2'
+    compile 'com.github.mancj:MaterialSearchBar:0.6'
 
     // App Intro
-    compile 'com.github.paolorotolo:appintro:4.0.0'
+    compile 'com.github.paolorotolo:appintro:4.1.0'
 
     // FAB Transition
     compile 'com.github.coyarzun89:fabtransitionactivity:0.2.0'
 
     // Material Dialogs
-    compile 'com.yarolegovich:lovely-dialog:1.0.4'
+    compile 'com.yarolegovich:lovely-dialog:1.0.7'
 
     // SQLite Asset Helper
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
 
     // William Chart
-    compile 'com.diogobernardino:williamchart:2.2'
+    compile 'com.diogobernardino:williamchart:2.4.0'
 
     // Slideable Activity
     compile 'com.r0adkll:slidableactivity:2.0.5'
