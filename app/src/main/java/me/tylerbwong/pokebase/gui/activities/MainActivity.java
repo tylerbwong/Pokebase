@@ -43,6 +43,8 @@ import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.tylerbwong.pokebase.R;
 import me.tylerbwong.pokebase.gui.fragments.ItemsFragment;
 import me.tylerbwong.pokebase.gui.fragments.MovesFragment;
@@ -205,12 +207,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
    }
 
    private void clearAllTeams() {
-      mDatabaseHelper.deleteAllTeams();
-      if (mCurrentFragment instanceof TeamsFragment) {
-         ((TeamsFragment) mCurrentFragment).refreshAdapter();
-      }
-      Toast.makeText(this, getResources().getString(R.string.cleared_teams),
-            Toast.LENGTH_SHORT).show();
+      mDatabaseHelper.deleteAllTeams()
+         .subscribeOn(Schedulers.newThread())
+         .observeOn(AndroidSchedulers.mainThread())
+         .subscribe(() -> {
+            if (mCurrentFragment instanceof TeamsFragment) {
+               ((TeamsFragment) mCurrentFragment).refreshAdapter();
+            }
+            Toast.makeText(this, getResources().getString(R.string.cleared_teams),
+                    Toast.LENGTH_SHORT).show();
+         });
    }
 
    private void hideKeyboard() {

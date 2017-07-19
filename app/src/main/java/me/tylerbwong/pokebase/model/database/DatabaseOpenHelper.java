@@ -31,6 +31,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.Completable;
+import io.reactivex.Observable;
 import me.tylerbwong.pokebase.model.components.Item;
 import me.tylerbwong.pokebase.model.components.Move;
 import me.tylerbwong.pokebase.model.components.PokemonListItem;
@@ -38,7 +40,6 @@ import me.tylerbwong.pokebase.model.components.PokemonProfile;
 import me.tylerbwong.pokebase.model.components.PokemonTeamItem;
 import me.tylerbwong.pokebase.model.components.PokemonTeamMember;
 import me.tylerbwong.pokebase.model.components.Team;
-import rx.Observable;
 
 /**
  * @author Tyler Wong
@@ -420,21 +421,23 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
    }
 
    public Observable<PokemonProfile> queryPokemonProfile(int id) {
-      PokemonProfile pokemon;
-      Cursor cursor = database.rawQuery(POKEMON_PROFILE_QUERY, new String[]{String.valueOf(id)});
-      cursor.moveToFirst();
+      return Observable.defer(() -> {
+            PokemonProfile pokemon;
+            Cursor cursor = database.rawQuery(POKEMON_PROFILE_QUERY, new String[]{String.valueOf(id)});
+            cursor.moveToFirst();
 
-      pokemon = new PokemonProfile(cursor.getInt(cursor.getColumnIndex(ID_COL)),
-            cursor.getString(cursor.getColumnIndex(NAME_COL)),
-            cursor.getInt(cursor.getColumnIndex(HEIGHT_COL)),
-            cursor.getInt(cursor.getColumnIndex(WEIGHT_COL)),
-            cursor.getInt(cursor.getColumnIndex(BASE_EXP_COL)),
-            cursor.getString(cursor.getColumnIndex(REGION_COL)),
-            queryPokemonTypes(id), queryPokemonMoves(id), queryPokemonEvolutions(id),
-            queryPokemonDescription(id), queryPokemonStats(id));
+            pokemon = new PokemonProfile(cursor.getInt(cursor.getColumnIndex(ID_COL)),
+                    cursor.getString(cursor.getColumnIndex(NAME_COL)),
+                    cursor.getInt(cursor.getColumnIndex(HEIGHT_COL)),
+                    cursor.getInt(cursor.getColumnIndex(WEIGHT_COL)),
+                    cursor.getInt(cursor.getColumnIndex(BASE_EXP_COL)),
+                    cursor.getString(cursor.getColumnIndex(REGION_COL)),
+                    queryPokemonTypes(id), queryPokemonMoves(id), queryPokemonEvolutions(id),
+                    queryPokemonDescription(id), queryPokemonStats(id));
 
-      cursor.close();
-      return Observable.just(pokemon);
+            cursor.close();
+            return Observable.just(pokemon);
+      });
    }
 
    private PokemonListItem[] queryPokemonEvolutions(int id) {
@@ -453,40 +456,40 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return pokemonEvolutions;
    }
 
-   public Observable<Void> insertTeam(String name, String description) {
+   public void insertTeam(String name, String description) {
       ContentValues contentValues = new ContentValues();
       contentValues.put(NAME_COL, name);
       contentValues.put(DESCRIPTION_COL, description);
       contentValues.put(LAST_UPDATED_COL, getDate());
       database.insert(TEAMS_TABLE, null, contentValues);
-      return Observable.just(null);
    }
 
-   public Observable<Void> insertTeamPokemon(int teamId, int pokemonId, String nickname, int level,
-                                    int moveOne, int moveTwo, int moveThree, int moveFour) {
-      ContentValues contentValues = new ContentValues();
-      contentValues.put(TEAM_ID_COL, teamId);
-      contentValues.put(POKEMON_ID_COL, pokemonId);
-      contentValues.put(NICKNAME_COL, nickname);
-      contentValues.put(LEVEL_COL, level);
-      contentValues.put(MOVE_ONE_COL, moveOne);
-      contentValues.put(MOVE_TWO_COL, moveTwo);
-      contentValues.put(MOVE_THREE_COL, moveThree);
-      contentValues.put(MOVE_FOUR_COL, moveFour);
-      contentValues.put(LAST_UPDATED_COL, getDate());
-      database.insert(TEAM_POKEMON_TABLE, null, contentValues);
-      updateTeamLastUpdated(teamId);
-      return Observable.just(null);
+   public Completable insertTeamPokemon(int teamId, int pokemonId, String nickname, int level,
+                                        int moveOne, int moveTwo, int moveThree, int moveFour) {
+      return Completable.defer(() -> {
+         ContentValues contentValues = new ContentValues();
+         contentValues.put(TEAM_ID_COL, teamId);
+         contentValues.put(POKEMON_ID_COL, pokemonId);
+         contentValues.put(NICKNAME_COL, nickname);
+         contentValues.put(LEVEL_COL, level);
+         contentValues.put(MOVE_ONE_COL, moveOne);
+         contentValues.put(MOVE_TWO_COL, moveTwo);
+         contentValues.put(MOVE_THREE_COL, moveThree);
+         contentValues.put(MOVE_FOUR_COL, moveFour);
+         contentValues.put(LAST_UPDATED_COL, getDate());
+         database.insert(TEAM_POKEMON_TABLE, null, contentValues);
+         updateTeamLastUpdated(teamId);
+         return Completable.complete();
+      });
    }
 
-   public Observable<Void> updateTeam(int teamId, String name, String description) {
+   public void updateTeam(int teamId, String name, String description) {
       ContentValues contentValues = new ContentValues();
       String idFilter = ROW_ID_COL + "=" + teamId;
       contentValues.put(NAME_COL, name);
       contentValues.put(DESCRIPTION_COL, description);
       contentValues.put(LAST_UPDATED_COL, getDate());
       database.update(TEAMS_TABLE, contentValues, idFilter, null);
-      return Observable.just(null);
    }
 
    private int queryTeamCount(int teamId) {
@@ -509,12 +512,11 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return result;
    }
 
-   private Observable<Void> updateTeamLastUpdated(int teamId) {
+   private void updateTeamLastUpdated(int teamId) {
       String teamFilter = ROW_ID_COL + "=" + teamId;
       ContentValues contentValues = new ContentValues();
       contentValues.put(LAST_UPDATED_COL, getDate());
       database.update(TEAMS_TABLE, contentValues, teamFilter, null);
-      return Observable.just(null);
    }
 
    public boolean doesTeamNameExist(String name, int teamId, boolean updateKey) {
@@ -551,21 +553,23 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
    }
 
    public Observable<List<Pair<Integer, String>>> queryTeamIdsAndNames() {
-      List<Pair<Integer, String>> teamNames = new ArrayList<>();
-      Cursor cursor = database.rawQuery(TEAM_NAMES, null);
-      int teamId;
-      cursor.moveToFirst();
+      return Observable.defer(() -> {
+         List<Pair<Integer, String>> teamNames = new ArrayList<>();
+         Cursor cursor = database.rawQuery(TEAM_NAMES, null);
+         int teamId;
+         cursor.moveToFirst();
 
-      while (!cursor.isAfterLast()) {
-         teamId = cursor.getInt(cursor.getColumnIndex(ROW_ID_COL));
+         while (!cursor.isAfterLast()) {
+            teamId = cursor.getInt(cursor.getColumnIndex(ROW_ID_COL));
 
-         if (queryTeamCount(teamId) < MAX_TEAM_SIZE) {
-            teamNames.add(new Pair<>(teamId, cursor.getString(cursor.getColumnIndex(NAME_COL))));
+            if (queryTeamCount(teamId) < MAX_TEAM_SIZE) {
+               teamNames.add(new Pair<>(teamId, cursor.getString(cursor.getColumnIndex(NAME_COL))));
+            }
+            cursor.moveToNext();
          }
-         cursor.moveToNext();
-      }
-      cursor.close();
-      return Observable.just(teamNames);
+         cursor.close();
+         return Observable.just(teamNames);
+      });
    }
 
    private PokemonTeamItem[] queryTeamPokemonIds(int teamId) {
@@ -585,22 +589,24 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
    }
 
    public Observable<Team[]> queryAllTeams() {
-      Cursor cursor = database.rawQuery(ALL_TEAM_INFO, null);
-      Team[] teams = new Team[cursor.getCount()];
-      int teamId, index = 0;
-      cursor.moveToFirst();
+      return Observable.defer(() -> {
+         Cursor cursor = database.rawQuery(ALL_TEAM_INFO, null);
+         Team[] teams = new Team[cursor.getCount()];
+         int teamId, index = 0;
+         cursor.moveToFirst();
 
-      while (!cursor.isAfterLast()) {
-         teamId = cursor.getInt(cursor.getColumnIndex(ROW_ID_COL));
-         teams[index] = new Team(teamId, cursor.getString(cursor.getColumnIndex(NAME_COL)),
-               cursor.getString(cursor.getColumnIndex(DESCRIPTION_COL)),
-               cursor.getString(cursor.getColumnIndex(LAST_UPDATED_COL)),
-               queryTeamPokemonIds(teamId));
-         index++;
-         cursor.moveToNext();
-      }
-      cursor.close();
-      return Observable.just(teams);
+         while (!cursor.isAfterLast()) {
+            teamId = cursor.getInt(cursor.getColumnIndex(ROW_ID_COL));
+            teams[index] = new Team(teamId, cursor.getString(cursor.getColumnIndex(NAME_COL)),
+                    cursor.getString(cursor.getColumnIndex(DESCRIPTION_COL)),
+                    cursor.getString(cursor.getColumnIndex(LAST_UPDATED_COL)),
+                    queryTeamPokemonIds(teamId));
+            index++;
+            cursor.moveToNext();
+         }
+         cursor.close();
+         return Observable.just(teams);
+      });
    }
 
    private String queryPokemonMove(int moveId) {
@@ -635,27 +641,29 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
    }
 
    public Observable<PokemonTeamMember[]> queryPokemonTeamMembers(int teamId) {
-      Cursor cursor = database.rawQuery(POKEMON_BY_TEAM, new String[]{String.valueOf(teamId)});
-      PokemonTeamMember[] pokemon = new PokemonTeamMember[cursor.getCount()];
-      int index = 0, tempId;
-      cursor.moveToFirst();
+      return Observable.defer(() -> {
+         Cursor cursor = database.rawQuery(POKEMON_BY_TEAM, new String[]{String.valueOf(teamId)});
+         PokemonTeamMember[] pokemon = new PokemonTeamMember[cursor.getCount()];
+         int index = 0, tempId;
+         cursor.moveToFirst();
 
-      while (!cursor.isAfterLast()) {
-         tempId = cursor.getInt(cursor.getColumnIndex(POKEMON_ID_COL));
-         pokemon[index] = new PokemonTeamMember(cursor.getInt(cursor.getColumnIndex(ROW_ID_COL)),
-               tempId, queryPokemonNameById(tempId),
-               cursor.getString(cursor.getColumnIndex(NICKNAME_COL)),
-               cursor.getInt(cursor.getColumnIndex(LEVEL_COL)),
-               queryPokemonMoves(cursor.getInt(cursor.getColumnIndex(MOVE_ONE_COL)),
-                     cursor.getInt(cursor.getColumnIndex(MOVE_TWO_COL)),
-                     cursor.getInt(cursor.getColumnIndex(MOVE_THREE_COL)),
-                     cursor.getInt(cursor.getColumnIndex(MOVE_FOUR_COL))),
-               cursor.getString(cursor.getColumnIndex(LAST_UPDATED_COL)));
-         index++;
-         cursor.moveToNext();
-      }
-      cursor.close();
-      return Observable.just(pokemon);
+         while (!cursor.isAfterLast()) {
+            tempId = cursor.getInt(cursor.getColumnIndex(POKEMON_ID_COL));
+            pokemon[index] = new PokemonTeamMember(cursor.getInt(cursor.getColumnIndex(ROW_ID_COL)),
+                    tempId, queryPokemonNameById(tempId),
+                    cursor.getString(cursor.getColumnIndex(NICKNAME_COL)),
+                    cursor.getInt(cursor.getColumnIndex(LEVEL_COL)),
+                    queryPokemonMoves(cursor.getInt(cursor.getColumnIndex(MOVE_ONE_COL)),
+                            cursor.getInt(cursor.getColumnIndex(MOVE_TWO_COL)),
+                            cursor.getInt(cursor.getColumnIndex(MOVE_THREE_COL)),
+                            cursor.getInt(cursor.getColumnIndex(MOVE_FOUR_COL))),
+                    cursor.getString(cursor.getColumnIndex(LAST_UPDATED_COL)));
+            index++;
+            cursor.moveToNext();
+         }
+         cursor.close();
+         return Observable.just(pokemon);
+      });
    }
 
    public String queryPokemonNameById(int pokemonId) {
@@ -740,19 +748,21 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
    }
 
    public Observable<Move> queryMoveInfoByName(String name) {
-      Move move;
-      Cursor cursor = database.rawQuery(MOVE_INFO_BY_NAME, new String[]{name});
-      cursor.moveToFirst();
+      return Observable.defer(() -> {
+         Move move;
+         Cursor cursor = database.rawQuery(MOVE_INFO_BY_NAME, new String[]{name});
+         cursor.moveToFirst();
 
-      move = new Move(cursor.getInt(cursor.getColumnIndex(MOVE_ID_COL)), name,
-            cursor.getInt(cursor.getColumnIndex(TYPE_ID_COL)),
-            cursor.getInt(cursor.getColumnIndex(POWER_COL)),
-            cursor.getInt(cursor.getColumnIndex(PP_COL)),
-            cursor.getInt(cursor.getColumnIndex(ACCURACY_COL)),
-            cursor.getString(cursor.getColumnIndex(NAME_COL)));
+         move = new Move(cursor.getInt(cursor.getColumnIndex(MOVE_ID_COL)), name,
+                 cursor.getInt(cursor.getColumnIndex(TYPE_ID_COL)),
+                 cursor.getInt(cursor.getColumnIndex(POWER_COL)),
+                 cursor.getInt(cursor.getColumnIndex(PP_COL)),
+                 cursor.getInt(cursor.getColumnIndex(ACCURACY_COL)),
+                 cursor.getString(cursor.getColumnIndex(NAME_COL)));
 
-      cursor.close();
-      return Observable.just(move);
+         cursor.close();
+         return Observable.just(move);
+      });
    }
 
    public String queryMoveDescriptionById(int moveId) {
@@ -764,54 +774,63 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
       return result;
    }
 
-   public Observable<Void> updateTeamPokemon(int memberId, int teamId, String nickname, int level, String moveOne,
+   public Completable updateTeamPokemon(int memberId, int teamId, String nickname, int level, String moveOne,
                                     String moveTwo, String moveThree, String moveFour) {
-      int moveOneId = queryMoveIdByName(moveOne);
-      int moveTwoId = queryMoveIdByName(moveTwo);
-      int moveThreeId = queryMoveIdByName(moveThree);
-      int moveFourId = queryMoveIdByName(moveFour);
-      String idFilter = ROW_ID_COL + "=" + memberId;
-      ContentValues contentValues = new ContentValues();
+      return Completable.defer(() -> {
+         int moveOneId = queryMoveIdByName(moveOne);
+         int moveTwoId = queryMoveIdByName(moveTwo);
+         int moveThreeId = queryMoveIdByName(moveThree);
+         int moveFourId = queryMoveIdByName(moveFour);
+         String idFilter = ROW_ID_COL + "=" + memberId;
+         ContentValues contentValues = new ContentValues();
 
-      contentValues.put(NICKNAME_COL, nickname);
-      contentValues.put(LEVEL_COL, level);
-      contentValues.put(MOVE_ONE_COL, moveOneId);
-      contentValues.put(MOVE_TWO_COL, moveTwoId);
-      contentValues.put(MOVE_THREE_COL, moveThreeId);
-      contentValues.put(MOVE_FOUR_COL, moveFourId);
-      contentValues.put(LAST_UPDATED_COL, getDate());
-      database.update(TEAM_POKEMON_TABLE, contentValues, idFilter, null);
-      updateTeamLastUpdated(teamId);
-      return Observable.just(null);
+         contentValues.put(NICKNAME_COL, nickname);
+         contentValues.put(LEVEL_COL, level);
+         contentValues.put(MOVE_ONE_COL, moveOneId);
+         contentValues.put(MOVE_TWO_COL, moveTwoId);
+         contentValues.put(MOVE_THREE_COL, moveThreeId);
+         contentValues.put(MOVE_FOUR_COL, moveFourId);
+         contentValues.put(LAST_UPDATED_COL, getDate());
+         database.update(TEAM_POKEMON_TABLE, contentValues, idFilter, null);
+         updateTeamLastUpdated(teamId);
+         return Completable.complete();
+      });
    }
 
-   public Observable<Void> deleteTeam(int teamId) {
-      String teamFilter = ROW_ID_COL + "=" + teamId;
-      database.delete(TEAMS_TABLE, teamFilter, null);
-      return Observable.just(null);
+   public Completable deleteTeam(int teamId) {
+      return Completable.defer(() -> {
+         String teamFilter = ROW_ID_COL + "=" + teamId;
+         database.delete(TEAMS_TABLE, teamFilter, null);
+         return Completable.complete();
+      });
    }
 
-   public Observable<Void> deleteTeamPokemonAll(int teamId) {
-      String teamFilter = TEAM_ID_COL + "=" + teamId;
-      database.delete(TEAM_POKEMON_TABLE, teamFilter, null);
-      return Observable.just(null);
+   public Completable deleteTeamPokemonAll(int teamId) {
+      return Completable.defer(() -> {
+         String teamFilter = TEAM_ID_COL + "=" + teamId;
+         database.delete(TEAM_POKEMON_TABLE, teamFilter, null);
+         return Completable.complete();
+      });
    }
 
-   public Observable<Void> deleteTeamPokemonSingle(int memberId) {
-      String memberFilter = ROW_ID_COL + "=" + memberId;
-      database.delete(TEAM_POKEMON_TABLE, memberFilter, null);
-      return Observable.just(null);
+   public Completable deleteTeamPokemonSingle(int memberId) {
+      return Completable.defer(() -> {
+         String memberFilter = ROW_ID_COL + "=" + memberId;
+         database.delete(TEAM_POKEMON_TABLE, memberFilter, null);
+         return Completable.complete();
+      });
    }
 
-   public Observable<Void> deleteAllTeams() {
-      database.delete(TEAM_POKEMON_TABLE, null, null);
-      database.delete(TEAMS_TABLE, null, null);
-      return Observable.just(null);
+   public Completable deleteAllTeams() {
+      return Completable.defer(() -> {
+         database.delete(TEAM_POKEMON_TABLE, null, null);
+         database.delete(TEAMS_TABLE, null, null);
+         return Completable.complete();
+      });
    }
 
-   public Observable<Void> deleteLastAddedPokemon() {
+   public void deleteLastAddedPokemon() {
       database.execSQL(DELETE_LAST_POKEMON);
-      return Observable.just(null);
    }
 
    private float[] queryPokemonStats(int pokemonId) {
@@ -864,21 +883,23 @@ public final class DatabaseOpenHelper extends SQLiteAssetHelper {
    }
 
    public Observable<Item[]> queryAllItems() {
-      Cursor cursor = database.rawQuery(ALL_ITEMS, null);
-      Item[] items = new Item[cursor.getCount()];
-      int index = 0;
-      cursor.moveToFirst();
+      return Observable.defer(() -> {
+         Cursor cursor = database.rawQuery(ALL_ITEMS, null);
+         Item[] items = new Item[cursor.getCount()];
+         int index = 0;
+         cursor.moveToFirst();
 
-      while (!cursor.isAfterLast()) {
-         items[index] = new Item(cursor.getInt(cursor.getColumnIndex(ID_COL)),
-               cursor.getString(cursor.getColumnIndex(IDENT_COL)),
-               cursor.getString(cursor.getColumnIndex(NAME_COL)),
-               cursor.getInt(cursor.getColumnIndex(COST_COL)));
-         index++;
-         cursor.moveToNext();
-      }
-      cursor.close();
-      return Observable.just(items);
+         while (!cursor.isAfterLast()) {
+            items[index] = new Item(cursor.getInt(cursor.getColumnIndex(ID_COL)),
+                    cursor.getString(cursor.getColumnIndex(IDENT_COL)),
+                    cursor.getString(cursor.getColumnIndex(NAME_COL)),
+                    cursor.getInt(cursor.getColumnIndex(COST_COL)));
+            index++;
+            cursor.moveToNext();
+         }
+         cursor.close();
+         return Observable.just(items);
+      });
    }
 
    public String queryItemDescription(int itemId) {

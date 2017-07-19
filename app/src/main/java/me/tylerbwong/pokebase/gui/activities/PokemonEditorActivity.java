@@ -39,12 +39,13 @@ import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.tylerbwong.pokebase.R;
 import me.tylerbwong.pokebase.gui.adapters.TextViewSpinnerAdapter;
 import me.tylerbwong.pokebase.gui.views.PokemonInfoView;
 import me.tylerbwong.pokebase.model.database.DatabaseOpenHelper;
 import me.tylerbwong.pokebase.model.utilities.ArrayUtils;
-import rx.schedulers.Schedulers;
 
 /**
  * @author Tyler Wong
@@ -240,11 +241,13 @@ public class PokemonEditorActivity extends AppCompatActivity {
 
    private void deletePokemon() {
       mDatabaseHelper.deleteTeamPokemonSingle(mMemberId)
-            .subscribeOn(Schedulers.newThread());
-
-      Toast.makeText(this, String.format(getString(R.string.team_deleted),
-            mNicknameInput.getText().toString()), Toast.LENGTH_SHORT).show();
-      backToTeamView();
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(() -> {
+               Toast.makeText(this, String.format(getString(R.string.team_deleted),
+                       mNicknameInput.getText().toString()), Toast.LENGTH_SHORT).show();
+               backToTeamView();
+            });
    }
 
    private void updatePokemon() {
@@ -254,11 +257,13 @@ public class PokemonEditorActivity extends AppCompatActivity {
             String.valueOf(mMoveSpinners[1].getSelectedItem()),
             String.valueOf(mMoveSpinners[2].getSelectedItem()),
             String.valueOf(mMoveSpinners[3].getSelectedItem()))
-            .subscribeOn(Schedulers.newThread());
-
-      Toast.makeText(this, String.format(getString(R.string.team_update),
-            mNicknameInput.getText().toString()), Toast.LENGTH_SHORT).show();
-      backToTeamView();
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(() -> {
+               Toast.makeText(this, String.format(getString(R.string.team_update),
+                       mNicknameInput.getText().toString()), Toast.LENGTH_SHORT).show();
+               backToTeamView();
+            });
    }
 
    private void backToTeamView() {

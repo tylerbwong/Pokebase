@@ -32,13 +32,11 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.tylerbwong.pokebase.R;
 import me.tylerbwong.pokebase.gui.adapters.ItemListAdapter;
-import me.tylerbwong.pokebase.model.components.Item;
 import me.tylerbwong.pokebase.model.database.DatabaseOpenHelper;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * @author Tyler Wong
@@ -83,22 +81,7 @@ public class ItemsFragment extends Fragment {
       mDatabaseHelper.queryAllItems()
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<Item[]>() {
-               @Override
-               public void onCompleted() {
-
-               }
-
-               @Override
-               public void onError(Throwable e) {
-
-               }
-
-               @Override
-               public void onNext(Item[] items) {
-                  mAdapter.setItems(items);
-               }
-            });
+            .subscribe(mAdapter::setItems);
 
       return view;
    }

@@ -25,14 +25,13 @@ import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.tylerbwong.pokebase.R;
 import me.tylerbwong.pokebase.gui.views.MoveInfoView;
 import me.tylerbwong.pokebase.model.components.Move;
 import me.tylerbwong.pokebase.model.database.DatabaseOpenHelper;
 import me.tylerbwong.pokebase.model.utilities.PokebaseCache;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * @author Tyler Wong
@@ -63,19 +62,7 @@ public class MoveListItemViewHolder extends RecyclerView.ViewHolder {
             PokebaseCache.getMove(mDatabaseHelper, mNameView.getText().toString())
                   .subscribeOn(Schedulers.newThread())
                   .observeOn(AndroidSchedulers.mainThread())
-                  .subscribe(new Subscriber<Move>() {
-                     @Override
-                     public void onCompleted() {
-
-                     }
-
-                     @Override
-                     public void onError(Throwable e) {
-
-                     }
-
-                     @Override
-                     public void onNext(Move move) {
+                  .subscribe(move -> {
                         mMove = move;
 
                         if (mMove.getTypeName() == null) {
@@ -87,7 +74,6 @@ public class MoveListItemViewHolder extends RecyclerView.ViewHolder {
                         }
 
                         showMoveInfoDialog();
-                     }
                   })
       );
    }

@@ -44,14 +44,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.tylerbwong.pokebase.R;
 import me.tylerbwong.pokebase.gui.adapters.PokemonTeamMemberAdapter;
 import me.tylerbwong.pokebase.gui.views.AnimatedRecyclerView;
 import me.tylerbwong.pokebase.model.components.PokemonTeamMember;
 import me.tylerbwong.pokebase.model.database.DatabaseOpenHelper;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * @author Tyler Wong
@@ -148,19 +147,7 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
          mDatabaseHelper.queryPokemonTeamMembers(mTeamId)
                .subscribeOn(Schedulers.newThread())
                .observeOn(AndroidSchedulers.mainThread())
-               .subscribe(new Subscriber<PokemonTeamMember[]>() {
-                  @Override
-                  public void onCompleted() {
-
-                  }
-
-                  @Override
-                  public void onError(Throwable e) {
-
-                  }
-
-                  @Override
-                  public void onNext(PokemonTeamMember[] pokemonTeamMembers) {
+               .subscribe(pokemonTeamMembers -> {
                      mPokemon = pokemonTeamMembers;
                      mPokemonAdapter.setTeam(mPokemon);
 
@@ -170,7 +157,6 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
                      }
 
                      checkEmpty();
-                  }
                });
       }
       else {
@@ -311,12 +297,15 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
    }
 
    private void deleteTeam() {
-      mDatabaseHelper.deleteTeamPokemonAll(mTeamId);
-      mDatabaseHelper.deleteTeam(mTeamId);
-
-      Toast.makeText(this, String.format(getString(R.string.team_deleted),
-            mNameInput.getText().toString().trim()), Toast.LENGTH_SHORT).show();
-      backToMain();
+      mDatabaseHelper.deleteTeamPokemonAll(mTeamId)
+         .concatWith(mDatabaseHelper.deleteTeam(mTeamId))
+         .subscribeOn(Schedulers.newThread())
+         .observeOn(AndroidSchedulers.mainThread())
+         .subscribe(() -> {
+            Toast.makeText(this, String.format(getString(R.string.team_deleted),
+                    mNameInput.getText().toString().trim()), Toast.LENGTH_SHORT).show();
+            backToMain();
+         });
    }
 
    private void showBackDialog() {

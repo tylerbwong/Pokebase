@@ -25,14 +25,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.BounceInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.db.chart.animation.Animation;
 import com.db.chart.model.BarSet;
-import com.db.chart.view.AxisController;
+import com.db.chart.renderer.AxisRenderer;
 import com.db.chart.view.BarChartView;
-import com.db.chart.view.animation.Animation;
-import com.db.chart.view.animation.easing.BounceEase;
 import com.yarolegovich.lovelydialog.LovelyCustomDialog;
 
 import java.util.Locale;
@@ -41,6 +41,8 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.tylerbwong.pokebase.R;
 import me.tylerbwong.pokebase.gui.adapters.MoveListAdapter;
 import me.tylerbwong.pokebase.gui.adapters.PokemonListAdapter;
@@ -48,9 +50,6 @@ import me.tylerbwong.pokebase.model.components.PokemonListItem;
 import me.tylerbwong.pokebase.model.components.PokemonProfile;
 import me.tylerbwong.pokebase.model.database.DatabaseOpenHelper;
 import me.tylerbwong.pokebase.model.utilities.PokebaseCache;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * @author Tyler Wong
@@ -188,19 +187,7 @@ public class PokemonInfoView extends NestedScrollView {
       PokebaseCache.getPokemonProfile(DatabaseOpenHelper.getInstance(mContext), pokemonId)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<PokemonProfile>() {
-               @Override
-               public void onCompleted() {
-
-               }
-
-               @Override
-               public void onError(Throwable e) {
-
-               }
-
-               @Override
-               public void onNext(PokemonProfile pokemonProfile) {
+            .subscribe(pokemonProfile -> {
                   mProfile = pokemonProfile;
                   setupDialogs();
                   loadTypes(mProfile.getTypes());
@@ -210,7 +197,6 @@ public class PokemonInfoView extends NestedScrollView {
                   mDescription.setText(mProfile.getDescription());
                   mRegionView.setText(mProfile.getRegion());
                   mExpView.setText(String.valueOf(mProfile.getBaseExp()));
-               }
             });
    }
 
@@ -263,10 +249,10 @@ public class PokemonInfoView extends NestedScrollView {
       mBarChart.addData(dataSet);
       mBarChart.setXAxis(false);
       mBarChart.setYAxis(false);
-      mBarChart.setYLabels(AxisController.LabelPosition.NONE);
+      mBarChart.setYLabels(AxisRenderer.LabelPosition.NONE);
 
       Animation animation = new Animation(1000);
-      animation.setEasing(new BounceEase());
+      animation.setInterpolator(new BounceInterpolator());
       mBarChart.show(animation);
    }
 

@@ -18,10 +18,10 @@ package me.tylerbwong.pokebase.model.utilities;
 
 import java.util.Hashtable;
 
+import io.reactivex.Observable;
 import me.tylerbwong.pokebase.model.components.Move;
 import me.tylerbwong.pokebase.model.components.PokemonProfile;
 import me.tylerbwong.pokebase.model.database.DatabaseOpenHelper;
-import rx.Observable;
 
 /**
  * @author Tyler Wong

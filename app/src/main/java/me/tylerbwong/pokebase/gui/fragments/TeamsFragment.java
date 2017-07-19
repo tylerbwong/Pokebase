@@ -37,15 +37,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.tylerbwong.pokebase.R;
 import me.tylerbwong.pokebase.gui.activities.TeamViewActivity;
 import me.tylerbwong.pokebase.gui.adapters.TeamAdapter;
 import me.tylerbwong.pokebase.gui.views.AnimatedRecyclerView;
 import me.tylerbwong.pokebase.model.components.Team;
 import me.tylerbwong.pokebase.model.database.DatabaseOpenHelper;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * @author Tyler Wong
@@ -104,22 +103,9 @@ public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimatio
       mDatabaseHelper.queryAllTeams()
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<Team[]>() {
-               @Override
-               public void onCompleted() {
-
-               }
-
-               @Override
-               public void onError(Throwable e) {
-
-               }
-
-               @Override
-               public void onNext(Team[] teams) {
+            .subscribe(teams -> {
                   mAdapter.setTeams(teams);
                   checkEmpty(teams);
-               }
             });
    }
 

@@ -68,11 +68,11 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile "junit:junit:$rootProject.junitVersion"
+    testCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
     androidTestCompile "com.android.support:support-annotations:$rootProject.supportLibVersion"
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile "com.android.support.test:runner:$rootProject.androidTestVersion"
+    androidTestCompile "com.android.support.test:rules:$rootProject.androidTestVersion"
 
     // Android Support Libraries
     compile "com.android.support:appcompat-v7:$rootProject.supportLibVersion"
@@ -83,40 +83,39 @@ dependencies {
     compile "com.google.firebase:firebase-crash:$rootProject.playServicesVersion"
 
     // Glide
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile "com.github.bumptech.glide:glide:$rootProject.glideVersion"
 
     // RxJava
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.2.2'
-    compile 'com.artemzin.rxjava:proguard-rules:1.2.6.0'
+    compile "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
+    compile "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
 
     // Circle Image View
-    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile "de.hdodenhof:circleimageview:$rootProject.circleImageViewVersion"
 
     // Material Search Bar
-    compile 'com.github.mancj:MaterialSearchBar:0.3.2'
+    compile "com.github.mancj:MaterialSearchBar:$rootProject.materialSearchBarVersion"
 
     // App Intro
-    compile 'com.github.paolorotolo:appintro:4.0.0'
+    compile "com.github.apl-devs:appintro:$rootProject.appIntroVersion"
 
     // FAB Transition
-    compile 'com.github.coyarzun89:fabtransitionactivity:0.2.0'
+    compile "com.github.coyarzun89:fabtransitionactivity:$rootProject.fabTransitionVersion"
 
     // Material Dialogs
-    compile 'com.yarolegovich:lovely-dialog:1.0.4'
+    compile "com.yarolegovich:lovely-dialog:$rootProject.lovelyDialogVersion"
 
     // SQLite Asset Helper
-    compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
+    compile "com.readystatesoftware.sqliteasset:sqliteassethelper:$rootProject.sqliteAssetVersion"
 
     // William Chart
-    compile 'com.diogobernardino:williamchart:2.2'
+    compile "com.diogobernardino:williamchart:$rootProject.williamChartVersion"
 
     // Slideable Activity
-    compile 'com.r0adkll:slidableactivity:2.0.5'
+    compile "com.r0adkll:slidableactivity:$rootProject.slidableVersion"
 
     // Butterknife
-    compile 'com.jakewharton:butterknife:8.5.1'
-    apt 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
+    apt "com.jakewharton:butterknife-compiler:$rootProject.butterknifeVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'

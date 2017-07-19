@@ -33,9 +33,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
-            app:hint="@string/search_hint"
-            app:maxSuggestionsCount="0"
-            app:speechMode="true"/>
+            app:mt_hint="@string/search_hint"
+            app:mt_maxSuggestionsCount="0"
+            app:mt_speechMode="true"/>
 
         <LinearLayout
             android:layout_width="match_parent"
