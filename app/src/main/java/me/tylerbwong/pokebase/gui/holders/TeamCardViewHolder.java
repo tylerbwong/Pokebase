@@ -33,63 +33,63 @@ import me.tylerbwong.pokebase.gui.activities.TeamViewActivity;
  * @author Tyler Wong
  */
 public class TeamCardViewHolder extends RecyclerView.ViewHolder {
-   @BindView(R.id.title_label)
-   public TextView mTitleLabel;
-   @BindView(R.id.description)
-   public TextView mDescription;
-   @BindView(R.id.last_updated)
-   public TextView mLastUpdated;
-   @BindView(R.id.pokemon_1)
-   public ImageView mPokemonOne;
-   @BindView(R.id.pokemon_2)
-   public ImageView mPokemonTwo;
-   @BindView(R.id.pokemon_3)
-   public ImageView mPokemonThree;
-   @BindView(R.id.pokemon_4)
-   public ImageView mPokemonFour;
-   @BindView(R.id.pokemon_5)
-   public ImageView mPokemonFive;
-   @BindView(R.id.pokemon_6)
-   public ImageView mPokemonSix;
+    @BindView(R.id.title_label)
+    public TextView titleLabel;
+    @BindView(R.id.description)
+    public TextView description;
+    @BindView(R.id.last_updated)
+    public TextView lastUpdated;
+    @BindView(R.id.pokemon_1)
+    public ImageView pokemonOne;
+    @BindView(R.id.pokemon_2)
+    public ImageView pokemonTwo;
+    @BindView(R.id.pokemon_3)
+    public ImageView pokemonThree;
+    @BindView(R.id.pokemon_4)
+    public ImageView pokemonFour;
+    @BindView(R.id.pokemon_5)
+    public ImageView pokemonFive;
+    @BindView(R.id.pokemon_6)
+    public ImageView pokemonSix;
 
-   public final View mView;
-   public ImageView[] mPokemonList;
+    public final View view;
+    public ImageView[] pokemonList;
 
-   public int mTeamId;
+    public int teamId;
 
-   private static final int NUM_POKEMON = 6;
+    private static final int NUM_POKEMON = 6;
 
-   public TeamCardViewHolder(View itemView) {
-      super(itemView);
-      ButterKnife.bind(this, itemView);
+    public TeamCardViewHolder(View itemView) {
+        super(itemView);
+        ButterKnife.bind(this, itemView);
 
-      this.mView = itemView;
-      mTeamId = 0;
+        this.view = itemView;
+        teamId = 0;
 
-      this.mView.setOnClickListener(view -> {
-               Context cardContext = view.getContext();
-               Intent editorIntent = new Intent(cardContext, TeamViewActivity.class);
-               Bundle extras = new Bundle();
-               extras.putInt(TeamViewActivity.TEAM_ID_KEY, mTeamId);
-               extras.putBoolean(TeamViewActivity.UPDATE_KEY, true);
-               extras.putString(TeamViewActivity.TEAM_NAME, mTitleLabel.getText().toString());
-               extras.putString(TeamViewActivity.DESCRIPTION, mDescription.getText().toString());
-               editorIntent.putExtras(extras);
-               view.getContext().startActivity(editorIntent);
-            }
-      );
+        this.view.setOnClickListener(view -> {
+                    Context cardContext = view.getContext();
+                    Intent editorIntent = new Intent(cardContext, TeamViewActivity.class);
+                    Bundle extras = new Bundle();
+                    extras.putInt(TeamViewActivity.TEAM_ID_KEY, teamId);
+                    extras.putBoolean(TeamViewActivity.UPDATE_KEY, true);
+                    extras.putString(TeamViewActivity.TEAM_NAME, titleLabel.getText().toString());
+                    extras.putString(TeamViewActivity.DESCRIPTION, description.getText().toString());
+                    editorIntent.putExtras(extras);
+                    view.getContext().startActivity(editorIntent);
+                }
+        );
 
-      mPokemonList = new ImageView[NUM_POKEMON];
+        pokemonList = new ImageView[NUM_POKEMON];
 
-      mPokemonList[0] = mPokemonOne;
-      mPokemonList[1] = mPokemonTwo;
-      mPokemonList[2] = mPokemonThree;
-      mPokemonList[3] = mPokemonFour;
-      mPokemonList[4] = mPokemonFive;
-      mPokemonList[5] = mPokemonSix;
-   }
+        pokemonList[0] = pokemonOne;
+        pokemonList[1] = pokemonTwo;
+        pokemonList[2] = pokemonThree;
+        pokemonList[3] = pokemonFour;
+        pokemonList[4] = pokemonFive;
+        pokemonList[5] = pokemonSix;
+    }
 
-   public void setTeamId(int teamId) {
-      this.mTeamId = teamId;
-   }
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
+    }
 }

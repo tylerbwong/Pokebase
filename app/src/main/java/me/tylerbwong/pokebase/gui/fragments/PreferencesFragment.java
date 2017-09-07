@@ -39,92 +39,92 @@ import me.tylerbwong.pokebase.gui.activities.SplashActivity;
  * @author Tyler Wong
  */
 public class PreferencesFragment extends PreferenceFragment implements
-      Preference.OnPreferenceClickListener {
-   private Preference mNamePreference;
-   private Preference mUpdatePreference;
-   private Preference mVersionPreference;
+        Preference.OnPreferenceClickListener {
+    private Preference namePreference;
+    private Preference updatePreference;
+    private Preference versionPreference;
 
-   private SharedPreferences mPref;
-   private boolean mListStyled = false;
+    private SharedPreferences pref;
+    private boolean listStyled = false;
 
-   @Override
-   public void onCreate(Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
-      mPref = getActivity().getSharedPreferences(SplashActivity.ACTIVITY_PREF,
-            Context.MODE_PRIVATE);
-      View rootView = getView();
-      ListView list = null;
-      if (rootView != null) {
-         list = (ListView) rootView.findViewById(android.R.id.list);
-      }
-      if (list != null) {
-         list.setDivider(null);
-      }
-
-      PackageInfo packageInfo = null;
-
-      try {
-         packageInfo = getActivity().getPackageManager().getPackageInfo(
-               getActivity().getPackageName(), 0);
-      }
-      catch (PackageManager.NameNotFoundException e) {
-
-      }
-
-      addPreferencesFromResource(R.xml.preferences);
-
-      mNamePreference = getPreferenceScreen().findPreference(getString(R.string.trainer_name_key));
-      mUpdatePreference = getPreferenceScreen().findPreference(getString(R.string.update_key));
-      mVersionPreference = getPreferenceScreen().findPreference(getString(R.string.version_key));
-
-      mNamePreference.setOnPreferenceClickListener(this);
-      mUpdatePreference.setOnPreferenceClickListener(this);
-
-      mNamePreference.setSummary(mPref.getString(SignUpActivity.USERNAME, "Error"));
-
-      if (packageInfo != null) {
-         mVersionPreference.setSummary(packageInfo.versionName);
-      }
-   }
-
-   @Override
-   public void onResume() {
-      super.onResume();
-      mUpdatePreference.setSummary(R.string.check_updates);
-
-      if (!mListStyled) {
-         View rootView = getView();
-         if (rootView != null) {
-            ListView list = (ListView) rootView.findViewById(android.R.id.list);
-            list.setPadding(0, 0, 0, 0);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        pref = getActivity().getSharedPreferences(SplashActivity.ACTIVITY_PREF,
+                Context.MODE_PRIVATE);
+        View rootView = getView();
+        ListView list = null;
+        if (rootView != null) {
+            list = rootView.findViewById(android.R.id.list);
+        }
+        if (list != null) {
             list.setDivider(null);
-            //any other styling call
-            mListStyled = true;
-         }
-      }
-   }
+        }
 
-   @Override
-   public boolean onPreferenceClick(Preference preference) {
-      if (preference.getKey().equals(getString(R.string.trainer_name_key))) {
-         new LovelyTextInputDialog(getActivity())
-               .setTopColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary))
-               .setTitle(getString(R.string.change_trainer_name))
-               .setIcon(R.drawable.ic_info_white_24dp)
-               .setInitialInput(mPref.getString(SignUpActivity.USERNAME, "Error"))
-               .setConfirmButton(android.R.string.ok, text -> {
-                  if (!text.isEmpty()) {
-                     mPref.edit().putString(SignUpActivity.USERNAME, text).apply();
-                     mNamePreference.setSummary(mPref.getString(SignUpActivity.USERNAME, "Error"));
-                  }
-               }).show();
-      }
-      else if (preference.getKey().equals(getString(R.string.update_key))) {
-         preference.setSummary(getString(R.string.checking));
+        PackageInfo packageInfo = null;
 
-         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.update_url)));
-         startActivity(browserIntent);
-      }
-      return true;
-   }
+        try {
+            packageInfo = getActivity().getPackageManager().getPackageInfo(
+                    getActivity().getPackageName(), 0);
+        }
+        catch (PackageManager.NameNotFoundException e) {
+
+        }
+
+        addPreferencesFromResource(R.xml.preferences);
+
+        namePreference = getPreferenceScreen().findPreference(getString(R.string.trainer_name_key));
+        updatePreference = getPreferenceScreen().findPreference(getString(R.string.update_key));
+        versionPreference = getPreferenceScreen().findPreference(getString(R.string.version_key));
+
+        namePreference.setOnPreferenceClickListener(this);
+        updatePreference.setOnPreferenceClickListener(this);
+
+        namePreference.setSummary(pref.getString(SignUpActivity.USERNAME, "Error"));
+
+        if (packageInfo != null) {
+            versionPreference.setSummary(packageInfo.versionName);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updatePreference.setSummary(R.string.check_updates);
+
+        if (!listStyled) {
+            View rootView = getView();
+            if (rootView != null) {
+                ListView list = (ListView) rootView.findViewById(android.R.id.list);
+                list.setPadding(0, 0, 0, 0);
+                list.setDivider(null);
+                //any other styling call
+                listStyled = true;
+            }
+        }
+    }
+
+    @Override
+    public boolean onPreferenceClick(Preference preference) {
+        if (preference.getKey().equals(getString(R.string.trainer_name_key))) {
+            new LovelyTextInputDialog(getActivity())
+                    .setTopColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary))
+                    .setTitle(getString(R.string.change_trainer_name))
+                    .setIcon(R.drawable.ic_info_white_24dp)
+                    .setInitialInput(pref.getString(SignUpActivity.USERNAME, "Error"))
+                    .setConfirmButton(android.R.string.ok, text -> {
+                        if (!text.isEmpty()) {
+                            pref.edit().putString(SignUpActivity.USERNAME, text).apply();
+                            namePreference.setSummary(pref.getString(SignUpActivity.USERNAME, "Error"));
+                        }
+                    }).show();
+        }
+        else if (preference.getKey().equals(getString(R.string.update_key))) {
+            preference.setSummary(getString(R.string.checking));
+
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.update_url)));
+            startActivity(browserIntent);
+        }
+        return true;
+    }
 }

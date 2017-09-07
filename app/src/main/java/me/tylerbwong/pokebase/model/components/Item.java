@@ -20,40 +20,40 @@ package me.tylerbwong.pokebase.model.components;
  * @author Tyler Wong
  */
 public class Item {
-   private int id;
-   private String identifier;
-   private String name;
-   private int cost;
-   private String description;
+    private int id;
+    private String identifier;
+    private String name;
+    private int cost;
+    private String description;
 
-   public Item(int id, String identifier, String name, int cost) {
-      this.id = id;
-      this.identifier = identifier;
-      this.name = name;
-      this.cost = cost;
-   }
+    public Item(int id, String identifier, String name, int cost) {
+        this.id = id;
+        this.identifier = identifier;
+        this.name = name;
+        this.cost = cost;
+    }
 
-   public int getId() {
-      return id;
-   }
+    public int getId() {
+        return id;
+    }
 
-   public String getIdentifier() {
-      return identifier;
-   }
+    public String getIdentifier() {
+        return identifier;
+    }
 
-   public String getName() {
-      return name;
-   }
+    public String getName() {
+        return name;
+    }
 
-   public int getCost() {
-      return cost;
-   }
+    public int getCost() {
+        return cost;
+    }
 
-   public String getDescription() {
-      return description;
-   }
+    public String getDescription() {
+        return description;
+    }
 
-   public void setDescription(String description) {
-      this.description = description;
-   }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

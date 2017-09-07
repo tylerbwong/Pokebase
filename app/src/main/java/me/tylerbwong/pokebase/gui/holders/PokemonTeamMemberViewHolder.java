@@ -35,67 +35,67 @@ import me.tylerbwong.pokebase.model.components.PokemonTeamMember;
  * @author Tyler Wong
  */
 public class PokemonTeamMemberViewHolder extends RecyclerView.ViewHolder {
-   @BindView(R.id.pokemon)
-   public ImageView mPokemon;
-   @BindView(R.id.name)
-   public TextView mName;
-   @BindView(R.id.level)
-   public TextView mLevel;
-   @BindView(R.id.last_updated)
-   public TextView mLastUpdated;
-   @BindView(R.id.moveset)
-   public TextView mMoveset;
+    @BindView(R.id.pokemon)
+    public ImageView pokemon;
+    @BindView(R.id.name)
+    public TextView name;
+    @BindView(R.id.level)
+    public TextView level;
+    @BindView(R.id.last_updated)
+    public TextView lastUpdated;
+    @BindView(R.id.moveset)
+    public TextView moveset;
 
-   public final View mView;
+    public final View view;
 
-   private PokemonTeamMember mPokemonData;
-   private String mTitle;
-   private String mDescription;
-   private int mTeamId;
+    private PokemonTeamMember pokemonData;
+    private String title;
+    private String description;
+    private int teamId;
 
-   public PokemonTeamMemberViewHolder(View itemView) {
-      super(itemView);
-      ButterKnife.bind(this, itemView);
+    public PokemonTeamMemberViewHolder(View itemView) {
+        super(itemView);
+        ButterKnife.bind(this, itemView);
 
-      this.mView = itemView;
+        this.view = itemView;
 
-      mView.setOnClickListener(view -> {
-               Context cardContext = view.getContext();
-               Intent editorIntent = new Intent(cardContext, PokemonEditorActivity.class);
-               String transitionName = cardContext.getString(R.string.shared_transition);
-               ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(
-                     (TeamViewActivity) cardContext, mPokemon, transitionName);
-               editorIntent.putExtra(PokemonEditorActivity.POKEMON_ID, mPokemonData.pokemonId);
-               editorIntent.putExtra(PokemonEditorActivity.TEAM_ID, mTeamId);
-               editorIntent.putExtra(PokemonEditorActivity.TITLE, mTitle);
-               editorIntent.putExtra(PokemonEditorActivity.DESCRIPTION, mDescription);
-               editorIntent.putExtra(PokemonEditorActivity.MEMBER_ID, mPokemonData.memberId);
-               editorIntent.putExtra(PokemonEditorActivity.LEVEL, mPokemonData.level);
-               editorIntent.putExtra(PokemonEditorActivity.NAME, mPokemonData.name);
-               editorIntent.putExtra(PokemonEditorActivity.NICKNAME, mPokemonData.nickname);
-               editorIntent.putExtra(PokemonEditorActivity.MOVE_ONE, mPokemonData.moves[0]);
-               editorIntent.putExtra(PokemonEditorActivity.MOVE_TWO, mPokemonData.moves[1]);
-               editorIntent.putExtra(PokemonEditorActivity.MOVE_THREE, mPokemonData.moves[2]);
-               editorIntent.putExtra(PokemonEditorActivity.MOVE_FOUR, mPokemonData.moves[3]);
+        view.setOnClickListener(view -> {
+                    Context cardContext = view.getContext();
+                    Intent editorIntent = new Intent(cardContext, PokemonEditorActivity.class);
+                    String transitionName = cardContext.getString(R.string.shared_transition);
+                    ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(
+                            (TeamViewActivity) cardContext, pokemon, transitionName);
+                    editorIntent.putExtra(PokemonEditorActivity.POKEMON_ID, pokemonData.pokemonId);
+                    editorIntent.putExtra(PokemonEditorActivity.TEAM_ID, teamId);
+                    editorIntent.putExtra(PokemonEditorActivity.TITLE, title);
+                    editorIntent.putExtra(PokemonEditorActivity.DESCRIPTION, description);
+                    editorIntent.putExtra(PokemonEditorActivity.MEMBER_ID, pokemonData.memberId);
+                    editorIntent.putExtra(PokemonEditorActivity.LEVEL, pokemonData.level);
+                    editorIntent.putExtra(PokemonEditorActivity.NAME, pokemonData.name);
+                    editorIntent.putExtra(PokemonEditorActivity.NICKNAME, pokemonData.nickname);
+                    editorIntent.putExtra(PokemonEditorActivity.MOVE_ONE, pokemonData.moves[0]);
+                    editorIntent.putExtra(PokemonEditorActivity.MOVE_TWO, pokemonData.moves[1]);
+                    editorIntent.putExtra(PokemonEditorActivity.MOVE_THREE, pokemonData.moves[2]);
+                    editorIntent.putExtra(PokemonEditorActivity.MOVE_FOUR, pokemonData.moves[3]);
 
-               view.getContext().startActivity(editorIntent, transitionActivityOptions.toBundle());
-            }
-      );
-   }
+                    view.getContext().startActivity(editorIntent, transitionActivityOptions.toBundle());
+                }
+        );
+    }
 
-   public void setPokemon(PokemonTeamMember member) {
-      mPokemonData = member;
-   }
+    public void setPokemon(PokemonTeamMember member) {
+        pokemonData = member;
+    }
 
-   public void setTitle(String name) {
-      mTitle = name;
-   }
+    public void setTitle(String name) {
+        title = name;
+    }
 
-   public void setDescription(String description) {
-      mDescription = description;
-   }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-   public void setTeamId(int teamId) {
-      mTeamId = teamId;
-   }
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
+    }
 }

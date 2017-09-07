@@ -20,67 +20,67 @@ package me.tylerbwong.pokebase.model.components;
  * @author Tyler Wong
  */
 public class Move {
-   private int moveId;
-   private String name;
-   private int typeId;
-   private int power;
-   private int pp;
-   private int accuracy;
-   private String className;
-   private String description;
-   private String typeName;
+    private int moveId;
+    private String name;
+    private int typeId;
+    private int power;
+    private int pp;
+    private int accuracy;
+    private String className;
+    private String description;
+    private String typeName;
 
-   public Move(int moveId, String name, int typeId, int power, int pp, int accuracy, String className) {
-      this.moveId = moveId;
-      this.name = name;
-      this.typeId = typeId;
-      this.power = power;
-      this.pp = pp;
-      this.accuracy = accuracy;
-      this.className = className;
-   }
+    public Move(int moveId, String name, int typeId, int power, int pp, int accuracy, String className) {
+        this.moveId = moveId;
+        this.name = name;
+        this.typeId = typeId;
+        this.power = power;
+        this.pp = pp;
+        this.accuracy = accuracy;
+        this.className = className;
+    }
 
-   public int getMoveId() {
-      return moveId;
-   }
+    public int getMoveId() {
+        return moveId;
+    }
 
-   public String getName() {
-      return name;
-   }
+    public String getName() {
+        return name;
+    }
 
-   public int getTypeId() {
-      return typeId;
-   }
+    public int getTypeId() {
+        return typeId;
+    }
 
-   public int getPower() {
-      return power;
-   }
+    public int getPower() {
+        return power;
+    }
 
-   public int getPp() {
-      return pp;
-   }
+    public int getPp() {
+        return pp;
+    }
 
-   public int getAccuracy() {
-      return accuracy;
-   }
+    public int getAccuracy() {
+        return accuracy;
+    }
 
-   public String getClassName() {
-      return className;
-   }
+    public String getClassName() {
+        return className;
+    }
 
-   public String getDescription() {
-      return description;
-   }
+    public String getDescription() {
+        return description;
+    }
 
-   public String getTypeName() {
-      return typeName;
-   }
+    public String getTypeName() {
+        return typeName;
+    }
 
-   public void setDescription(String description) {
-      this.description = description;
-   }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-   public void setTypeName(String typeName) {
-      this.typeName = typeName;
-   }
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
 }

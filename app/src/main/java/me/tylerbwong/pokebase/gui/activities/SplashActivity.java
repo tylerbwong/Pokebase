@@ -36,48 +36,48 @@ import me.tylerbwong.pokebase.model.utilities.Typefaces;
  * @author Tyler Wong
  */
 public class SplashActivity extends AppCompatActivity {
-   @BindView(R.id.title_label)
-   TextView mTitleLabel;
-   @BindView(R.id.logo_image)
-   ImageView mLogoImage;
+    @BindView(R.id.title_label)
+    TextView titleLabel;
+    @BindView(R.id.logo_image)
+    ImageView logoImage;
 
-   public static final String ACTIVITY_PREF = "ActivityPREF";
-   public static final String INTRO_FINISHED = "appIntroFinished";
-   public static final String SIGN_UP_COMPLETE = "signUpComplete";
+    public static final String ACTIVITY_PREF = "ActivityPREF";
+    public static final String INTRO_FINISHED = "appIntroFinished";
+    public static final String SIGN_UP_COMPLETE = "signUpComplete";
 
-   @Override
-   protected void onCreate(Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
-      setContentView(R.layout.activity_splash);
-      ButterKnife.bind(this);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
+        ButterKnife.bind(this);
 
-      Typeface robotoLight = Typefaces.get(this, Typefaces.ROBOTO_PATH);
+        Typeface robotoLight = Typefaces.get(this, Typefaces.ROBOTO_PATH);
 
-      if (robotoLight != null) {
-         mTitleLabel.setTypeface(robotoLight);
-      }
+        if (robotoLight != null) {
+            titleLabel.setTypeface(robotoLight);
+        }
 
-      Glide.with(this)
-            .load(R.drawable.ic_material_pokeball)
-            .into(mLogoImage);
+        Glide.with(this)
+                .load(R.drawable.ic_material_pokeball)
+                .into(logoImage);
 
-      SharedPreferences pref = getSharedPreferences(ACTIVITY_PREF, Context.MODE_PRIVATE);
-      boolean appIntroFinished = pref.getBoolean(INTRO_FINISHED, false);
-      boolean signUpComplete = pref.getBoolean(SIGN_UP_COMPLETE, false);
+        SharedPreferences pref = getSharedPreferences(ACTIVITY_PREF, Context.MODE_PRIVATE);
+        boolean appIntroFinished = pref.getBoolean(INTRO_FINISHED, false);
+        boolean signUpComplete = pref.getBoolean(SIGN_UP_COMPLETE, false);
 
-      Intent resultIntent;
+        Intent resultIntent;
 
-      if (appIntroFinished && signUpComplete) {
-         resultIntent = new Intent(SplashActivity.this, MainActivity.class);
-      }
-      else if (appIntroFinished && !signUpComplete) {
-         resultIntent = new Intent(SplashActivity.this, SignUpActivity.class);
-      }
-      else {
-         resultIntent = new Intent(SplashActivity.this, IntroActivity.class);
-      }
+        if (appIntroFinished && signUpComplete) {
+            resultIntent = new Intent(SplashActivity.this, MainActivity.class);
+        }
+        else if (appIntroFinished && !signUpComplete) {
+            resultIntent = new Intent(SplashActivity.this, SignUpActivity.class);
+        }
+        else {
+            resultIntent = new Intent(SplashActivity.this, IntroActivity.class);
+        }
 
-      startActivity(resultIntent);
-      finish();
-   }
+        startActivity(resultIntent);
+        finish();
+    }
 }

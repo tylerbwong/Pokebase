@@ -38,34 +38,34 @@ import me.tylerbwong.pokebase.model.utilities.Typefaces;
  * @author Tyler Wong
  */
 public class IntroMoveFragment extends Fragment {
-   @BindView(R.id.description)
-   TextView mDescription;
-   @BindView(R.id.move_dialog)
-   ImageView mTrainerImage;
+    @BindView(R.id.description)
+    TextView description;
+    @BindView(R.id.move_dialog)
+    ImageView trainerImage;
 
-   private Unbinder mUnbinder;
+    private Unbinder unbinder;
 
-   @Nullable
-   @Override
-   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-      View view = inflater.inflate(R.layout.intro_move_fragment, container, false);
-      mUnbinder = ButterKnife.bind(this, view);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.intro_move_fragment, container, false);
+        unbinder = ButterKnife.bind(this, view);
 
-      Glide.with(this)
-            .load(R.drawable.move_dialog)
-            .into(mTrainerImage);
+        Glide.with(this)
+                .load(R.drawable.move_dialog)
+                .into(trainerImage);
 
-      Typeface robotoLight = Typefaces.get(getContext(), Typefaces.ROBOTO_PATH);
+        Typeface robotoLight = Typefaces.get(getContext(), Typefaces.ROBOTO_PATH);
 
-      if (robotoLight != null) {
-         mDescription.setTypeface(robotoLight);
-      }
-      return view;
-   }
+        if (robotoLight != null) {
+            description.setTypeface(robotoLight);
+        }
+        return view;
+    }
 
-   @Override
-   public void onDestroyView() {
-      super.onDestroyView();
-      mUnbinder.unbind();
-   }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

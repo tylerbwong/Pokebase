@@ -29,31 +29,31 @@ import me.tylerbwong.pokebase.gui.holders.MoveListItemViewHolder;
  * @author Tyler Wong
  */
 public class MoveListAdapter extends RecyclerView.Adapter {
-   private Context mContext;
-   private String[] mMoves;
+    private Context context;
+    private String[] moves;
 
-   public MoveListAdapter(Context context, String[] items) {
-      this.mContext = context;
-      this.mMoves = items;
-   }
+    public MoveListAdapter(Context context, String[] items) {
+        this.context = context;
+        this.moves = items;
+    }
 
-   @Override
-   public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      View view = LayoutInflater.from(mContext).inflate(R.layout.list_item_move, parent, false);
-      return new MoveListItemViewHolder(view);
-   }
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_move, parent, false);
+        return new MoveListItemViewHolder(view);
+    }
 
-   @Override
-   public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-      MoveListItemViewHolder holder = (MoveListItemViewHolder) viewHolder;
-      holder.mNameView.setText(mMoves[position]);
-   }
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        MoveListItemViewHolder holder = (MoveListItemViewHolder) viewHolder;
+        holder.nameView.setText(moves[position]);
+    }
 
-   @Override
-   public int getItemCount() {
-      if (mMoves != null) {
-         return mMoves.length;
-      }
-      return 0;
-   }
+    @Override
+    public int getItemCount() {
+        if (moves != null) {
+            return moves.length;
+        }
+        return 0;
+    }
 }

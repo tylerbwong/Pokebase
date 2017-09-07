@@ -32,67 +32,63 @@ import me.tylerbwong.pokebase.model.components.PokemonTeamMember;
  * @author Tyler Wong
  */
 public class PokemonTeamMemberAdapter extends RecyclerView.Adapter<PokemonTeamMemberViewHolder> {
-   private PokemonTeamMember[] mPokemon;
-   private Context mContext;
-   private String mName;
-   private String mDescription;
-   private int mTeamId;
+    private PokemonTeamMember[] pokemon;
+    private Context context;
+    private String name;
+    private String description;
+    private int teamId;
 
-   private static final String SPRITE = "sprites_";
-   private static final String DRAWABLE = "drawable";
+    public PokemonTeamMemberAdapter(Context context, PokemonTeamMember[] pokemon, int teamId,
+                                    String name, String description) {
+        this.context = context;
+        this.pokemon = pokemon;
+        this.name = name;
+        this.description = description;
+        this.teamId = teamId;
+    }
 
-   public PokemonTeamMemberAdapter(Context context, PokemonTeamMember[] pokemon, int teamId,
-                                   String name, String description) {
-      this.mContext = context;
-      this.mPokemon = pokemon;
-      this.mName = name;
-      this.mDescription = description;
-      this.mTeamId = teamId;
-   }
+    @Override
+    public PokemonTeamMemberViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.pokemon_team_member_card, parent, false);
 
-   @Override
-   public PokemonTeamMemberViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      View view = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.pokemon_team_member_card, parent, false);
+        return new PokemonTeamMemberViewHolder(view);
+    }
 
-      return new PokemonTeamMemberViewHolder(view);
-   }
+    @Override
+    public void onBindViewHolder(final PokemonTeamMemberViewHolder holder, int position) {
+        PokemonTeamMember curPokemon = pokemon[position];
+        holder.name.setText(curPokemon.nickname);
+        holder.level.setText(String.valueOf(curPokemon.level));
+        holder.lastUpdated.setText(curPokemon.lastUpdated);
 
-   @Override
-   public void onBindViewHolder(final PokemonTeamMemberViewHolder holder, int position) {
-      PokemonTeamMember curPokemon = mPokemon[position];
-      holder.mName.setText(curPokemon.nickname);
-      holder.mLevel.setText(String.valueOf(curPokemon.level));
-      holder.mLastUpdated.setText(curPokemon.lastUpdated);
+        Glide.with(context)
+                .load(String.format(context.getString(R.string.sprite_url), curPokemon.name.toLowerCase()))
+                .into(holder.pokemon);
 
-      Glide.with(mContext)
-            .load(String.format(mContext.getString(R.string.sprite_url), curPokemon.name.toLowerCase()))
-            .fitCenter()
-            .into(holder.mPokemon);
+        String[] moves = curPokemon.moves;
+        String moveList = "";
+        for (String move : moves) {
+            moveList += move + "\n";
+        }
 
-      String[] moves = curPokemon.moves;
-      String moveList = "";
-      for (String move : moves) {
-         moveList += move + "\n";
-      }
+        holder.moveset.setText(moveList);
+        holder.setPokemon(curPokemon);
+        holder.setTeamId(teamId);
+        holder.setTitle(name);
+        holder.setDescription(description);
+    }
 
-      holder.mMoveset.setText(moveList);
-      holder.setPokemon(curPokemon);
-      holder.setTeamId(mTeamId);
-      holder.setTitle(mName);
-      holder.setDescription(mDescription);
-   }
+    public void setTeam(PokemonTeamMember[] team) {
+        this.pokemon = team;
+        notifyDataSetChanged();
+    }
 
-   public void setTeam(PokemonTeamMember[] team) {
-      this.mPokemon = team;
-      notifyDataSetChanged();
-   }
-
-   @Override
-   public int getItemCount() {
-      if (mPokemon != null) {
-         return mPokemon.length;
-      }
-      return 0;
-   }
+    @Override
+    public int getItemCount() {
+        if (pokemon != null) {
+            return pokemon.length;
+        }
+        return 0;
+    }
 }

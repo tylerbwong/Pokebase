@@ -34,47 +34,47 @@ import butterknife.ButterKnife;
  * @author Tyler Wong
  */
 public class ItemInfoView extends RelativeLayout {
-   @BindView(R.id.cost)
-   TextView mCost;
-   @BindView(R.id.item)
-   ImageView mItem;
-   @BindView(R.id.description)
-   TextView mDescription;
+    @BindView(R.id.cost)
+    TextView cost;
+    @BindView(R.id.item)
+    ImageView item;
+    @BindView(R.id.description)
+    TextView description;
 
-   private Context mContext;
+    private Context context;
 
-   public ItemInfoView(Context context) {
-      super(context, null);
-      mContext = context;
-      init();
-   }
+    public ItemInfoView(Context context) {
+        super(context, null);
+        this.context = context;
+        init();
+    }
 
-   public ItemInfoView(Context context, AttributeSet attrs) {
-      super(context, attrs);
-      mContext = context;
-      init();
-   }
+    public ItemInfoView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.context = context;
+        init();
+    }
 
-   public ItemInfoView(Context context, AttributeSet attrs, int defStyle) {
-      super(context, attrs, defStyle);
-      mContext = context;
-      init();
-   }
+    public ItemInfoView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        this.context = context;
+        init();
+    }
 
-   private void init() {
-      View view = inflate(mContext, R.layout.item_info, this);
-      ButterKnife.bind(this, view);
-   }
+    private void init() {
+        View view = inflate(context, R.layout.item_info, this);
+        ButterKnife.bind(this, view);
+    }
 
-   public void setFields(String cost, int identifier, String description) {
-      mCost.setText(cost);
-      mItem.setImageResource(identifier);
-      mDescription.setText(description);
+    public void setFields(String cost, int identifier, String description) {
+        this.cost.setText(cost);
+        item.setImageResource(identifier);
+        this.description.setText(description);
 
-      if (mItem.getDrawable() == null) {
-         Glide.with(mContext)
-               .load(R.drawable.tm_normal)
-               .into(mItem);
-      }
-   }
+        if (item.getDrawable() == null) {
+            Glide.with(context)
+                    .load(R.drawable.tm_normal)
+                    .into(item);
+        }
+    }
 }

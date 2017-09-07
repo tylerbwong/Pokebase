@@ -26,54 +26,54 @@ import android.view.View;
  * @author Tyler Wong
  */
 public class AnimatedRecyclerView extends RecyclerView {
-   private boolean mScrollable;
-   private Runnable mRunnable;
+    private boolean scrollable;
+    private Runnable runnable;
 
-   private static final int TRANSLATION_Y = 100;
-   private static final int DELAY = 100;
-   private static final int DURATION = 200;
+    private static final int TRANSLATION_Y = 100;
+    private static final int DELAY = 100;
+    private static final int DURATION = 200;
 
-   public AnimatedRecyclerView(Context context) {
-      this(context, null);
-      init();
-   }
+    public AnimatedRecyclerView(Context context) {
+        this(context, null);
+        init();
+    }
 
-   public AnimatedRecyclerView(Context context, AttributeSet attrs) {
-      this(context, attrs, 0);
-      init();
-   }
+    public AnimatedRecyclerView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+        init();
+    }
 
-   public AnimatedRecyclerView(Context context, AttributeSet attrs, int defStyle) {
-      super(context, attrs, defStyle);
-      mScrollable = false;
-      init();
-   }
+    public AnimatedRecyclerView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        scrollable = false;
+        init();
+    }
 
-   private void init() {
-      mRunnable = () -> mScrollable = true;
-   }
+    private void init() {
+        runnable = () -> scrollable = true;
+    }
 
-   @Override
-   public boolean dispatchTouchEvent(MotionEvent event) {
-      return !mScrollable || super.dispatchTouchEvent(event);
-   }
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        return !scrollable || super.dispatchTouchEvent(event);
+    }
 
-   @Override
-   protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-      super.onLayout(changed, left, top, right, bottom);
-      for (int index = 0; index < getChildCount(); index++) {
-         animate(getChildAt(index), index);
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        for (int index = 0; index < getChildCount(); index++) {
+            animate(getChildAt(index), index);
 
-         if (index == getChildCount() - 1) {
-            getHandler().postDelayed(mRunnable, index * DELAY);
-         }
-      }
-   }
+            if (index == getChildCount() - 1) {
+                getHandler().postDelayed(runnable, index * DELAY);
+            }
+        }
+    }
 
-   private void animate(View view, int position) {
-      view.animate().cancel();
-      view.setTranslationY(TRANSLATION_Y);
-      view.setAlpha(0);
-      view.animate().alpha(1.0f).translationY(0).setDuration(DURATION).setStartDelay(position * DELAY);
-   }
+    private void animate(View view, int position) {
+        view.animate().cancel();
+        view.setTranslationY(TRANSLATION_Y);
+        view.setAlpha(0);
+        view.animate().alpha(1.0f).translationY(0).setDuration(DURATION).setStartDelay(position * DELAY);
+    }
 }

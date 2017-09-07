@@ -56,257 +56,257 @@ import me.tylerbwong.pokebase.model.database.DatabaseOpenHelper;
  * @author Tyler Wong
  */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-   @BindView(R.id.navigation_view)
-   NavigationView mNavigationView;
-   @BindView(R.id.drawer_layout)
-   DrawerLayout mDrawerLayout;
-   @BindView(R.id.toolbar)
-   Toolbar mToolbar;
+    @BindView(R.id.navigation_view)
+    NavigationView navigationView;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
-   private ImageView mProfilePicture;
-   private TextView mUsernameView;
+    private ImageView profilePicture;
+    private TextView usernameView;
 
-   private Fragment mCurrentFragment;
-   private DatabaseOpenHelper mDatabaseHelper;
+    private Fragment currentFragment;
+    private DatabaseOpenHelper databaseHelper;
 
-   private int mLastClicked;
-   private int mMenuId;
-   private boolean mPokemonAdd;
+    private int lastClicked;
+    private int menuId;
+    private boolean pokemonAdd;
 
-   private static final int DELAY = 250;
+    private static final int DELAY = 250;
 
-   @Override
-   protected void onCreate(Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
-      setContentView(R.layout.activity_main);
-      ButterKnife.bind(this);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-      mDatabaseHelper = DatabaseOpenHelper.getInstance(this);
+        databaseHelper = DatabaseOpenHelper.getInstance(this);
 
-      View headerView = mNavigationView.getHeaderView(0);
-      mProfilePicture = (ImageView) headerView.findViewById(R.id.profile_image);
-      mUsernameView = (TextView) headerView.findViewById(R.id.username);
+        View headerView = navigationView.getHeaderView(0);
+        profilePicture = headerView.findViewById(R.id.profile_image);
+        usernameView = headerView.findViewById(R.id.username);
 
-      SharedPreferences pref = getSharedPreferences(SplashActivity.ACTIVITY_PREF, Context.MODE_PRIVATE);
-      mUsernameView.setText(String.format(getString(R.string.trainer),
-            pref.getString(SignUpActivity.USERNAME, "")));
+        SharedPreferences pref = getSharedPreferences(SplashActivity.ACTIVITY_PREF, Context.MODE_PRIVATE);
+        usernameView.setText(String.format(getString(R.string.trainer),
+                pref.getString(SignUpActivity.USERNAME, "")));
 
-      int image;
+        int image;
 
-      if (pref.getString(GenderActivity.GENDER, GenderActivity.MALE).equals(GenderActivity.MALE)) {
-         image = R.drawable.boy;
-      }
-      else {
-         image = R.drawable.girl;
-      }
+        if (pref.getString(GenderActivity.GENDER, GenderActivity.MALE).equals(GenderActivity.MALE)) {
+            image = R.drawable.boy;
+        }
+        else {
+            image = R.drawable.girl;
+        }
 
-      Glide.with(this)
-            .load(image)
-            .into(mProfilePicture);
+        Glide.with(this)
+                .load(image)
+                .into(profilePicture);
 
-      String fragTag;
+        String fragTag;
 
-      mPokemonAdd = getIntent().getBooleanExtra(TeamViewActivity.POKEMON_ADD, false);
+        pokemonAdd = getIntent().getBooleanExtra(TeamViewActivity.POKEMON_ADD, false);
 
-      if (mPokemonAdd) {
-         fragTag = PokebaseFragment.class.getSimpleName();
-         mNavigationView.getMenu().getItem(1).setChecked(true);
-         mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
-         if (mCurrentFragment == null) {
-            mCurrentFragment = new PokebaseFragment();
-         }
-         mLastClicked = R.id.pokebase;
-      }
-      else {
-         fragTag = TeamsFragment.class.getSimpleName();
-         mNavigationView.getMenu().getItem(0).setChecked(true);
-         mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
-         if (mCurrentFragment == null) {
-            mCurrentFragment = new TeamsFragment();
-         }
-         mLastClicked = R.id.teams;
-      }
-
-      getSupportFragmentManager().beginTransaction()
-            .replace(R.id.frame, mCurrentFragment, fragTag).commit();
-
-      setSupportActionBar(mToolbar);
-
-      mNavigationView.setNavigationItemSelectedListener(this);
-
-      ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
-            this, mDrawerLayout, mToolbar, R.string.open_drawer, R.string.close_drawer) {
-
-         @Override
-         public void onDrawerClosed(View drawerView) {
-            super.onDrawerClosed(drawerView);
-            hideKeyboard();
-         }
-
-         @Override
-         public void onDrawerOpened(View drawerView) {
-            super.onDrawerOpened(drawerView);
-            hideKeyboard();
-         }
-      };
-
-      mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
-      actionBarDrawerToggle.syncState();
-   }
-
-   @Override
-   protected void onResume() {
-      super.onResume();
-      SharedPreferences pref = getSharedPreferences(SplashActivity.ACTIVITY_PREF, Context.MODE_PRIVATE);
-      mUsernameView.setText(String.format(getString(R.string.trainer),
-            pref.getString(SignUpActivity.USERNAME, "Error")));
-   }
-
-   @Override
-   public boolean onCreateOptionsMenu(Menu menu) {
-      MenuInflater inflater = getMenuInflater();
-      inflater.inflate(R.menu.menu_main, menu);
-      menu.findItem(R.id.clear_all_teams_action).setVisible(true);
-      menu.findItem(R.id.number_action).setVisible(false);
-      menu.findItem(R.id.name_action).setVisible(false);
-      return true;
-   }
-
-   @Override
-   public boolean onOptionsItemSelected(MenuItem item) {
-      switch (item.getItemId()) {
-         case R.id.clear_all_teams_action:
-            showClearAllTeamsDialog();
-            break;
-         case R.id.settings:
-            switchToSettings();
-            break;
-         case R.id.exit_action:
-            showExitDialog();
-            break;
-         default:
-            return false;
-      }
-      return true;
-   }
-
-   private void switchToSettings() {
-      startActivity(new Intent(MainActivity.this, PreferencesActivity.class));
-   }
-
-   private void showClearAllTeamsDialog() {
-      new LovelyStandardDialog(this)
-            .setIcon(R.drawable.ic_info_white_24dp)
-            .setTitle(R.string.clear_all_teams)
-            .setMessage(R.string.clear_all_teams_prompt)
-            .setCancelable(true)
-            .setPositiveButton(R.string.yes, v -> clearAllTeams())
-            .setNegativeButton(R.string.no, null)
-            .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
-            .show();
-   }
-
-   private void clearAllTeams() {
-      mDatabaseHelper.deleteAllTeams()
-         .subscribeOn(Schedulers.newThread())
-         .observeOn(AndroidSchedulers.mainThread())
-         .subscribe(() -> {
-            if (mCurrentFragment instanceof TeamsFragment) {
-               ((TeamsFragment) mCurrentFragment).refreshAdapter();
+        if (pokemonAdd) {
+            fragTag = PokebaseFragment.class.getSimpleName();
+            navigationView.getMenu().getItem(1).setChecked(true);
+            currentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+            if (currentFragment == null) {
+                currentFragment = new PokebaseFragment();
             }
-            Toast.makeText(this, getResources().getString(R.string.cleared_teams),
-                    Toast.LENGTH_SHORT).show();
-         });
-   }
+            lastClicked = R.id.pokebase;
+        }
+        else {
+            fragTag = TeamsFragment.class.getSimpleName();
+            navigationView.getMenu().getItem(0).setChecked(true);
+            currentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+            if (currentFragment == null) {
+                currentFragment = new TeamsFragment();
+            }
+            lastClicked = R.id.teams;
+        }
 
-   private void hideKeyboard() {
-      View view = getCurrentFocus();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, currentFragment, fragTag).commit();
 
-      if (view != null) {
-         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-      }
-   }
+        setSupportActionBar(toolbar);
 
-   private void showExitDialog() {
-      new LovelyStandardDialog(this)
-            .setIcon(R.drawable.ic_info_white_24dp)
-            .setTitle(R.string.close_title)
-            .setMessage(R.string.close_prompt)
-            .setCancelable(true)
-            .setPositiveButton(R.string.yes, v -> {
-               Intent intent = new Intent(Intent.ACTION_MAIN);
-               intent.addCategory(Intent.CATEGORY_HOME);
-               intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-               startActivity(intent);
-            }).setNegativeButton(R.string.no, null)
-            .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
-            .show();
-   }
+        navigationView.setNavigationItemSelectedListener(this);
 
-   @Override
-   public void onBackPressed() {
-      if (mPokemonAdd) {
-         Intent toIntent = new Intent(this, TeamViewActivity.class);
-         toIntent.putExtras(getIntent().getExtras());
-         startActivity(toIntent);
-      }
-      else {
-         showExitDialog();
-      }
-   }
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer) {
 
-   @Override
-   public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-      mDrawerLayout.closeDrawers();
-      new Handler().postDelayed(() -> {
-         String fragTag = "";
-         mMenuId = item.getItemId();
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                hideKeyboard();
+            }
 
-         switch (mMenuId) {
-            case R.id.teams:
-               fragTag = TeamsFragment.class.getSimpleName();
-               mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
-               if (mCurrentFragment == null) {
-                  mCurrentFragment = new TeamsFragment();
-               }
-               break;
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                hideKeyboard();
+            }
+        };
 
-            case R.id.pokebase:
-               fragTag = PokebaseFragment.class.getSimpleName();
-               mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
-               if (mCurrentFragment == null) {
-                  mCurrentFragment = new PokebaseFragment();
-               }
-               break;
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+    }
 
-            case R.id.moves:
-               fragTag = MovesFragment.class.getSimpleName();
-               mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
-               if (mCurrentFragment == null) {
-                  mCurrentFragment = new MovesFragment();
-               }
-               break;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences pref = getSharedPreferences(SplashActivity.ACTIVITY_PREF, Context.MODE_PRIVATE);
+        usernameView.setText(String.format(getString(R.string.trainer),
+                pref.getString(SignUpActivity.USERNAME, "Error")));
+    }
 
-            case R.id.items:
-               fragTag = ItemsFragment.class.getSimpleName();
-               mCurrentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
-               if (mCurrentFragment == null) {
-                  mCurrentFragment = new ItemsFragment();
-               }
-               break;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        menu.findItem(R.id.clear_all_teams_action).setVisible(true);
+        menu.findItem(R.id.number_action).setVisible(false);
+        menu.findItem(R.id.name_action).setVisible(false);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.clear_all_teams_action:
+                showClearAllTeamsDialog();
+                break;
             case R.id.settings:
-               switchToSettings();
-               break;
-         }
+                switchToSettings();
+                break;
+            case R.id.exit_action:
+                showExitDialog();
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
 
-         if (mMenuId != R.id.settings && mMenuId != mLastClicked) {
-            getSupportFragmentManager().beginTransaction()
-                  .replace(R.id.frame, mCurrentFragment, fragTag).commit();
-            mLastClicked = mMenuId;
-         }
-      }, DELAY);
-      return true;
-   }
+    private void switchToSettings() {
+        startActivity(new Intent(MainActivity.this, PreferencesActivity.class));
+    }
+
+    private void showClearAllTeamsDialog() {
+        new LovelyStandardDialog(this)
+                .setIcon(R.drawable.ic_info_white_24dp)
+                .setTitle(R.string.clear_all_teams)
+                .setMessage(R.string.clear_all_teams_prompt)
+                .setCancelable(true)
+                .setPositiveButton(R.string.yes, v -> clearAllTeams())
+                .setNegativeButton(R.string.no, null)
+                .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .show();
+    }
+
+    private void clearAllTeams() {
+        databaseHelper.deleteAllTeams()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    if (currentFragment instanceof TeamsFragment) {
+                        ((TeamsFragment) currentFragment).refreshAdapter();
+                    }
+                    Toast.makeText(this, getResources().getString(R.string.cleared_teams),
+                            Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void hideKeyboard() {
+        View view = getCurrentFocus();
+
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    private void showExitDialog() {
+        new LovelyStandardDialog(this)
+                .setIcon(R.drawable.ic_info_white_24dp)
+                .setTitle(R.string.close_title)
+                .setMessage(R.string.close_prompt)
+                .setCancelable(true)
+                .setPositiveButton(R.string.yes, v -> {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }).setNegativeButton(R.string.no, null)
+                .setTopColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (pokemonAdd) {
+            Intent toIntent = new Intent(this, TeamViewActivity.class);
+            toIntent.putExtras(getIntent().getExtras());
+            startActivity(toIntent);
+        }
+        else {
+            showExitDialog();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        drawerLayout.closeDrawers();
+        new Handler().postDelayed(() -> {
+            String fragTag = "";
+            menuId = item.getItemId();
+
+            switch (menuId) {
+                case R.id.teams:
+                    fragTag = TeamsFragment.class.getSimpleName();
+                    currentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+                    if (currentFragment == null) {
+                        currentFragment = new TeamsFragment();
+                    }
+                    break;
+
+                case R.id.pokebase:
+                    fragTag = PokebaseFragment.class.getSimpleName();
+                    currentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+                    if (currentFragment == null) {
+                        currentFragment = new PokebaseFragment();
+                    }
+                    break;
+
+                case R.id.moves:
+                    fragTag = MovesFragment.class.getSimpleName();
+                    currentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+                    if (currentFragment == null) {
+                        currentFragment = new MovesFragment();
+                    }
+                    break;
+
+                case R.id.items:
+                    fragTag = ItemsFragment.class.getSimpleName();
+                    currentFragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+                    if (currentFragment == null) {
+                        currentFragment = new ItemsFragment();
+                    }
+                    break;
+
+                case R.id.settings:
+                    switchToSettings();
+                    break;
+            }
+
+            if (menuId != R.id.settings && menuId != lastClicked) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame, currentFragment, fragTag).commit();
+                lastClicked = menuId;
+            }
+        }, DELAY);
+        return true;
+    }
 }

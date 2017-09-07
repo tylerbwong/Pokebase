@@ -32,68 +32,65 @@ import me.tylerbwong.pokebase.model.components.Team;
  * @author Tyler Wong
  */
 public class TeamAdapter extends RecyclerView.Adapter {
-   private Team[] mTeams;
-   private Context mContext;
+    private Team[] teams;
+    private Context context;
 
-   private static final String DRAWABLE = "drawable";
-   private static final String SPRITES = "sprites_";
+    public TeamAdapter(Context context, Team[] teams) {
+        this.context = context;
+        this.teams = teams;
+    }
 
-   public TeamAdapter(Context context, Team[] teams) {
-      this.mContext = context;
-      this.mTeams = teams;
-   }
+    @Override
+    public TeamCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context)
+                .inflate(R.layout.team_card, parent, false);
+        return new TeamCardViewHolder(view);
+    }
 
-   @Override
-   public TeamCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      View view = LayoutInflater.from(mContext)
-            .inflate(R.layout.team_card, parent, false);
-      return new TeamCardViewHolder(view);
-   }
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        TeamCardViewHolder holder = (TeamCardViewHolder) viewHolder;
+        Team curTeam = teams[position];
+        holder.titleLabel.setText(curTeam.name);
+        holder.description.setText(curTeam.description);
+        holder.lastUpdated.setText(curTeam.lastUpdated);
+        int teamSize = curTeam.team.length;
 
-   @Override
-   public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-      TeamCardViewHolder holder = (TeamCardViewHolder) viewHolder;
-      Team curTeam = mTeams[position];
-      holder.mTitleLabel.setText(curTeam.name);
-      holder.mDescription.setText(curTeam.description);
-      holder.mLastUpdated.setText(curTeam.lastUpdated);
-      int teamSize = curTeam.team.length;
+        if (teamSize > 0) {
+            for (int index = 0; index < teamSize; index++) {
+                Glide.with(context)
+                        .load(String.format(context.getString(R.string.sprite_url),
+                                curTeam.team[index].name.toLowerCase()))
+                        .into(holder.pokemonList[index]);
+            }
+        }
+        else {
+            for (int index = 0; index < teamSize; index++) {
+                Glide.with(context)
+                        .clear(holder.pokemonList[index]);
+            }
+        }
 
-      if (teamSize > 0) {
-         for (int index = 0; index < teamSize; index++) {
-            Glide.with(mContext)
-                  .load(String.format(mContext.getString(R.string.sprite_url),
-                        curTeam.team[index].name.toLowerCase()))
-                  .fitCenter()
-                  .into(holder.mPokemonList[index]);
-         }
-      }
-      else {
-         for (int index = 0; index < teamSize; index++) {
-            Glide.clear(holder.mPokemonList[index]);
-         }
-      }
+        holder.setTeamId(curTeam.id);
+    }
 
-      holder.setTeamId(curTeam.id);
-   }
+    public void setTeams(Team[] teams) {
+        this.teams = teams;
+        notifyDataSetChanged();
+    }
 
-   public void setTeams(Team[] teams) {
-      this.mTeams = teams;
-      notifyDataSetChanged();
-   }
+    @Override
+    public int getItemCount() {
+        if (teams != null) {
+            return teams.length;
+        }
+        return 0;
+    }
 
-   @Override
-   public int getItemCount() {
-      if (mTeams != null) {
-         return mTeams.length;
-      }
-      return 0;
-   }
-
-   @Override
-   public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-      super.onAttachedToRecyclerView(recyclerView);
-   }
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
 
 
 }

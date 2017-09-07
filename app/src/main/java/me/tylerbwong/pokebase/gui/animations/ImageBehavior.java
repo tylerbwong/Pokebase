@@ -29,135 +29,135 @@ import me.tylerbwong.pokebase.R;
 
 @SuppressWarnings("unused")
 public class ImageBehavior extends CoordinatorLayout.Behavior<ImageView> {
-   private static final String TAG = "behavior";
-   private static final String STATUS_BAR_HEIGHT = "status_bar_height";
-   private static final String DIMEN = "dimen";
-   private static final String ANDROID = "android";
-   private Context mContext;
+    private static final String TAG = "behavior";
+    private static final String STATUS_BAR_HEIGHT = "status_bar_height";
+    private static final String DIMEN = "dimen";
+    private static final String ANDROID = "android";
+    private Context context;
 
-   private float mCustomFinalYPosition;
-   private float mCustomStartXPosition;
-   private float mCustomStartToolbarPosition;
-   private float mCustomStartHeight;
-   private float mCustomFinalHeight;
+    private float customFinalYPosition;
+    private float customStartXPosition;
+    private float customStartToolbarPosition;
+    private float customStartHeight;
+    private float customFinalHeight;
 
-   private float mAvatarMaxSize;
-   private float mFinalLeftAvatarPadding;
-   private float mStartPosition;
-   private int mStartXPosition;
-   private float mStartToolbarPosition;
-   private int mStartYPosition;
-   private int mFinalYPosition;
-   private int mStartHeight;
-   private int mFinalXPosition;
-   private float mChangeBehaviorPoint;
+    private float avatarMaxSize;
+    private float finalLeftAvatarPadding;
+    private float startPosition;
+    private int startXPosition;
+    private float startToolbarPosition;
+    private int startYPosition;
+    private int finalYPosition;
+    private int startHeight;
+    private int finalXPosition;
+    private float changeBehaviorPoint;
 
-   public ImageBehavior(Context context, AttributeSet attrs) {
-      mContext = context;
+    public ImageBehavior(Context context, AttributeSet attrs) {
+        this.context = context;
 
-      if (attrs != null) {
-         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.AvatarImageBehavior);
-         mCustomFinalYPosition = array.getDimension(R.styleable.AvatarImageBehavior_finalYPosition, 0);
-         mCustomStartXPosition = array.getDimension(R.styleable.AvatarImageBehavior_startXPosition, 0);
-         mCustomStartToolbarPosition = array.getDimension(R.styleable.AvatarImageBehavior_startToolbarPosition, 0);
-         mCustomStartHeight = array.getDimension(R.styleable.AvatarImageBehavior_startHeight, 0);
-         mCustomFinalHeight = array.getDimension(R.styleable.AvatarImageBehavior_finalHeight, 0);
+        if (attrs != null) {
+            TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.AvatarImageBehavior);
+            customFinalYPosition = array.getDimension(R.styleable.AvatarImageBehavior_finalYPosition, 0);
+            customStartXPosition = array.getDimension(R.styleable.AvatarImageBehavior_startXPosition, 0);
+            customStartToolbarPosition = array.getDimension(R.styleable.AvatarImageBehavior_startToolbarPosition, 0);
+            customStartHeight = array.getDimension(R.styleable.AvatarImageBehavior_startHeight, 0);
+            customFinalHeight = array.getDimension(R.styleable.AvatarImageBehavior_finalHeight, 0);
 
-         array.recycle();
-      }
+            array.recycle();
+        }
 
-      init();
+        init();
 
-      mFinalLeftAvatarPadding = context.getResources().getDimension(R.dimen.spacing_normal);
-   }
+        finalLeftAvatarPadding = context.getResources().getDimension(R.dimen.spacing_normal);
+    }
 
-   private void init() {
-      bindDimensions();
-   }
+    private void init() {
+        bindDimensions();
+    }
 
-   private void bindDimensions() {
-      mAvatarMaxSize = mContext.getResources().getDimension(R.dimen.image_width);
-   }
+    private void bindDimensions() {
+        avatarMaxSize = context.getResources().getDimension(R.dimen.image_width);
+    }
 
-   @Override
-   public boolean layoutDependsOn(CoordinatorLayout parent, ImageView child, View dependency) {
-      return dependency instanceof Toolbar;
-   }
+    @Override
+    public boolean layoutDependsOn(CoordinatorLayout parent, ImageView child, View dependency) {
+        return dependency instanceof Toolbar;
+    }
 
-   @Override
-   public boolean onDependentViewChanged(CoordinatorLayout parent, ImageView child, View dependency) {
-      maybeInitProperties(child, dependency);
+    @Override
+    public boolean onDependentViewChanged(CoordinatorLayout parent, ImageView child, View dependency) {
+        maybeInitProperties(child, dependency);
 
-      final int maxScrollDistance = (int) (mStartToolbarPosition);
-      float expandedPercentageFactor = dependency.getY() / maxScrollDistance;
+        final int maxScrollDistance = (int) (startToolbarPosition);
+        float expandedPercentageFactor = dependency.getY() / maxScrollDistance;
 
-      if (expandedPercentageFactor < mChangeBehaviorPoint) {
-         float heightFactor = (mChangeBehaviorPoint - expandedPercentageFactor) / mChangeBehaviorPoint;
+        if (expandedPercentageFactor < changeBehaviorPoint) {
+            float heightFactor = (changeBehaviorPoint - expandedPercentageFactor) / changeBehaviorPoint;
 
-         float distanceXToSubtract = ((mStartXPosition - mFinalXPosition)
-               * heightFactor) + (child.getHeight() / 2);
-         float distanceYToSubtract = ((mStartYPosition - mFinalYPosition)
-               * (1f - expandedPercentageFactor)) + (child.getHeight() / 2);
+            float distanceXToSubtract = ((startXPosition - finalXPosition)
+                    * heightFactor) + (child.getHeight() / 2);
+            float distanceYToSubtract = ((startYPosition - finalYPosition)
+                    * (1f - expandedPercentageFactor)) + (child.getHeight() / 2);
 
-         child.setX(mStartXPosition - distanceXToSubtract);
-         child.setY(mStartYPosition - distanceYToSubtract);
+            child.setX(startXPosition - distanceXToSubtract);
+            child.setY(startYPosition - distanceYToSubtract);
 
-         float heightToSubtract = ((mStartHeight - mCustomFinalHeight) * heightFactor);
+            float heightToSubtract = ((startHeight - customFinalHeight) * heightFactor);
 
-         CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) child.getLayoutParams();
-         lp.width = (int) (mStartHeight - heightToSubtract);
-         lp.height = (int) (mStartHeight - heightToSubtract);
-         child.setLayoutParams(lp);
-      }
-      else {
-         float distanceYToSubtract = ((mStartYPosition - mFinalYPosition)
-               * (1f - expandedPercentageFactor)) + (mStartHeight / 2);
+            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) child.getLayoutParams();
+            lp.width = (int) (startHeight - heightToSubtract);
+            lp.height = (int) (startHeight - heightToSubtract);
+            child.setLayoutParams(lp);
+        }
+        else {
+            float distanceYToSubtract = ((startYPosition - finalYPosition)
+                    * (1f - expandedPercentageFactor)) + (startHeight / 2);
 
-         child.setX(mStartXPosition - child.getWidth() / 2);
-         child.setY(mStartYPosition - distanceYToSubtract);
+            child.setX(startXPosition - child.getWidth() / 2);
+            child.setY(startYPosition - distanceYToSubtract);
 
-         CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) child.getLayoutParams();
-         lp.width = mStartHeight;
-         lp.height = mStartHeight;
-         child.setLayoutParams(lp);
-      }
-      return true;
-   }
+            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) child.getLayoutParams();
+            lp.width = startHeight;
+            lp.height = startHeight;
+            child.setLayoutParams(lp);
+        }
+        return true;
+    }
 
-   private void maybeInitProperties(ImageView child, View dependency) {
-      if (mStartYPosition == 0)
-         mStartYPosition = (int) (dependency.getY());
+    private void maybeInitProperties(ImageView child, View dependency) {
+        if (startYPosition == 0)
+            startYPosition = (int) (dependency.getY());
 
-      if (mFinalYPosition == 0)
-         mFinalYPosition = (dependency.getHeight() / 2);
+        if (finalYPosition == 0)
+            finalYPosition = (dependency.getHeight() / 2);
 
-      if (mStartHeight == 0)
-         mStartHeight = child.getHeight();
+        if (startHeight == 0)
+            startHeight = child.getHeight();
 
-      if (mStartXPosition == 0)
-         mStartXPosition = (int) (child.getX() + (child.getWidth() / 2));
+        if (startXPosition == 0)
+            startXPosition = (int) (child.getX() + (child.getWidth() / 2));
 
-      if (mFinalXPosition == 0)
-         mFinalXPosition = mContext.getResources().getDimensionPixelOffset(
-               R.dimen.abc_action_bar_content_inset_material) + ((int) mCustomFinalHeight / 2) +
-               Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40,
-                     dependency.getContext().getResources().getDisplayMetrics()));
+        if (finalXPosition == 0)
+            finalXPosition = context.getResources().getDimensionPixelOffset(
+                    R.dimen.abc_action_bar_content_inset_material) + ((int) customFinalHeight / 2) +
+                    Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40,
+                            dependency.getContext().getResources().getDisplayMetrics()));
 
-      if (mStartToolbarPosition == 0)
-         mStartToolbarPosition = dependency.getY();
+        if (startToolbarPosition == 0)
+            startToolbarPosition = dependency.getY();
 
-      if (mChangeBehaviorPoint == 0) {
-         mChangeBehaviorPoint = (child.getHeight() - mCustomFinalHeight) / (2f * (mStartYPosition - mFinalYPosition));
-      }
-   }
+        if (changeBehaviorPoint == 0) {
+            changeBehaviorPoint = (child.getHeight() - customFinalHeight) / (2f * (startYPosition - finalYPosition));
+        }
+    }
 
-   public int getStatusBarHeight() {
-      int result = 0;
-      int resourceId = mContext.getResources().getIdentifier(STATUS_BAR_HEIGHT, DIMEN, ANDROID);
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = context.getResources().getIdentifier(STATUS_BAR_HEIGHT, DIMEN, ANDROID);
 
-      if (resourceId > 0) {
-         result = mContext.getResources().getDimensionPixelSize(resourceId);
-      }
-      return result;
-   }
+        if (resourceId > 0) {
+            result = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
 }

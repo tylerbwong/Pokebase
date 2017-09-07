@@ -20,11 +20,11 @@ package me.tylerbwong.pokebase.model.components;
  * @author Tyler Wong
  */
 public class PokemonTeamItem {
-   public final int pokemonId;
-   public final String name;
+    public final int pokemonId;
+    public final String name;
 
-   public PokemonTeamItem(int id, String name) {
-      this.pokemonId = id;
-      this.name = name;
-   }
+    public PokemonTeamItem(int id, String name) {
+        this.pokemonId = id;
+        this.name = name;
+    }
 }

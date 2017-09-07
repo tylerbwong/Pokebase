@@ -36,32 +36,32 @@ import me.tylerbwong.pokebase.model.utilities.Typefaces;
  * @author Tyler Wong
  */
 public class IntroTeamFragment extends Fragment {
-   @BindView(R.id.description)
-   TextView mDescription;
-   @BindView(R.id.trainer)
-   ImageView mTrainerImage;
+    @BindView(R.id.description)
+    TextView description;
+    @BindView(R.id.trainer)
+    ImageView trainerImage;
 
-   private Unbinder mUnbinder;
+    private Unbinder unbinder;
 
-   @Nullable
-   @Override
-   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-      View view = inflater.inflate(R.layout.intro_team_fragment, container, false);
-      mUnbinder = ButterKnife.bind(this, view);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.intro_team_fragment, container, false);
+        unbinder = ButterKnife.bind(this, view);
 
-      mTrainerImage.setImageResource(R.drawable.trainer);
+        trainerImage.setImageResource(R.drawable.trainer);
 
-      Typeface robotoLight = Typefaces.get(getContext(), Typefaces.ROBOTO_PATH);
+        Typeface robotoLight = Typefaces.get(getContext(), Typefaces.ROBOTO_PATH);
 
-      if (robotoLight != null) {
-         mDescription.setTypeface(robotoLight);
-      }
-      return view;
-   }
+        if (robotoLight != null) {
+            description.setTypeface(robotoLight);
+        }
+        return view;
+    }
 
-   @Override
-   public void onDestroyView() {
-      super.onDestroyView();
-      mUnbinder.unbind();
-   }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

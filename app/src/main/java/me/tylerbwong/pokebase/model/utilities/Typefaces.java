@@ -26,23 +26,23 @@ import java.util.Hashtable;
  * @author Tyler Wong
  */
 public class Typefaces {
-   private static final Hashtable<String, Typeface> cache = new Hashtable<>();
+    private static final Hashtable<String, Typeface> cache = new Hashtable<>();
 
-   public static final String ROBOTO_PATH = "fonts/roboto-light.ttf";
+    public static final String ROBOTO_PATH = "fonts/roboto-light.ttf";
 
-   @Nullable
-   public static Typeface get(Context context, String assetPath) {
-      synchronized (cache) {
-         if (!cache.containsKey(assetPath)) {
-            try {
-               Typeface typeface = Typeface.createFromAsset(context.getAssets(), assetPath);
-               cache.put(assetPath, typeface);
+    @Nullable
+    public static Typeface get(Context context, String assetPath) {
+        synchronized (cache) {
+            if (!cache.containsKey(assetPath)) {
+                try {
+                    Typeface typeface = Typeface.createFromAsset(context.getAssets(), assetPath);
+                    cache.put(assetPath, typeface);
+                }
+                catch (Exception e) {
+                    return null;
+                }
             }
-            catch (Exception e) {
-               return null;
-            }
-         }
-         return cache.get(assetPath);
-      }
-   }
+            return cache.get(assetPath);
+        }
+    }
 }

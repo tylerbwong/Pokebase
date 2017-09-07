@@ -27,24 +27,24 @@ import me.tylerbwong.pokebase.model.database.DatabaseOpenHelper;
  * @author Tyler Wong
  */
 public class PokebaseCache {
-   private static final Hashtable<Integer, Observable<PokemonProfile>> profileCache = new Hashtable<>();
-   private static final Hashtable<String, Observable<Move>> moveCache = new Hashtable<>();
+    private static final Hashtable<Integer, Observable<PokemonProfile>> profileCache = new Hashtable<>();
+    private static final Hashtable<String, Observable<Move>> moveCache = new Hashtable<>();
 
-   public static Observable<PokemonProfile> getPokemonProfile(DatabaseOpenHelper databaseHelper, int pokemonId) {
-      synchronized (profileCache) {
-         if (!profileCache.containsKey(pokemonId)) {
-            profileCache.put(pokemonId, databaseHelper.queryPokemonProfile(pokemonId));
-         }
-         return profileCache.get(pokemonId);
-      }
-   }
+    public static Observable<PokemonProfile> getPokemonProfile(DatabaseOpenHelper databaseHelper, int pokemonId) {
+        synchronized (profileCache) {
+            if (!profileCache.containsKey(pokemonId)) {
+                profileCache.put(pokemonId, databaseHelper.queryPokemonProfile(pokemonId));
+            }
+            return profileCache.get(pokemonId);
+        }
+    }
 
-   public static Observable<Move> getMove(DatabaseOpenHelper databaseHelper, String moveName) {
-      synchronized (moveCache) {
-         if (!moveCache.containsKey(moveName)) {
-            moveCache.put(moveName, databaseHelper.queryMoveInfoByName(moveName));
-         }
-         return moveCache.get(moveName);
-      }
-   }
+    public static Observable<Move> getMove(DatabaseOpenHelper databaseHelper, String moveName) {
+        synchronized (moveCache) {
+            if (!moveCache.containsKey(moveName)) {
+                moveCache.put(moveName, databaseHelper.queryMoveInfoByName(moveName));
+            }
+            return moveCache.get(moveName);
+        }
+    }
 }

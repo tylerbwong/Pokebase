@@ -36,83 +36,82 @@ import me.tylerbwong.pokebase.model.utilities.Typefaces;
 /**
  * @author Tyler Wong
  */
+@SuppressWarnings("unused")
 public class SignUpActivity extends AppCompatActivity {
-   @BindView(R.id.title_label)
-   TextView mTitleLabel;
-   @BindView(R.id.name_input)
-   TextInputEditText mNameInput;
-   @BindView(R.id.name_count)
-   TextView mNameCount;
-   @BindView(R.id.exit_button)
-   Button mExitButton;
-   @BindView(R.id.create_user)
-   Button mCreateButton;
+    @BindView(R.id.title_label)
+    TextView titleLabel;
+    @BindView(R.id.name_input)
+    TextInputEditText nameInput;
+    @BindView(R.id.name_count)
+    TextView nameCount;
+    @BindView(R.id.create_user)
+    Button createButton;
 
-   private boolean mHasText = false;
+    private boolean hasText = false;
 
-   public static final String USERNAME = "username";
-   private static final String MAX_LENGTH = "/15";
+    public static final String USERNAME = "username";
+    private static final String MAX_LENGTH = "/15";
 
-   @Override
-   public void onCreate(Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
-      setContentView(R.layout.activity_signup);
-      ButterKnife.bind(this);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_signup);
+        ButterKnife.bind(this);
 
-      mCreateButton.setEnabled(false);
+        createButton.setEnabled(false);
 
-      Typeface robotoLight = Typefaces.get(this, Typefaces.ROBOTO_PATH);
+        Typeface robotoLight = Typefaces.get(this, Typefaces.ROBOTO_PATH);
 
-      if (robotoLight != null) {
-         mTitleLabel.setTypeface(robotoLight);
-         mNameInput.setTypeface(robotoLight);
-         mNameCount.setTypeface(robotoLight);
-      }
-   }
+        if (robotoLight != null) {
+            titleLabel.setTypeface(robotoLight);
+            nameInput.setTypeface(robotoLight);
+            nameCount.setTypeface(robotoLight);
+        }
+    }
 
-   private void checkFields() {
-      if (mHasText) {
-         mCreateButton.setEnabled(true);
-      }
-      else {
-         mCreateButton.setEnabled(false);
-      }
-   }
+    private void checkFields() {
+        if (hasText) {
+            createButton.setEnabled(true);
+        }
+        else {
+            createButton.setEnabled(false);
+        }
+    }
 
-   @OnTextChanged(R.id.name_input)
-   public void textChanged(CharSequence sequence) {
-      String charLeft = sequence.length() + MAX_LENGTH;
+    @OnTextChanged(R.id.name_input)
+    public void textChanged(CharSequence sequence) {
+        String charLeft = sequence.length() + MAX_LENGTH;
 
-      if (sequence.toString().trim().length() == 0) {
-         mHasText = false;
-      }
-      else {
-         mHasText = true;
-      }
-      checkFields();
-      mNameCount.setText(charLeft);
-   }
+        if (sequence.toString().trim().length() == 0) {
+            hasText = false;
+        }
+        else {
+            hasText = true;
+        }
+        checkFields();
+        nameCount.setText(charLeft);
+    }
 
-   @OnClick(R.id.create_user)
-   public void createUser() {
-      SharedPreferences pref = getSharedPreferences(SplashActivity.ACTIVITY_PREF,
-            Context.MODE_PRIVATE);
-      SharedPreferences.Editor ed = pref.edit();
-      ed.putString(USERNAME, mNameInput.getText().toString());
-      ed.apply();
-      startActivity(new Intent(this, GenderActivity.class));
-   }
+    @OnClick(R.id.create_user)
+    public void createUser() {
+        SharedPreferences pref = getSharedPreferences(SplashActivity.ACTIVITY_PREF,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = pref.edit();
+        ed.putString(USERNAME, nameInput.getText().toString());
+        ed.apply();
+        startActivity(new Intent(this, GenderActivity.class));
+    }
 
-   @OnClick(R.id.exit_button)
-   public void close() {
-      Intent intent = new Intent(Intent.ACTION_MAIN);
-      intent.addCategory(Intent.CATEGORY_HOME);
-      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      startActivity(intent);
-   }
+    @OnClick(R.id.exit_button)
+    public void close() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 
-   @Override
-   public void onBackPressed() {
+    @Override
+    public void onBackPressed() {
 
-   }
+    }
 }

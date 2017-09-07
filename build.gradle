@@ -17,14 +17,13 @@
 buildscript {
     repositories {
         jcenter()
+
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
-        classpath 'com.google.gms:google-services:3.0.0'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.android.tools.build:gradle:3.0.0-beta4'
+        classpath 'com.google.gms:google-services:3.1.0'
         classpath 'com.dicedmelon.gradle:jacoco-android:0.1.1'
-        classpath 'me.tatarka:gradle-retrolambda:3.3.1'
-        classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
     }
 
     configurations.classpath.exclude group: 'com.android.tools.external.lombok'
@@ -33,6 +32,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+
         google()
     }
 }
@@ -46,21 +46,21 @@ ext {
     targetSdkVersion = 26
     compileSdkVersion = 26
     buildToolsVersion = '26.0.1'
-    supportLibVersion = '26.0.0'
-    playServicesVersion = '11.0.4'
+    supportLibVersion = '26.0.2'
+    playServicesVersion = '11.2.0'
     junitVersion = '4.12'
-    mockitoVersion = '1.10.19'
+    mockitoVersion = '2.9.0'
     androidTestVersion = '0.5'
-    glideVersion = '3.7.0'
+    glideVersion = '4.1.1'
     rxAndroidVersion = '2.0.1'
-    rxJavaVersion = '2.1.1'
+    rxJavaVersion = '2.1.3'
     circleImageViewVersion = '2.1.0'
     materialSearchBarVersion = '0.7.1'
-    appIntroVersion = 'v4.2.0'
+    appIntroVersion = 'v4.2.2'
     fabTransitionVersion = '0.2.0'
     lovelyDialogVersion = '1.0.7'
     sqliteAssetVersion = '2.0.1'
     williamChartVersion = '2.5.0'
     slidableVersion = '2.0.5'
-    butterknifeVersion = '8.7.0'
+    butterknifeVersion = '8.8.1'
 }

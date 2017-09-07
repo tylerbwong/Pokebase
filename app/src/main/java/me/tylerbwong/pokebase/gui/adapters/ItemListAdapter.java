@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import me.tylerbwong.pokebase.R;
 import me.tylerbwong.pokebase.gui.holders.ItemListItemViewHolder;
@@ -32,48 +33,52 @@ import me.tylerbwong.pokebase.model.components.Item;
  * @author Tyler Wong
  */
 public class ItemListAdapter extends RecyclerView.Adapter {
-   private Context mContext;
-   private Item[] mItems;
+    private Context context;
+    private Item[] items;
 
-   private static final String DRAWABLE = "drawable";
+    private static final String DRAWABLE = "drawable";
 
-   public ItemListAdapter(Context context, Item[] items) {
-      this.mContext = context;
-      this.mItems = items;
-   }
+    public ItemListAdapter(Context context, Item[] items) {
+        this.context = context;
+        this.items = items;
+    }
 
-   @Override
-   public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      View view = LayoutInflater.from(mContext).inflate(R.layout.list_item_item, parent, false);
-      return new ItemListItemViewHolder(view);
-   }
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_item, parent, false);
+        return new ItemListItemViewHolder(view);
+    }
 
-   @Override
-   public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-      ItemListItemViewHolder holder = (ItemListItemViewHolder) viewHolder;
-      Item curItem = mItems[position];
-      holder.mNameView.setText(curItem.getName());
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        ItemListItemViewHolder holder = (ItemListItemViewHolder) viewHolder;
+        Item curItem = items[position];
+        holder.nameView.setText(curItem.getName());
 
-      int imageResourceId = mContext.getResources().getIdentifier(curItem.getIdentifier(),
-            DRAWABLE, mContext.getPackageName());
-      Glide.with(mContext)
-            .load(imageResourceId)
-            .placeholder(R.drawable.tm_normal)
-            .into(holder.mItemView);
+        int imageResourceId = context.getResources().getIdentifier(curItem.getIdentifier(),
+                DRAWABLE, context.getPackageName());
 
-      holder.mItem = curItem;
-   }
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.tm_normal);
 
-   public void setItems(Item[] items) {
-      this.mItems = items;
-      notifyDataSetChanged();
-   }
+        Glide.with(context)
+                .load(imageResourceId)
+                .apply(options)
+                .into(holder.pokemonItemView);
 
-   @Override
-   public int getItemCount() {
-      if (mItems != null) {
-         return mItems.length;
-      }
-      return 0;
-   }
+        holder.item = curItem;
+    }
+
+    public void setItems(Item[] items) {
+        this.items = items;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemCount() {
+        if (items != null) {
+            return items.length;
+        }
+        return 0;
+    }
 }

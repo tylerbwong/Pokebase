@@ -20,26 +20,26 @@ package me.tylerbwong.pokebase.model.components;
  * @author Tyler Wong
  */
 public class PokemonTeamMember {
-   public final int memberId;
-   public final int pokemonId;
-   public final int level;
-   public final String name;
-   public final String nickname;
-   public String[] moves;
-   public String lastUpdated;
+    public final int memberId;
+    public final int pokemonId;
+    public final int level;
+    public final String name;
+    public final String nickname;
+    public String[] moves;
+    public String lastUpdated;
 
-   public PokemonTeamMember(int memberId, int id, String name, String nickname, int level, String[] moves,
-                            String lastUpdated) {
-      this.memberId = memberId;
-      this.pokemonId = id;
-      this.level = level;
-      this.name = name;
-      this.nickname = nickname;
-      this.moves = moves;
-      this.lastUpdated = lastUpdated;
-   }
+    public PokemonTeamMember(int memberId, int id, String name, String nickname, int level, String[] moves,
+                             String lastUpdated) {
+        this.memberId = memberId;
+        this.pokemonId = id;
+        this.level = level;
+        this.name = name;
+        this.nickname = nickname;
+        this.moves = moves;
+        this.lastUpdated = lastUpdated;
+    }
 
-   public int getId() {
-      return pokemonId;
-   }
+    public int getId() {
+        return pokemonId;
+    }
 }

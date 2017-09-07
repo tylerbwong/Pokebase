@@ -53,7 +53,7 @@
                     android:layout_height="100dp"
                     android:layout_marginEnd="20dp"
                     android:background="@null"
-                    android:scaleType="centerInside"/>
+                    android:scaleType="fitCenter"/>
 
                 <ImageView
                     android:id="@+id/pokemon_2"
@@ -61,14 +61,14 @@
                     android:layout_height="100dp"
                     android:layout_marginEnd="20dp"
                     android:background="@null"
-                    android:scaleType="centerInside"/>
+                    android:scaleType="fitCenter"/>
 
                 <ImageView
                     android:id="@+id/pokemon_3"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:background="@null"
-                    android:scaleType="centerInside"/>
+                    android:scaleType="fitCenter"/>
             </LinearLayout>
 
             <LinearLayout
@@ -84,7 +84,7 @@
                     android:layout_height="100dp"
                     android:layout_marginEnd="20dp"
                     android:background="@null"
-                    android:scaleType="centerInside"/>
+                    android:scaleType="fitCenter"/>
 
                 <ImageView
                     android:id="@+id/pokemon_5"
@@ -92,14 +92,14 @@
                     android:layout_height="100dp"
                     android:layout_marginEnd="20dp"
                     android:background="@null"
-                    android:scaleType="centerInside"/>
+                    android:scaleType="fitCenter"/>
 
                 <ImageView
                     android:id="@+id/pokemon_6"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:background="@null"
-                    android:scaleType="centerInside"/>
+                    android:scaleType="fitCenter"/>
 
             </LinearLayout>
         </LinearLayout>

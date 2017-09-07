@@ -15,8 +15,6 @@
  */
 
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'jacoco-android'
 
 repositories {
@@ -40,12 +38,14 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         debug {
             debuggable true
             minifyEnabled false
             testCoverageEnabled true
         }
+
         release {
             debuggable false
             minifyEnabled true
@@ -54,12 +54,15 @@ android {
                     'proguard-rules.pro'
         }
     }
+
     dexOptions {
         javaMaxHeapSize "4g"
     }
+
     lintOptions {
         abortOnError false
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -115,7 +118,7 @@ dependencies {
 
     // Butterknife
     compile "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
-    apt "com.jakewharton:butterknife-compiler:$rootProject.butterknifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterknifeVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'

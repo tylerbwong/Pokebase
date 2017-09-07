@@ -36,56 +36,56 @@ import me.tylerbwong.pokebase.model.components.PokemonListItem;
  * @author Tyler Wong
  */
 public class PokemonListAdapter extends RecyclerView.Adapter implements View.OnClickListener {
-   private Context mContext;
-   private PokemonListItem[] mItems;
-   private boolean mIsEvolutions = false;
+    private Context context;
+    private PokemonListItem[] items;
+    private boolean isEvolutions = false;
 
-   public PokemonListAdapter(Context context, PokemonListItem[] items, boolean isEvolutions) {
-      this.mContext = context;
-      this.mItems = items;
-      mIsEvolutions = isEvolutions;
-   }
+    public PokemonListAdapter(Context context, PokemonListItem[] items, boolean isEvolutions) {
+        this.context = context;
+        this.items = items;
+        this.isEvolutions = isEvolutions;
+    }
 
-   @Override
-   public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      View view = LayoutInflater.from(mContext).inflate(R.layout.list_item_pokemon, parent, false);
-      return new PokemonListItemViewHolder(view);
-   }
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_pokemon, parent, false);
+        return new PokemonListItemViewHolder(view);
+    }
 
-   @Override
-   public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-      PokemonListItemViewHolder holder = (PokemonListItemViewHolder) viewHolder;
-      PokemonListItem item = mItems[position];
-      holder.mIdView.setText(PokemonProfileActivity.formatId(item.id));
-      holder.mNameView.setText(item.name);
-      Glide.with(mContext)
-            .load(String.format(mContext.getString(R.string.icon_url), item.originalName.toLowerCase()))
-            .fitCenter()
-            .into(holder.mIconView);
-      holder.mView.setOnClickListener(this);
-   }
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        PokemonListItemViewHolder holder = (PokemonListItemViewHolder) viewHolder;
+        PokemonListItem item = items[position];
+        holder.idView.setText(PokemonProfileActivity.formatId(item.id));
+        holder.nameView.setText(item.name);
 
-   @Override
-   public int getItemCount() {
-      if (mItems != null) {
-         return mItems.length;
-      }
-      return 0;
-   }
+        Glide.with(context)
+                .load(String.format(context.getString(R.string.icon_url), item.originalName.toLowerCase()))
+                .into(holder.iconView);
+        holder.view.setOnClickListener(this);
+    }
 
-   @Override
-   public void onClick(View v) {
-      int pokemonId = Integer.valueOf((((TextView) v.findViewById(R.id.id)).getText()).toString());
-      Intent profileIntent = new Intent(mContext, PokemonProfileActivity.class);
-      Bundle extras = new Bundle();
-      extras.putInt(PokemonProfileActivity.POKEMON_ID_KEY, pokemonId);
-      extras.putString(PokemonProfileActivity.POKEMON_NAME_KEY, (((TextView) v.findViewById(R.id.name)).getText()).toString());
-      profileIntent.putExtras(extras);
-      mContext.startActivity(profileIntent);
+    @Override
+    public int getItemCount() {
+        if (items != null) {
+            return items.length;
+        }
+        return 0;
+    }
 
-      if (mIsEvolutions) {
-         ((PokemonProfileActivity) mContext).finish();
-         ((PokemonProfileActivity) mContext).closeEvolutionsDialog();
-      }
-   }
+    @Override
+    public void onClick(View v) {
+        int pokemonId = Integer.valueOf((((TextView) v.findViewById(R.id.id)).getText()).toString());
+        Intent profileIntent = new Intent(context, PokemonProfileActivity.class);
+        Bundle extras = new Bundle();
+        extras.putInt(PokemonProfileActivity.POKEMON_ID_KEY, pokemonId);
+        extras.putString(PokemonProfileActivity.POKEMON_NAME_KEY, (((TextView) v.findViewById(R.id.name)).getText()).toString());
+        profileIntent.putExtras(extras);
+        context.startActivity(profileIntent);
+
+        if (isEvolutions) {
+            ((PokemonProfileActivity) context).finish();
+            ((PokemonProfileActivity) context).closeEvolutionsDialog();
+        }
+    }
 }

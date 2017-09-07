@@ -20,29 +20,29 @@ package me.tylerbwong.pokebase.model.components;
  * @author Tyler Wong
  */
 public class PokemonListItem {
-   public final int id;
-   public final String originalName;
-   public final String name;
+    public final int id;
+    public final String originalName;
+    public final String name;
 
-   public PokemonListItem(int id, String name) {
-      this.id = id;
-      this.name = name;
-      switch (this.name) {
-         case "Nidoran♂":
-            this.originalName = "Nidoran-M";
-            break;
-         case "Nidoran♀":
-            this.originalName = "Nidoran-F";
-            break;
-         case "Mr. Mime":
-            this.originalName = "Mr-Mime";
-            break;
-         case "Mime Jr.":
-            this.originalName = "Mime-Jr";
-            break;
-         default:
-            this.originalName = name;
-            break;
-      }
-   }
+    public PokemonListItem(int id, String name) {
+        this.id = id;
+        this.name = name;
+        switch (this.name) {
+            case "Nidoran♂":
+                this.originalName = "Nidoran-M";
+                break;
+            case "Nidoran♀":
+                this.originalName = "Nidoran-F";
+                break;
+            case "Mr. Mime":
+                this.originalName = "Mr-Mime";
+                break;
+            case "Mime Jr.":
+                this.originalName = "Mime-Jr";
+                break;
+            default:
+                this.originalName = name;
+                break;
+        }
+    }
 }

@@ -26,7 +26,6 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.db.chart.animation.Animation;
@@ -54,226 +53,223 @@ import me.tylerbwong.pokebase.model.utilities.PokebaseCache;
 /**
  * @author Tyler Wong
  */
+@SuppressWarnings("unused")
 public class PokemonInfoView extends NestedScrollView {
-   @BindView(R.id.type_one)
-   TextView mTypeOneView;
-   @BindView(R.id.type_two)
-   TextView mTypeTwoView;
-   @BindView(R.id.region)
-   TextView mRegionView;
-   @BindView(R.id.height)
-   TextView mHeightView;
-   @BindView(R.id.weight)
-   TextView mWeightView;
-   @BindView(R.id.exp)
-   TextView mExpView;
-   @BindView(R.id.description)
-   TextView mDescription;
-   @BindView(R.id.moves)
-   Button mMovesButton;
-   @BindView(R.id.evolutions)
-   Button mEvolutionsButton;
-   @BindView(R.id.chart)
-   BarChartView mBarChart;
-   @BindView(R.id.buttons)
-   CardView mButtons;
-   @BindViews({R.id.hp, R.id.attack, R.id.defense, R.id.special_attack, R.id.special_defense, R.id.speed})
-   TextView[] mStats;
+    @BindView(R.id.type_one)
+    TextView typeOneView;
+    @BindView(R.id.type_two)
+    TextView typeTwoView;
+    @BindView(R.id.region)
+    TextView regionView;
+    @BindView(R.id.height)
+    TextView heightView;
+    @BindView(R.id.weight)
+    TextView weightView;
+    @BindView(R.id.exp)
+    TextView expView;
+    @BindView(R.id.description)
+    TextView description;
+    @BindView(R.id.chart)
+    BarChartView barChart;
+    @BindView(R.id.buttons)
+    CardView buttons;
+    @BindViews({R.id.hp, R.id.attack, R.id.defense, R.id.special_attack, R.id.special_defense, R.id.speed})
+    TextView[] stats;
 
-   private Context mContext;
-   private PokemonProfile mProfile;
-   private LovelyCustomDialog mMovesDialog;
-   private LovelyCustomDialog mEvolutionsDialog;
+    private Context context;
+    private PokemonProfile profile;
+    private LovelyCustomDialog movesDialog;
+    private LovelyCustomDialog evolutionsDialog;
 
-   private static final double FT_PER_DM = 0.32808399;
-   private static final double LB_PER_HG = 0.22046226218;
-   private static final int KG_PER_HG = 10;
-   private static final int IN_PER_FT = 12;
-   private static final int DM_PER_M = 10;
-   private static final String TYPE = "type";
-   private static final String COLOR = "color";
-   private static final String[] STATS =
-         {"HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"};
+    private static final double FT_PER_DM = 0.32808399;
+    private static final double LB_PER_HG = 0.22046226218;
+    private static final int KG_PER_HG = 10;
+    private static final int IN_PER_FT = 12;
+    private static final int DM_PER_M = 10;
+    private static final String TYPE = "typeLabel";
+    private static final String COLOR = "color";
+    private static final String[] STATS =
+            {"HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"};
 
-   public PokemonInfoView(Context context) {
-      super(context, null);
-      mContext = context;
-      init();
-   }
+    public PokemonInfoView(Context context) {
+        super(context, null);
+        this.context = context;
+        init();
+    }
 
-   public PokemonInfoView(Context context, AttributeSet attrs) {
-      super(context, attrs);
-      mContext = context;
-      init();
-   }
+    public PokemonInfoView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.context = context;
+        init();
+    }
 
-   public PokemonInfoView(Context context, AttributeSet attrs, int defStyle) {
-      super(context, attrs, defStyle);
-      mContext = context;
-      init();
-   }
+    public PokemonInfoView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        this.context = context;
+        init();
+    }
 
-   private void init() {
-      View view = inflate(mContext, R.layout.pokemon_info, this);
-      ButterKnife.bind(this, view);
-   }
+    private void init() {
+        View view = inflate(context, R.layout.pokemon_info, this);
+        ButterKnife.bind(this, view);
+    }
 
-   public void setButtonsVisible(boolean isVisible) {
-      if (isVisible) {
-         mButtons.setVisibility(VISIBLE);
-      }
-      else {
-         mButtons.setVisibility(GONE);
-      }
-   }
+    public void setButtonsVisible(boolean isVisible) {
+        if (isVisible) {
+            buttons.setVisibility(VISIBLE);
+        }
+        else {
+            buttons.setVisibility(GONE);
+        }
+    }
 
-   private void setupDialogs() {
-      AnimatedRecyclerView movesList = new AnimatedRecyclerView(mContext);
-      movesList.setLayoutManager(new LinearLayoutManager(mContext));
-      movesList.setHasFixedSize(true);
-      movesList.setAdapter(new MoveListAdapter(mContext, mProfile.getMoves()));
+    private void setupDialogs() {
+        AnimatedRecyclerView movesList = new AnimatedRecyclerView(context);
+        movesList.setLayoutManager(new LinearLayoutManager(context));
+        movesList.setHasFixedSize(true);
+        movesList.setAdapter(new MoveListAdapter(context, profile.getMoves()));
 
-      mMovesDialog = new LovelyCustomDialog(mContext)
-            .setTopColorRes(R.color.colorPrimary)
-            .setTitle(R.string.moveset)
-            .setIcon(R.drawable.ic_book_white_24dp)
-            .setView(movesList)
-            .setCancelable(true);
+        movesDialog = new LovelyCustomDialog(context)
+                .setTopColorRes(R.color.colorPrimary)
+                .setTitle(R.string.moveset)
+                .setIcon(R.drawable.ic_book_white_24dp)
+                .setView(movesList)
+                .setCancelable(true);
 
-      PokemonListItem[] evolutions = mProfile.getEvolutions();
+        PokemonListItem[] evolutions = profile.getEvolutions();
 
-      AnimatedRecyclerView evolutionsList = new AnimatedRecyclerView(mContext);
-      evolutionsList.setLayoutManager(new LinearLayoutManager(mContext));
-      evolutionsList.setHasFixedSize(true);
-      evolutionsList.setAdapter(new PokemonListAdapter(mContext, evolutions, true));
+        AnimatedRecyclerView evolutionsList = new AnimatedRecyclerView(context);
+        evolutionsList.setLayoutManager(new LinearLayoutManager(context));
+        evolutionsList.setHasFixedSize(true);
+        evolutionsList.setAdapter(new PokemonListAdapter(context, evolutions, true));
 
-      mEvolutionsDialog = new LovelyCustomDialog(mContext)
-            .setTopColorRes(R.color.colorPrimary)
-            .setView(evolutionsList)
-            .setIcon(R.drawable.ic_group_work_white_24dp)
-            .setCancelable(true);
+        evolutionsDialog = new LovelyCustomDialog(context)
+                .setTopColorRes(R.color.colorPrimary)
+                .setView(evolutionsList)
+                .setIcon(R.drawable.ic_group_work_white_24dp)
+                .setCancelable(true);
 
-      if (evolutions.length == 0) {
-         mEvolutionsDialog.setTitle(mContext.getString(R.string.no_evolutions));
-         mEvolutionsDialog.setMessage(String.format(mContext.getString(R.string.no_evolutions_message),
-               mProfile.getName()));
-      }
-      else {
-         mEvolutionsDialog.setTitle(mContext.getString(R.string.evolutions));
-      }
-   }
+        if (evolutions.length == 0) {
+            evolutionsDialog.setTitle(context.getString(R.string.no_evolutions));
+            evolutionsDialog.setMessage(String.format(context.getString(R.string.no_evolutions_message),
+                    profile.getName()));
+        }
+        else {
+            evolutionsDialog.setTitle(context.getString(R.string.evolutions));
+        }
+    }
 
-   @OnClick(R.id.moves)
-   public void onMoves() {
-      if (mMovesDialog != null) {
-         mMovesDialog.show();
-      }
-   }
+    @OnClick(R.id.moves)
+    public void onMoves() {
+        if (movesDialog != null) {
+            movesDialog.show();
+        }
+    }
 
-   @OnClick(R.id.evolutions)
-   public void onEvolutions() {
-      if (mEvolutionsDialog != null) {
-         mEvolutionsDialog.show();
-      }
-   }
+    @OnClick(R.id.evolutions)
+    public void onEvolutions() {
+        if (evolutionsDialog != null) {
+            evolutionsDialog.show();
+        }
+    }
 
-   public void closeEvolutionsDialog() {
-      if (mEvolutionsDialog != null) {
-         mEvolutionsDialog.dismiss();
-      }
-   }
+    public void closeEvolutionsDialog() {
+        if (evolutionsDialog != null) {
+            evolutionsDialog.dismiss();
+        }
+    }
 
-   public void loadPokemonInfo(int pokemonId) {
-      PokebaseCache.getPokemonProfile(DatabaseOpenHelper.getInstance(mContext), pokemonId)
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(pokemonProfile -> {
-                  mProfile = pokemonProfile;
-                  setupDialogs();
-                  loadTypes(mProfile.getTypes());
-                  loadChart(mProfile.getBaseStats());
-                  setHeightViewText(mProfile.getHeight());
-                  setWeightViewText(mProfile.getWeight());
-                  mDescription.setText(mProfile.getDescription());
-                  mRegionView.setText(mProfile.getRegion());
-                  mExpView.setText(String.valueOf(mProfile.getBaseExp()));
-            });
-   }
+    public void loadPokemonInfo(int pokemonId) {
+        PokebaseCache.getPokemonProfile(DatabaseOpenHelper.getInstance(context), pokemonId)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(pokemonProfile -> {
+                    profile = pokemonProfile;
+                    setupDialogs();
+                    loadTypes(profile.getTypes());
+                    loadChart(profile.getBaseStats());
+                    setHeightViewText(profile.getHeight());
+                    setWeightViewText(profile.getWeight());
+                    description.setText(profile.getDescription());
+                    regionView.setText(profile.getRegion());
+                    expView.setText(String.valueOf(profile.getBaseExp()));
+                });
+    }
 
-   private void loadTypes(String[] types) {
-      PaintDrawable backgroundColor;
-      float dimension = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2,
-            getResources().getDisplayMetrics());
+    private void loadTypes(String[] types) {
+        PaintDrawable backgroundColor;
+        float dimension = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2,
+                getResources().getDisplayMetrics());
 
-      if (types.length == 1) {
-         String type = types[0];
-         String colorName = TYPE + type;
-         int colorResId = getResources().getIdentifier(colorName, COLOR, mContext.getPackageName());
+        if (types.length == 1) {
+            String type = types[0];
+            String colorName = TYPE + type;
+            int colorResId = getResources().getIdentifier(colorName, COLOR, context.getPackageName());
 
-         mTypeTwoView.setVisibility(View.GONE);
-         mTypeOneView.setText(type);
-         backgroundColor = new PaintDrawable(ContextCompat.getColor(mContext, colorResId));
-         backgroundColor.setCornerRadius(dimension);
-         mTypeOneView.setBackground(backgroundColor);
-      }
-      else {
-         String typeOne = types[0];
-         String typeTwo = types[1];
-         String colorName = TYPE + typeOne;
-         int colorResId = getResources().getIdentifier(colorName, COLOR, mContext.getPackageName());
+            typeTwoView.setVisibility(View.GONE);
+            typeOneView.setText(type);
+            backgroundColor = new PaintDrawable(ContextCompat.getColor(context, colorResId));
+            backgroundColor.setCornerRadius(dimension);
+            typeOneView.setBackground(backgroundColor);
+        }
+        else {
+            String typeOne = types[0];
+            String typeTwo = types[1];
+            String colorName = TYPE + typeOne;
+            int colorResId = getResources().getIdentifier(colorName, COLOR, context.getPackageName());
 
-         mTypeOneView.setText(typeOne);
-         backgroundColor = new PaintDrawable(ContextCompat.getColor(mContext, colorResId));
-         backgroundColor.setCornerRadius(dimension);
-         mTypeOneView.setBackground(backgroundColor);
-         mTypeTwoView.setVisibility(View.VISIBLE);
-         mTypeTwoView.setText(typeTwo);
-         colorName = TYPE + typeTwo;
-         colorResId = getResources().getIdentifier(colorName, COLOR, mContext.getPackageName());
-         backgroundColor = new PaintDrawable(ContextCompat.getColor(mContext, colorResId));
-         backgroundColor.setCornerRadius(dimension);
-         mTypeTwoView.setBackground(backgroundColor);
-      }
-   }
+            typeOneView.setText(typeOne);
+            backgroundColor = new PaintDrawable(ContextCompat.getColor(context, colorResId));
+            backgroundColor.setCornerRadius(dimension);
+            typeOneView.setBackground(backgroundColor);
+            typeTwoView.setVisibility(View.VISIBLE);
+            typeTwoView.setText(typeTwo);
+            colorName = TYPE + typeTwo;
+            colorResId = getResources().getIdentifier(colorName, COLOR, context.getPackageName());
+            backgroundColor = new PaintDrawable(ContextCompat.getColor(context, colorResId));
+            backgroundColor.setCornerRadius(dimension);
+            typeTwoView.setBackground(backgroundColor);
+        }
+    }
 
-   private void loadChart(float[] data) {
-      BarSet dataSet = new BarSet();
-      float tempVal;
-      for (int index = 0; index < data.length; index++) {
-         tempVal = data[index];
-         dataSet.addBar(STATS[index], tempVal);
-         mStats[index].setText(String.valueOf(Math.round(tempVal)));
-      }
+    private void loadChart(float[] data) {
+        BarSet dataSet = new BarSet();
+        float tempVal;
+        for (int index = 0; index < data.length; index++) {
+            tempVal = data[index];
+            dataSet.addBar(STATS[index], tempVal);
+            stats[index].setText(String.valueOf(Math.round(tempVal)));
+        }
 
-      dataSet.setColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
-      mBarChart.addData(dataSet);
-      mBarChart.setXAxis(false);
-      mBarChart.setYAxis(false);
-      mBarChart.setYLabels(AxisRenderer.LabelPosition.NONE);
+        dataSet.setColor(ContextCompat.getColor(context, R.color.colorPrimary));
+        barChart.addData(dataSet);
+        barChart.setXAxis(false);
+        barChart.setYAxis(false);
+        barChart.setYLabels(AxisRenderer.LabelPosition.NONE);
 
-      Animation animation = new Animation(1000);
-      animation.setInterpolator(new BounceInterpolator());
-      mBarChart.show(animation);
-   }
+        Animation animation = new Animation(1000);
+        animation.setInterpolator(new BounceInterpolator());
+        barChart.show(animation);
+    }
 
-   private void setHeightViewText(int decimeters) {
-      int feet = (int) Math.floor(decimeters * FT_PER_DM);
-      int inches = (int) Math.round((decimeters * FT_PER_DM - feet) * IN_PER_FT);
-      if (inches == IN_PER_FT) {
-         feet++;
-         inches = 0;
-      }
-      double millimeters = (double) decimeters / DM_PER_M;
-      String heightText = feet + "' " + inches + "'' ("
-            + String.format(Locale.US, "%.2f", millimeters) + " m)";
-      mHeightView.setText(heightText);
-   }
+    private void setHeightViewText(int decimeters) {
+        int feet = (int) Math.floor(decimeters * FT_PER_DM);
+        int inches = (int) Math.round((decimeters * FT_PER_DM - feet) * IN_PER_FT);
+        if (inches == IN_PER_FT) {
+            feet++;
+            inches = 0;
+        }
+        double millimeters = (double) decimeters / DM_PER_M;
+        String heightText = feet + "' " + inches + "'' ("
+                + String.format(Locale.US, "%.2f", millimeters) + " m)";
+        heightView.setText(heightText);
+    }
 
-   private void setWeightViewText(int hectograms) {
-      double pounds = hectograms * LB_PER_HG;
-      double kilograms = (double) hectograms / KG_PER_HG;
-      String weightText = String.format(Locale.US, "%.1f", pounds) + " lbs (" +
-            String.format(Locale.US, "%.1f", kilograms) + " kg)";
-      mWeightView.setText(weightText);
-   }
+    private void setWeightViewText(int hectograms) {
+        double pounds = hectograms * LB_PER_HG;
+        double kilograms = (double) hectograms / KG_PER_HG;
+        String weightText = String.format(Locale.US, "%.1f", pounds) + " lbs (" +
+                String.format(Locale.US, "%.1f", kilograms) + " kg)";
+        weightView.setText(weightText);
+    }
 }

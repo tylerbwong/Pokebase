@@ -50,104 +50,104 @@ import me.tylerbwong.pokebase.model.database.DatabaseOpenHelper;
  * @author Tyler Wong
  */
 public class TeamsFragment extends Fragment implements SheetLayout.OnFabAnimationEndListener {
-   @BindView(R.id.bottom_sheet)
-   SheetLayout mSheetLayout;
-   @BindView(R.id.fab)
-   FloatingActionButton mFab;
-   @BindView(R.id.team_list)
-   AnimatedRecyclerView mTeamList;
-   @BindView(R.id.no_team)
-   ImageView mNoTeam;
-   @BindView(R.id.empty_layout)
-   LinearLayout mEmptyView;
+    @BindView(R.id.bottom_sheet)
+    SheetLayout sheetLayout;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.team_list)
+    AnimatedRecyclerView teamList;
+    @BindView(R.id.no_team)
+    ImageView noTeam;
+    @BindView(R.id.empty_layout)
+    LinearLayout emptyView;
 
-   private DatabaseOpenHelper mDatabaseHelper;
-   private Unbinder mUnbinder;
-   private TeamAdapter mAdapter;
+    private DatabaseOpenHelper databaseHelper;
+    private Unbinder unbinder;
+    private TeamAdapter adapter;
 
-   private static final int REQUEST_CODE = 1;
+    private static final int REQUEST_CODE = 1;
 
-   @Nullable
-   @Override
-   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-      View view = inflater.inflate(R.layout.teams_fragment, container, false);
-      mUnbinder = ButterKnife.bind(this, view);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.teams_fragment, container, false);
+        unbinder = ButterKnife.bind(this, view);
 
-      mDatabaseHelper = DatabaseOpenHelper.getInstance(getContext());
+        databaseHelper = DatabaseOpenHelper.getInstance(getContext());
 
-      mTeamList.setHasFixedSize(true);
-      LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-      layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-      mTeamList.setLayoutManager(layoutManager);
-      mAdapter = new TeamAdapter(getContext(), null);
-      mTeamList.setAdapter(mAdapter);
+        teamList.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        teamList.setLayoutManager(layoutManager);
+        adapter = new TeamAdapter(getContext(), null);
+        teamList.setAdapter(adapter);
 
-      mSheetLayout.setFab(mFab);
-      mSheetLayout.setFabAnimationEndListener(this);
+        sheetLayout.setFab(fab);
+        sheetLayout.setFabAnimationEndListener(this);
 
-      ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-      if (actionBar != null) {
-         actionBar.setTitle(R.string.teams);
-      }
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.teams);
+        }
 
-      Glide.with(this)
-            .load(R.drawable.no_teams)
-            .into(mNoTeam);
+        Glide.with(this)
+                .load(R.drawable.no_teams)
+                .into(noTeam);
 
-      loadTeams();
+        loadTeams();
 
-      return view;
-   }
+        return view;
+    }
 
-   public void loadTeams() {
-      mDatabaseHelper.queryAllTeams()
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(teams -> {
-                  mAdapter.setTeams(teams);
-                  checkEmpty(teams);
-            });
-   }
+    public void loadTeams() {
+        databaseHelper.queryAllTeams()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(teams -> {
+                    adapter.setTeams(teams);
+                    checkEmpty(teams);
+                });
+    }
 
-   public void refreshAdapter() {
-      loadTeams();
-   }
+    public void refreshAdapter() {
+        loadTeams();
+    }
 
-   private void checkEmpty(Team[] teams) {
-      if (teams.length == 0) {
-         mEmptyView.setVisibility(View.VISIBLE);
-      }
-      else {
-         mEmptyView.setVisibility(View.INVISIBLE);
-      }
-   }
+    private void checkEmpty(Team[] teams) {
+        if (teams.length == 0) {
+            emptyView.setVisibility(View.VISIBLE);
+        }
+        else {
+            emptyView.setVisibility(View.INVISIBLE);
+        }
+    }
 
-   @OnClick(R.id.fab)
-   public void onFabClick() {
-      mSheetLayout.expandFab();
-   }
+    @OnClick(R.id.fab)
+    public void onFabClick() {
+        sheetLayout.expandFab();
+    }
 
-   @Override
-   public void onFabAnimationEnd() {
-      Intent intent = new Intent(getContext(), TeamViewActivity.class);
-      Bundle extras = new Bundle();
-      extras.putInt(TeamViewActivity.TEAM_ID_KEY, 0);
-      extras.putBoolean(TeamViewActivity.UPDATE_KEY, false);
-      intent.putExtras(extras);
-      startActivityForResult(intent, REQUEST_CODE);
-   }
+    @Override
+    public void onFabAnimationEnd() {
+        Intent intent = new Intent(getContext(), TeamViewActivity.class);
+        Bundle extras = new Bundle();
+        extras.putInt(TeamViewActivity.TEAM_ID_KEY, 0);
+        extras.putBoolean(TeamViewActivity.UPDATE_KEY, false);
+        intent.putExtras(extras);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
 
-   @Override
-   public void onActivityResult(int requestCode, int resultCode, Intent data) {
-      super.onActivityResult(requestCode, resultCode, data);
-      if (requestCode == REQUEST_CODE) {
-         mSheetLayout.contractFab();
-      }
-   }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            sheetLayout.contractFab();
+        }
+    }
 
-   @Override
-   public void onDestroyView() {
-      super.onDestroyView();
-      mUnbinder.unbind();
-   }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

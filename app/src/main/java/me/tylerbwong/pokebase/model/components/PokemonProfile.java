@@ -20,75 +20,75 @@ package me.tylerbwong.pokebase.model.components;
  * @author Tyler Wong
  */
 public class PokemonProfile {
-   private int id;
-   private String name;
-   private int height;
-   private int weight;
-   private int baseExp;
-   private String region;
-   private String[] types;
-   private String[] moves;
-   private PokemonListItem[] evolutions;
-   private String description;
-   private float[] baseStats;
+    private int id;
+    private String name;
+    private int height;
+    private int weight;
+    private int baseExp;
+    private String region;
+    private String[] types;
+    private String[] moves;
+    private PokemonListItem[] evolutions;
+    private String description;
+    private float[] baseStats;
 
-   public PokemonProfile(int id, String name, int height, int weight, int baseExp, String region,
-                         String[] types, String[] moves, PokemonListItem[] evolutions,
-                         String description, float[] baseStats) {
-      this.id = id;
-      this.name = name;
-      this.height = height;
-      this.weight = weight;
-      this.baseExp = baseExp;
-      this.region = region;
-      this.types = types;
-      this.moves = moves;
-      this.evolutions = evolutions;
-      this.description = description;
-      this.baseStats = baseStats;
-   }
+    public PokemonProfile(int id, String name, int height, int weight, int baseExp, String region,
+                          String[] types, String[] moves, PokemonListItem[] evolutions,
+                          String description, float[] baseStats) {
+        this.id = id;
+        this.name = name;
+        this.height = height;
+        this.weight = weight;
+        this.baseExp = baseExp;
+        this.region = region;
+        this.types = types;
+        this.moves = moves;
+        this.evolutions = evolutions;
+        this.description = description;
+        this.baseStats = baseStats;
+    }
 
-   public int getWeight() {
-      return weight;
-   }
+    public int getWeight() {
+        return weight;
+    }
 
-   public int getId() {
-      return id;
-   }
+    public int getId() {
+        return id;
+    }
 
-   public String getName() {
-      return name;
-   }
+    public String getName() {
+        return name;
+    }
 
-   public int getHeight() {
-      return height;
-   }
+    public int getHeight() {
+        return height;
+    }
 
-   public int getBaseExp() {
-      return baseExp;
-   }
+    public int getBaseExp() {
+        return baseExp;
+    }
 
-   public String getRegion() {
-      return region;
-   }
+    public String getRegion() {
+        return region;
+    }
 
-   public String[] getTypes() {
-      return types;
-   }
+    public String[] getTypes() {
+        return types;
+    }
 
-   public String[] getMoves() {
-      return moves;
-   }
+    public String[] getMoves() {
+        return moves;
+    }
 
-   public PokemonListItem[] getEvolutions() {
-      return evolutions;
-   }
+    public PokemonListItem[] getEvolutions() {
+        return evolutions;
+    }
 
-   public String getDescription() {
-      return description;
-   }
+    public String getDescription() {
+        return description;
+    }
 
-   public float[] getBaseStats() {
-      return baseStats;
-   }
+    public float[] getBaseStats() {
+        return baseStats;
+    }
 }

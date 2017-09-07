@@ -33,70 +33,70 @@ import me.tylerbwong.pokebase.R;
  * @author Tyler Wong
  */
 public class MoveInfoView extends RelativeLayout {
-   @BindView(R.id.type_label)
-   TextView mType;
-   @BindView(R.id.power_label)
-   TextView mPower;
-   @BindView(R.id.pp_label)
-   TextView mPp;
-   @BindView(R.id.accuracy_label)
-   TextView mAccuracy;
-   @BindView(R.id.class_label)
-   TextView mClass;
-   @BindView(R.id.description)
-   TextView mDescription;
+    @BindView(R.id.type_label)
+    TextView typeLabel;
+    @BindView(R.id.power_label)
+    TextView powerLabel;
+    @BindView(R.id.pp_label)
+    TextView ppLabel;
+    @BindView(R.id.accuracy_label)
+    TextView accuracyLabel;
+    @BindView(R.id.class_label)
+    TextView classLabel;
+    @BindView(R.id.description)
+    TextView description;
 
-   private Context mContext;
+    private Context context;
 
-   private static final String CLASS = "class";
-   private static final String TYPE = "type";
-   private static final String COLOR = "color";
+    private static final String CLASS = "class";
+    private static final String TYPE = "type";
+    private static final String COLOR = "color";
 
-   public MoveInfoView(Context context) {
-      super(context, null);
-      mContext = context;
-      init();
-   }
+    public MoveInfoView(Context context) {
+        super(context, null);
+        this.context = context;
+        init();
+    }
 
-   public MoveInfoView(Context context, AttributeSet attrs) {
-      super(context, attrs);
-      mContext = context;
-      init();
-   }
+    public MoveInfoView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.context = context;
+        init();
+    }
 
-   public MoveInfoView(Context context, AttributeSet attrs, int defStyle) {
-      super(context, attrs, defStyle);
-      mContext = context;
-      init();
-   }
+    public MoveInfoView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        this.context = context;
+        init();
+    }
 
-   private void init() {
-      View view = inflate(mContext, R.layout.move_info, this);
-      ButterKnife.bind(this, view);
-   }
+    private void init() {
+        View view = inflate(context, R.layout.move_info, this);
+        ButterKnife.bind(this, view);
+    }
 
-   public void setFields(String type, String power, String pp, String accuracy, String className, String description) {
-      PaintDrawable backgroundColor;
-      float dimension = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2,
-            getResources().getDisplayMetrics());
+    public void setFields(String type, String power, String pp, String accuracy, String className, String description) {
+        PaintDrawable backgroundColor;
+        float dimension = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2,
+                getResources().getDisplayMetrics());
 
-      mType.setText(type);
-      mPower.setText(power);
-      mPp.setText(pp);
-      mAccuracy.setText(accuracy);
-      mClass.setText(className);
-      mDescription.setText(description);
+        this.typeLabel.setText(type);
+        this.powerLabel.setText(power);
+        this.ppLabel.setText(pp);
+        this.accuracyLabel.setText(accuracy);
+        classLabel.setText(className);
+        this.description.setText(description);
 
-      String classColor = CLASS + className;
-      int colorResId = getResources().getIdentifier(classColor, COLOR, mContext.getPackageName());
-      backgroundColor = new PaintDrawable(ContextCompat.getColor(mContext, colorResId));
-      backgroundColor.setCornerRadius(dimension);
-      mClass.setBackground(backgroundColor);
+        String classColor = CLASS + className;
+        int colorResId = getResources().getIdentifier(classColor, COLOR, context.getPackageName());
+        backgroundColor = new PaintDrawable(ContextCompat.getColor(context, colorResId));
+        backgroundColor.setCornerRadius(dimension);
+        classLabel.setBackground(backgroundColor);
 
-      String typeColor = TYPE + type;
-      colorResId = getResources().getIdentifier(typeColor, COLOR, mContext.getPackageName());
-      backgroundColor = new PaintDrawable(ContextCompat.getColor(mContext, colorResId));
-      backgroundColor.setCornerRadius(dimension);
-      mType.setBackground(backgroundColor);
-   }
+        String typeColor = TYPE + type;
+        colorResId = getResources().getIdentifier(typeColor, COLOR, context.getPackageName());
+        backgroundColor = new PaintDrawable(ContextCompat.getColor(context, colorResId));
+        backgroundColor.setCornerRadius(dimension);
+        this.typeLabel.setBackground(backgroundColor);
+    }
 }

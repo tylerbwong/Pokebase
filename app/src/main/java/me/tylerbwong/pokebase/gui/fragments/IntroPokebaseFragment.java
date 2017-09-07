@@ -38,44 +38,46 @@ import me.tylerbwong.pokebase.model.utilities.Typefaces;
  * @author Tyler Wong
  */
 public class IntroPokebaseFragment extends Fragment {
-   @BindView(R.id.description)
-   TextView mDescription;
-   @BindView(R.id.small_img)
-   ImageView mSmallImage;
-   @BindView(R.id.med_img)
-   ImageView mMedImage;
-   @BindView(R.id.big_img)
-   ImageView mBigImage;
+    @BindView(R.id.description)
+    TextView description;
+    @BindView(R.id.small_img)
+    ImageView smallImage;
+    @BindView(R.id.med_img)
+    ImageView medImage;
+    @BindView(R.id.big_img)
+    ImageView bigImage;
 
-   private Unbinder mUnbinder;
+    private Unbinder unbinder;
 
-   @Nullable
-   @Override
-   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-      View view = inflater.inflate(R.layout.intro_pokebase_fragment, container, false);
-      mUnbinder = ButterKnife.bind(this, view);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.intro_pokebase_fragment, container, false);
+        unbinder = ButterKnife.bind(this, view);
 
-      Glide.with(this)
-            .load(R.drawable.pokedex)
-            .into(mSmallImage);
-      Glide.with(this)
-            .load(R.drawable.charizard)
-            .into(mMedImage);
-      Glide.with(this)
-            .load(R.drawable.starters)
-            .into(mBigImage);
+        Glide.with(this)
+                .load(R.drawable.pokedex)
+                .into(smallImage);
 
-      Typeface robotoLight = Typefaces.get(getContext(), Typefaces.ROBOTO_PATH);
+        Glide.with(this)
+                .load(R.drawable.charizard)
+                .into(medImage);
 
-      if (robotoLight != null) {
-         mDescription.setTypeface(robotoLight);
-      }
-      return view;
-   }
+        Glide.with(this)
+                .load(R.drawable.starters)
+                .into(bigImage);
 
-   @Override
-   public void onDestroyView() {
-      super.onDestroyView();
-      mUnbinder.unbind();
-   }
+        Typeface robotoLight = Typefaces.get(getContext(), Typefaces.ROBOTO_PATH);
+
+        if (robotoLight != null) {
+            description.setTypeface(robotoLight);
+        }
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

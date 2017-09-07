@@ -20,17 +20,17 @@ package me.tylerbwong.pokebase.model.components;
  * @author Tyler Wong
  */
 public class Team {
-   public final int id;
-   public final String name;
-   public final String description;
-   public final String lastUpdated;
-   public final PokemonTeamItem[] team;
+    public final int id;
+    public final String name;
+    public final String description;
+    public final String lastUpdated;
+    public final PokemonTeamItem[] team;
 
-   public Team(int id, String name, String description, String lastUpdated, PokemonTeamItem[] team) {
-      this.id = id;
-      this.name = name;
-      this.description = description;
-      this.lastUpdated = lastUpdated;
-      this.team = team;
-   }
+    public Team(int id, String name, String description, String lastUpdated, PokemonTeamItem[] team) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.lastUpdated = lastUpdated;
+        this.team = team;
+    }
 }

@@ -187,7 +187,7 @@
         android:layout_height="160dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/circle_shape"
-        android:scaleType="centerInside"
+        android:scaleType="fitCenter"
         app:finalHeight="@dimen/image_final_width"
         app:finalYPosition="2dp"
         app:layout_behavior="me.tylerbwong.pokebase.gui.animations.ImageBehavior"

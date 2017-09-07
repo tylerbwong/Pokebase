@@ -37,85 +37,85 @@ import me.tylerbwong.pokebase.model.utilities.PokebaseCache;
  * @author Tyler Wong
  */
 public class MoveListItemViewHolder extends RecyclerView.ViewHolder {
-   @BindView(R.id.name)
-   public TextView mNameView;
+    @BindView(R.id.name)
+    public TextView nameView;
 
-   public final View mView;
+    public final View view;
 
-   private Move mMove;
-   private String mType;
-   private DatabaseOpenHelper mDatabaseHelper;
+    private Move move;
+    private String type;
+    private DatabaseOpenHelper databaseHelper;
 
-   private static final String NA = "N/A";
-   private static final String NONE = "0";
-   private static final String TYPE = "type";
-   private static final String COLOR = "color";
+    private static final String NA = "N/A";
+    private static final String NONE = "0";
+    private static final String TYPE = "type";
+    private static final String COLOR = "color";
 
-   public MoveListItemViewHolder(View itemView) {
-      super(itemView);
-      ButterKnife.bind(this, itemView);
+    public MoveListItemViewHolder(View itemView) {
+        super(itemView);
+        ButterKnife.bind(this, itemView);
 
-      this.mView = itemView;
-      mDatabaseHelper = DatabaseOpenHelper.getInstance(mView.getContext());
+        this.view = itemView;
+        databaseHelper = DatabaseOpenHelper.getInstance(view.getContext());
 
-      mView.setOnClickListener(view ->
-            PokebaseCache.getMove(mDatabaseHelper, mNameView.getText().toString())
-                  .subscribeOn(Schedulers.newThread())
-                  .observeOn(AndroidSchedulers.mainThread())
-                  .subscribe(move -> {
-                        mMove = move;
+        view.setOnClickListener(view ->
+                PokebaseCache.getMove(databaseHelper, nameView.getText().toString())
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(move -> {
+                            this.move = move;
 
-                        if (mMove.getTypeName() == null) {
-                           mType = mDatabaseHelper.queryTypeById(mMove.getTypeId());
-                           mMove.setTypeName(mType);
-                        }
-                        else {
-                           mType = mMove.getTypeName();
-                        }
+                            if (this.move.getTypeName() == null) {
+                                type = databaseHelper.queryTypeById(this.move.getTypeId());
+                                this.move.setTypeName(type);
+                            }
+                            else {
+                                type = this.move.getTypeName();
+                            }
 
-                        showMoveInfoDialog();
-                  })
-      );
-   }
+                            showMoveInfoDialog();
+                        })
+        );
+    }
 
-   private void showMoveInfoDialog() {
-      String colorName = TYPE + mType;
-      Context context = mView.getContext();
-      int colorResId = context.getResources().getIdentifier(colorName, COLOR, context.getPackageName());
-      String type = mType;
-      String power = String.valueOf(mMove.getPower());
-      String pp = String.valueOf(mMove.getPp());
-      String accuracy = String.valueOf(mMove.getAccuracy());
-      String className = mMove.getClassName();
-      String description;
+    private void showMoveInfoDialog() {
+        String colorName = TYPE + type;
+        Context context = view.getContext();
+        int colorResId = context.getResources().getIdentifier(colorName, COLOR, context.getPackageName());
+        String type = this.type;
+        String power = String.valueOf(move.getPower());
+        String pp = String.valueOf(move.getPp());
+        String accuracy = String.valueOf(move.getAccuracy());
+        String className = move.getClassName();
+        String description;
 
-      if (mMove.getDescription() == null) {
-         description = mDatabaseHelper.queryMoveDescriptionById(mMove.getMoveId());
-         mMove.setDescription(description);
-      }
-      else {
-         description = mMove.getDescription();
-      }
+        if (move.getDescription() == null) {
+            description = databaseHelper.queryMoveDescriptionById(move.getMoveId());
+            move.setDescription(description);
+        }
+        else {
+            description = move.getDescription();
+        }
 
-      if (power.equals(NONE)) {
-         power = NA;
-      }
-      if (pp.equals(NONE)) {
-         pp = NA;
-      }
-      if (accuracy.equals(NONE)) {
-         accuracy = NA;
-      }
+        if (power.equals(NONE)) {
+            power = NA;
+        }
+        if (pp.equals(NONE)) {
+            pp = NA;
+        }
+        if (accuracy.equals(NONE)) {
+            accuracy = NA;
+        }
 
-      MoveInfoView infoView = new MoveInfoView(context);
-      infoView.setFields(type, power, pp, accuracy, className, description);
+        MoveInfoView infoView = new MoveInfoView(context);
+        infoView.setFields(type, power, pp, accuracy, className, description);
 
-      new LovelyCustomDialog(mView.getContext())
-            .setTopColorRes(colorResId)
-            .setIcon(R.drawable.ic_book_white_24dp)
-            .setView(infoView)
-            .setTitle(mMove.getName())
-            .setCancelable(true)
-            .show();
-   }
+        new LovelyCustomDialog(view.getContext())
+                .setTopColorRes(colorResId)
+                .setIcon(R.drawable.ic_book_white_24dp)
+                .setView(infoView)
+                .setTitle(move.getName())
+                .setCancelable(true)
+                .show();
+    }
 }
