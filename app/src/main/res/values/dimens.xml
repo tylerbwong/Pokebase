@@ -22,4 +22,6 @@
     <dimen name="image_width">160dp</dimen>
     <dimen name="image_final_width">40dp</dimen>
     <dimen name="spacing_normal">16dp</dimen>
+    <dimen name="toolbar_margin_top">55dp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
 </resources>

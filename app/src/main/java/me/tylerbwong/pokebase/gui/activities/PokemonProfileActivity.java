@@ -345,10 +345,8 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
         handleAlphaOnTitle(percentage);
         handleToolbarTitleVisibility(percentage);
 
-        if (Math.abs(offset) >= appBar.getHeight() - TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 55, getResources().getDisplayMetrics())) {
-            actionBar.setElevation(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
-                    getResources().getDisplayMetrics()));
+        if (Math.abs(offset) >= appBar.getHeight() - getResources().getDimension(R.dimen.toolbar_margin_top)) {
+            actionBar.setElevation(getResources().getDimension(R.dimen.toolbar_elevation));
             actionBar.setBackgroundDrawable(new ColorDrawable(
                     ContextCompat.getColor(this, R.color.colorPrimary)));
         }

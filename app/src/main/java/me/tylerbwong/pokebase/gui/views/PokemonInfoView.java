@@ -86,7 +86,7 @@ public class PokemonInfoView extends NestedScrollView {
     private static final int KG_PER_HG = 10;
     private static final int IN_PER_FT = 12;
     private static final int DM_PER_M = 10;
-    private static final String TYPE = "typeLabel";
+    private static final String TYPE = "type";
     private static final String COLOR = "color";
     private static final String[] STATS =
             {"HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"};
