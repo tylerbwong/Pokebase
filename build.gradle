@@ -21,7 +21,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-beta7'
+        classpath 'com.android.tools.build:gradle:3.0.0-rc1'
         classpath 'com.google.gms:google-services:3.1.1'
         classpath 'com.dicedmelon.gradle:jacoco-android:0.1.1'
     }
@@ -45,14 +45,14 @@ ext {
     compileSdkVersion = 26
     buildToolsVersion = '26.0.2'
     supportLibVersion = '26.1.0'
-    playServicesVersion = '11.4.0'
+    playServicesVersion = '11.4.2'
     junitVersion = '4.12'
     mockitoVersion = '2.9.0'
     androidTestVersion = '0.5'
     glideVersion = '4.1.1'
     rxAndroidVersion = '2.0.1'
     rxJavaVersion = '2.1.4'
-    circleImageViewVersion = '2.1.0'
+    circleImageViewVersion = '2.2.0'
     materialSearchBarVersion = '0.7.1'
     appIntroVersion = 'v4.2.2'
     fabTransitionVersion = '0.2.0'

@@ -69,54 +69,55 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile "junit:junit:$rootProject.junitVersion"
-    testCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
-    androidTestCompile "com.android.support:support-annotations:$rootProject.supportLibVersion"
-    androidTestCompile "com.android.support.test:runner:$rootProject.androidTestVersion"
-    androidTestCompile "com.android.support.test:rules:$rootProject.androidTestVersion"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    testImplementation "junit:junit:$rootProject.junitVersion"
+    testImplementation "org.mockito:mockito-core:$rootProject.mockitoVersion"
+    androidTestImplementation "com.android.support:support-annotations:$rootProject.supportLibVersion"
+    androidTestImplementation "com.android.support.test:runner:$rootProject.androidTestVersion"
+    androidTestImplementation "com.android.support.test:rules:$rootProject.androidTestVersion"
 
     // Android Support Libraries
-    compile "com.android.support:appcompat-v7:$rootProject.supportLibVersion"
-    compile "com.android.support:design:$rootProject.supportLibVersion"
+    implementation "com.android.support:appcompat-v7:$rootProject.supportLibVersion"
+    implementation "com.android.support:design:$rootProject.supportLibVersion"
 
     // Firebase
-    compile "com.google.firebase:firebase-core:$rootProject.playServicesVersion"
-    compile "com.google.firebase:firebase-crash:$rootProject.playServicesVersion"
+    implementation "com.google.firebase:firebase-core:$rootProject.playServicesVersion"
+    implementation "com.google.firebase:firebase-crash:$rootProject.playServicesVersion"
 
     // Glide
-    compile "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+    implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
 
     // RxJava
-    compile "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
-    compile "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
 
     // Circle Image View
-    compile "de.hdodenhof:circleimageview:$rootProject.circleImageViewVersion"
+    implementation "de.hdodenhof:circleimageview:$rootProject.circleImageViewVersion"
 
     // Material Search Bar
-    compile "com.github.mancj:MaterialSearchBar:$rootProject.materialSearchBarVersion"
+    implementation "com.github.mancj:MaterialSearchBar:$rootProject.materialSearchBarVersion"
 
     // App Intro
-    compile "com.github.apl-devs:appintro:$rootProject.appIntroVersion"
+    implementation "com.github.apl-devs:appintro:$rootProject.appIntroVersion"
 
     // FAB Transition
-    compile "com.github.coyarzun89:fabtransitionactivity:$rootProject.fabTransitionVersion"
+    implementation "com.github.coyarzun89:fabtransitionactivity:$rootProject.fabTransitionVersion"
 
     // Material Dialogs
-    compile "com.yarolegovich:lovely-dialog:$rootProject.lovelyDialogVersion"
+    implementation "com.yarolegovich:lovely-dialog:$rootProject.lovelyDialogVersion"
 
     // SQLite Asset Helper
-    compile "com.readystatesoftware.sqliteasset:sqliteassethelper:$rootProject.sqliteAssetVersion"
+    implementation "com.readystatesoftware.sqliteasset:sqliteassethelper:$rootProject.sqliteAssetVersion"
 
     // William Chart
-    compile "com.diogobernardino:williamchart:$rootProject.williamChartVersion"
+    implementation "com.diogobernardino:williamchart:$rootProject.williamChartVersion"
 
     // Slideable Activity
-    compile "com.r0adkll:slidableactivity:$rootProject.slidableVersion"
+    implementation "com.r0adkll:slidableactivity:$rootProject.slidableVersion"
 
     // Butterknife
-    compile "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
+    implementation "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterknifeVersion"
 }
 
