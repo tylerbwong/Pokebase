@@ -6,12 +6,12 @@ android:
     - platform-tools
     - tools
     - build-tools-26.0.2
-    - android-26
+    - android-27
     - extra-google-google_play_services
     - extra-android-m2repository
     - extra-google-m2repository
     - extra-android-support
-    - addon-google_apis-google-26
+    - addon-google_apis-google-27
 script:
     ./gradlew build jacocoTestReport assembleAndroidTest
 after_success:
