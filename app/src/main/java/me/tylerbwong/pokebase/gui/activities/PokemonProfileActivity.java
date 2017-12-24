@@ -40,7 +40,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrConfig;
 import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
@@ -88,7 +87,6 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
     private ActionBar actionBar;
 
     private DatabaseOpenHelper databaseHelper;
-    private FirebaseAnalytics analytics;
     private int pokemonId;
     private String pokemonName;
     private List<Pair<Integer, String>> pokemonTeams;
@@ -126,7 +124,6 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
         ButterKnife.bind(this);
 
         databaseHelper = DatabaseOpenHelper.getInstance(this);
-        analytics = FirebaseAnalytics.getInstance(this);
 
         profileImg.setClipToOutline(true);
         profileImg.setElevation(PROFILE_IMG_ELEVATION);
@@ -171,12 +168,6 @@ public class PokemonProfileActivity extends AppCompatActivity implements AppBarL
                 formatId(pokemonId), pokemonName);
         title.setText(formattedName);
         mainTitle.setText(formattedName);
-
-        Bundle bundle = new Bundle();
-        bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, pokemonId);
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, pokemonName);
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, PROFILE);
-        analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
     @OnClick(R.id.previous)

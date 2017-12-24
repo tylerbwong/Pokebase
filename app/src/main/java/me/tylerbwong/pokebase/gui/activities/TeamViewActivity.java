@@ -37,7 +37,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.github.fabtransitionactivity.SheetLayout;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import butterknife.BindView;
@@ -84,7 +83,6 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
 
     private boolean updateKey;
     private int teamId;
-    private FirebaseAnalytics analytics;
 
     private static final String DEFAULT_NAME = "Team ";
     private static final String DEFAULT_DESCRIPTION = "None";
@@ -105,7 +103,6 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
         ButterKnife.bind(this);
 
         databaseHelper = DatabaseOpenHelper.getInstance(this);
-        analytics = FirebaseAnalytics.getInstance(this);
 
         Glide.with(this)
                 .load(R.drawable.no_teams)
@@ -257,7 +254,6 @@ public class TeamViewActivity extends AppCompatActivity implements SheetLayout.O
 
             Bundle bundle = new Bundle();
             bundle.putBoolean(TEAM_CREATED, true);
-            analytics.logEvent(CREATED_TEAM, bundle);
         }
         else if (updateKey && !doesTeamNameExist) {
             databaseHelper.updateTeam(teamId, name, description);

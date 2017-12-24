@@ -24,7 +24,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.github.paolorotolo.appintro.AppIntro2;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import me.tylerbwong.pokebase.gui.fragments.IntroMoveFragment;
 import me.tylerbwong.pokebase.gui.fragments.IntroPokebaseFragment;
@@ -34,15 +33,12 @@ import me.tylerbwong.pokebase.gui.fragments.IntroTeamFragment;
  * @author Tyler Wong
  */
 public class IntroActivity extends AppIntro2 {
-    private FirebaseAnalytics analytics;
 
     private static final String SKIP_PRESSED = "skip_pressed";
-    private static final String INTRO_SKIPPED = "intro_skipped";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        analytics = FirebaseAnalytics.getInstance(this);
 
         addSlide(new IntroPokebaseFragment());
         addSlide(new IntroMoveFragment());
@@ -54,7 +50,6 @@ public class IntroActivity extends AppIntro2 {
         super.onSkipPressed(currentFragment);
         Bundle bundle = new Bundle();
         bundle.putBoolean(SKIP_PRESSED, true);
-        analytics.logEvent(INTRO_SKIPPED, bundle);
         done();
     }
 
