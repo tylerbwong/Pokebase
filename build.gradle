@@ -17,11 +17,10 @@
 buildscript {
     repositories {
         jcenter()
-
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         classpath 'com.google.gms:google-services:3.1.1'
         classpath 'com.dicedmelon.gradle:jacoco-android:0.1.1'
     }
@@ -30,7 +29,6 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-
         google()
     }
 }
@@ -43,15 +41,15 @@ ext {
     minSdkVersion = 21
     targetSdkVersion = 27
     compileSdkVersion = 27
-    buildToolsVersion = '26.0.2'
-    supportLibVersion = '27.0.0'
-    playServicesVersion = '11.4.2'
+    buildToolsVersion = '27.0.2'
+    supportLibVersion = '27.0.2'
+    playServicesVersion = '11.8.0'
     junitVersion = '4.12'
     mockitoVersion = '2.10.0'
     androidTestVersion = '1.0.1'
-    glideVersion = '4.3.0'
+    glideVersion = '4.4.0'
     rxAndroidVersion = '2.0.1'
-    rxJavaVersion = '2.1.6'
+    rxJavaVersion = '2.1.7'
     circleImageViewVersion = '2.2.0'
     materialSearchBarVersion = '0.7.5'
     appIntroVersion = 'v4.2.2'
@@ -59,6 +57,6 @@ ext {
     lovelyDialogVersion = '1.0.7'
     sqliteAssetVersion = '2.0.1'
     williamChartVersion = '2.5.0'
-    slidableVersion = '2.0.5'
+    slidableVersion = '2.0.6'
     butterknifeVersion = '8.8.1'
 }

@@ -19,7 +19,6 @@ apply plugin: 'jacoco-android'
 
 repositories {
     jcenter()
-
     maven {
         url "https://jitpack.io"
     }
